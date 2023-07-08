@@ -120,6 +120,7 @@ export const defaultStore = markRaw(new Storage('base', {
 			'-',
 			'favorites',
 			'channels',
+			'antennas',
 		],
 	},
 	visibility: {
