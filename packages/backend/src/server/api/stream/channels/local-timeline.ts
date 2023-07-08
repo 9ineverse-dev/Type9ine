@@ -105,7 +105,7 @@ class LocalTimelineChannel extends Channel {
 }
 
 @Injectable()
-export class HybridTimelineChannelService {
+export class LocalTimelineChannelService {
 	public readonly shouldShare = LocalTimelineChannel.shouldShare;
 	public readonly requireCredential = LocalTimelineChannel.requireCredential;
 
