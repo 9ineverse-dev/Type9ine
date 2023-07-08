@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { checkWordMute } from '@/misc/check-word-mute.js';
 import { isUserRelated } from '@/misc/is-user-related.js';
+import { isInstanceMuted } from '@/misc/is-instance-muted.js';
 import type { Packed } from '@/misc/json-schema.js';
 import { MetaService } from '@/core/MetaService.js';
 import { NoteEntityService } from '@/core/entities/NoteEntityService.js';
@@ -8,10 +9,10 @@ import { bindThis } from '@/decorators.js';
 import { RoleService } from '@/core/RoleService.js';
 import Channel from '../channel.js';
 
-class LocalTimelineChannel extends Channel {
-	public readonly chName = 'localTimeline';
+class HybridTimelineChannel extends Channel {
+	public readonly chName = 'hybridTimeline';
 	public static shouldShare = true;
-	public static requireCredential = false;
+	public static requireCredential = true;
 	private withReplies: boolean;
 
 	constructor(
@@ -27,7 +28,7 @@ class LocalTimelineChannel extends Channel {
 	}
 
 	@bindThis
-	public async init(params: any) {
+	public async init(params: any): Promise<void> {
 		const policies = await this.roleService.getUserPolicies(this.user ? this.user.id : null);
 		if (!policies.ltlAvailable) return;
 
@@ -39,28 +40,45 @@ class LocalTimelineChannel extends Channel {
 
 	@bindThis
 	private async onNote(note: Packed<'Note'>) {
-		if (note.user.host !== null) return;
-		if (note.visibility !== 'public') return;
-		if (note.channelId != null && !this.followingChannels.has(note.channelId)) return;
+		// チャンネルの投稿ではなく、自分自身の投稿 または
+		// チャンネルの投稿ではなく、その投稿のユーザーをフォローしている または
+		// チャンネルの投稿ではなく、全体公開のローカルの投稿 または
+		// フォローしているチャンネルの投稿 の場合だけ
+		if (
+			(note.channelId == null && note.renoteId == null && note.renoteCount >= 3) 
+		) return;
 
-		// リプライなら再pack
-		if (note.replyId != null) {
-			note.reply = await this.noteEntityService.pack(note.replyId, this.user, {
+		if (['followers', 'specified'].includes(note.visibility)) {
+			note = await this.noteEntityService.pack(note.id, this.user!, {
 				detail: true,
 			});
+
+			if (note.isHidden) {
+				return;
+			}
+		} else {
+			// リプライなら再pack
+			if (note.replyId != null) {
+				note.reply = await this.noteEntityService.pack(note.replyId, this.user!, {
+					detail: true,
+				});
+			}
+			// Renoteなら再pack
+			if (note.renoteId != null) {
+				note.renote = await this.noteEntityService.pack(note.renoteId, this.user!, {
+					detail: true,
+				});
+			}
 		}
-		// Renoteなら再pack
-		if (note.renoteId != null) {
-			note.renote = await this.noteEntityService.pack(note.renoteId, this.user, {
-				detail: true,
-			});
-		}
+
+		// Ignore notes from instances the user has muted
+		if (isInstanceMuted(note, new Set<string>(this.userProfile!.mutedInstances ?? []))) return;
 
 		// 関係ない返信は除外
-		if (note.reply && this.user && !this.withReplies) {
+		if (note.reply && !this.withReplies) {
 			const reply = note.reply;
 			// 「チャンネル接続主への返信」でもなければ、「チャンネル接続主が行った返信」でもなければ、「投稿者の投稿者自身への返信」でもない場合
-			if (reply.userId !== this.user.id && note.userId !== this.user.id && reply.userId !== note.userId) return;
+			if (reply.userId !== this.user!.id && note.userId !== this.user!.id && reply.userId !== note.userId) return;
 		}
 
 		// 流れてきたNoteがミュートしているユーザーが関わるものだったら無視する
@@ -83,16 +101,16 @@ class LocalTimelineChannel extends Channel {
 	}
 
 	@bindThis
-	public dispose() {
+	public dispose(): void {
 		// Unsubscribe events
 		this.subscriber.off('notesStream', this.onNote);
 	}
 }
 
 @Injectable()
-export class LocalTimelineChannelService {
-	public readonly shouldShare = LocalTimelineChannel.shouldShare;
-	public readonly requireCredential = LocalTimelineChannel.requireCredential;
+export class HybridTimelineChannelService {
+	public readonly shouldShare = HybridTimelineChannel.shouldShare;
+	public readonly requireCredential = HybridTimelineChannel.requireCredential;
 
 	constructor(
 		private metaService: MetaService,
@@ -102,8 +120,8 @@ export class LocalTimelineChannelService {
 	}
 
 	@bindThis
-	public create(id: string, connection: Channel['connection']): LocalTimelineChannel {
-		return new LocalTimelineChannel(
+	public create(id: string, connection: Channel['connection']): HybridTimelineChannel {
+		return new HybridTimelineChannel(
 			this.metaService,
 			this.roleService,
 			this.noteEntityService,
