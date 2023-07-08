@@ -40,10 +40,7 @@ class HybridTimelineChannel extends Channel {
 
 	@bindThis
 	private async onNote(note: Packed<'Note'>) {
-		// チャンネルの投稿ではなく、自分自身の投稿 または
-		// チャンネルの投稿ではなく、その投稿のユーザーをフォローしている または
-		// チャンネルの投稿ではなく、全体公開のローカルの投稿 または
-		// フォローしているチャンネルの投稿 の場合だけ
+		// チャンネルの投稿ではなく、リノートでなく、リノート回数が一定以上の場合だけ
 		if (
 			(note.channelId == null && note.renoteId == null && note.renoteCount >= 3) 
 		) return;
