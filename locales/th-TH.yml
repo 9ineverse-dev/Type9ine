@@ -1798,7 +1798,7 @@ _instanceCharts:
   filesTotal: "จำนวนไฟล์สะสม"
 _timelines:
   home: "หน้าแรก"
-  local: "ในพื้นที่"
+  local: "สปอร์ตไลท์"
   social: "โซเชี่ยล"
   global: "ทั่วโลก"
 _play:

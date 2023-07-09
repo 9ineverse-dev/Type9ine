@@ -1550,7 +1550,7 @@ _instanceCharts:
   filesTotal: "Số lượng tập tin tích lũy"
 _timelines:
   home: "Trang chính"
-  local: "Máy chủ này"
+  local: "Điểm sáng"
   social: "Xã hội"
   global: "Liên hợp"
 _play:

@@ -1409,7 +1409,7 @@ _instanceCharts:
   filesTotal: "Total cumulé du nombre de fichiers"
 _timelines:
   home: "Principal"
-  local: "Local"
+  local: "Projecteur"
   social: "Social"
   global: "Global"
 _play:

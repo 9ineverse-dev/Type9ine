@@ -1504,7 +1504,7 @@ _instanceCharts:
   filesTotal: "Сумарна кількість файлів"
 _timelines:
   home: "Домівка"
-  local: "Локальна"
+  local: "Прожектор"
   social: "Соціальна"
   global: "Глобальна"
 _play:

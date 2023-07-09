@@ -1753,7 +1753,7 @@ _instanceCharts:
   filesTotal: "Суммарное количество файлов"
 _timelines:
   home: "Персональная"
-  local: "Местная"
+  local: "центр внимания"
   social: "Социальная"
   global: "Всеобщая"
 _play:

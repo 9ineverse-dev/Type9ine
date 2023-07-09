@@ -1846,7 +1846,7 @@ _instanceCharts:
   filesTotal: "Gesamtanzahl an Dateien"
 _timelines:
   home: "Startseite"
-  local: "Lokal"
+  local: "Spotlight"
   social: "Sozial"
   global: "Global"
 _play:

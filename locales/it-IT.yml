@@ -1772,7 +1772,7 @@ _instanceCharts:
   filesTotal: "Totale cumulato del numero di file"
 _timelines:
   home: "Home"
-  local: "Locale"
+  local: "Riflettore"
   social: "Sociale"
   global: "Federata"
 _play:

@@ -1845,7 +1845,7 @@ _instanceCharts:
   filesTotal: "누적 파일 수"
 _timelines:
   home: "홈"
-  local: "로컬"
+  local: "주시"
   social: "소셜"
   global: "글로벌"
 _play:

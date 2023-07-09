@@ -1670,7 +1670,7 @@ _instanceCharts:
   filesTotal: "Jumlah # berkas kumulatif"
 _timelines:
   home: "Beranda"
-  local: "Lokal"
+  local: "Menyoroti"
   social: "Sosial"
   global: "Global"
 _play:

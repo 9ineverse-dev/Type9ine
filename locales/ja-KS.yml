@@ -1845,7 +1845,7 @@ _instanceCharts:
   filesTotal: "ファイル数の累積"
 _timelines:
   home: "ホーム"
-  local: "ローカル"
+  local: "スポットライト"
   social: "ソーシャル"
   global: "グローバル"
 _play:

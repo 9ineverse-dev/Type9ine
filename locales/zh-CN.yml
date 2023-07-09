@@ -1845,7 +1845,7 @@ _instanceCharts:
   filesTotal: "文件数总计"
 _timelines:
   home: "首页"
-  local: "本地"
+  local: "脚灯"
   social: "社交"
   global: "全局"
 _play:
