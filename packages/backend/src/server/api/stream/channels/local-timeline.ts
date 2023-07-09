@@ -42,7 +42,7 @@ class LocalTimelineChannel extends Channel {
 	private async onNote(note: Packed<'Note'>) {
 		// チャンネルの投稿ではなく、リノートでなく、リノート回数が一定以上の場合だけ
 		if (
-			!(note.channelId == null && note.renoteId == null && note.renoteCount >= 3) 
+			!(note.channelId == null && note.renoteId == null && note.renoteCount > 5) 
 		) return;
 
 		if (['followers', 'specified'].includes(note.visibility)) {
