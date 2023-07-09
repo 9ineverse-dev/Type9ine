@@ -126,7 +126,7 @@ const headerTabs = $computed(() => [{
 }, ...(isLocalTimelineAvailable ? [{
 	key: 'local',
 	title: i18n.ts._timelines.local,
-	icon: 'ti ti-planet',
+	icon: 'ti ti-bolt',
 	iconOnly: true,
 }, {
 	key: 'social',
