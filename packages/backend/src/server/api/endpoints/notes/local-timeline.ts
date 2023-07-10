@@ -1,6 +1,6 @@
 import { Brackets } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
-import type { NotesRepository } from '@/models/index.js';
+import type { NotesRepository , FollowingsRepository} from '@/models/index.js';
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import { QueryService } from '@/core/QueryService.js';
 import { NoteEntityService } from '@/core/entities/NoteEntityService.js';
@@ -58,6 +58,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		@Inject(DI.notesRepository)
 		private notesRepository: NotesRepository,
 
+		@Inject(DI.followingsRepository)
+		private followingsRepository: FollowingsRepository,
+
 		private noteEntityService: NoteEntityService,
 		private queryService: QueryService,
 		private metaService: MetaService,
@@ -71,10 +74,21 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				throw new ApiError(meta.errors.ltlDisabled);
 			}
 
+			const followingQuery = this.followingsRepository.createQueryBuilder('following')
+				.select('following.followeeId')
+				.where('following.followerId = :followerId', { followerId: me.id });
+
 			//#region Construct query
 			const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
 				ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
+				.andWhere(new Brackets(qb => {
+					//
+					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.score > :minscore) AND Not(note.fileIds = :deffileIds))`,{minscore: 2},{deffileIds: []}) //フォローしているユーザーのメディア付き投稿
+						.orWhere(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.score > :minscore) AND (note.fileIds = :deffileIds))`, {minscore: 3},{deffileIds: []}) //フォローしているユーザーのメディア無し投稿
+						.orWhere(`(Not(note.userId IN (${ followingQuery.getQuery() })) AND (note.score > :minscore) AND (note.fileIds = :deffileIds))`, {minscore: 4},{deffileIds: []}) //フォローしていないユーザーのメディア無し投稿
+						.orWhere(`(Not(note.userId IN (${ followingQuery.getQuery() })) AND (note.score > :minscore) AND Not(note.fileIds = :deffileIds))`, {minscore: 5},{deffileIds: []}); //フォローしていなうユーザーのメディア付き投稿
+				}))
 				.andWhere('(note.visibility = \'public\')')
 				.andWhere('(note.renote IS NULL)')
 				.andWhere('(note.channelId IS NULL)')

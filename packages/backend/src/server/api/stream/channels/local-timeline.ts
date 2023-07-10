@@ -41,8 +41,9 @@ class LocalTimelineChannel extends Channel {
 	@bindThis
 	private async onNote(note: Packed<'Note'>) {
 		// チャンネルの投稿ではなく、リノートでなく、リノート回数が一定以上の場合だけ
-		if (
-			!(note.channelId == null && note.renoteId == null && note.renoteCount > 5) 
+		if (!(
+			(note.channelId == null && this.following.has(note.renote!.userId) && note.renote!.renoteCount == 3 )||
+			(note.channelId == null && !this.following.has(note.renote!.userId) && note.renote!.renoteCount == 5)) 
 		) return;
 
 		if (['followers', 'specified'].includes(note.visibility)) {
@@ -117,7 +118,7 @@ export class LocalTimelineChannelService {
 	}
 
 	@bindThis
-	public create(id: string, connection: Channel['connection']): HybridTimelineChannel {
+	public create(id: string, connection: Channel['connection']): LocalTimelineChannel {
 		return new LocalTimelineChannel(
 			this.metaService,
 			this.roleService,
