@@ -14,6 +14,8 @@ import { ApiError } from '../../error.js';
 export const meta = {
 	tags: ['notes'],
 
+	requireCredential: true,
+
 	res: {
 		type: 'array',
 		optional: false, nullable: false,
@@ -69,7 +71,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		private idService: IdService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
-			const policies = await this.roleService.getUserPolicies(me ? me.id : null);
+			const policies = await this.roleService.getUserPolicies(me.id);
 			if (!policies.ltlAvailable) {
 				throw new ApiError(meta.errors.ltlDisabled);
 			}
