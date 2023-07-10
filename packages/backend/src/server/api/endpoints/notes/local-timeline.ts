@@ -83,7 +83,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
 				.andWhere(new Brackets(qb => {
-					//
 					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.score > :minscore))`,{minscore: 3}) //フォローしているユーザーの投稿
 						.orWhere(`note.score > :minscore`, {minscore: 5}); //フォローしていないユーザーの投稿
 				}))
