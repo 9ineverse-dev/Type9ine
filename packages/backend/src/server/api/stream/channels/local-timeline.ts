@@ -42,9 +42,9 @@ class LocalTimelineChannel extends Channel {
 	private async onNote(note: Packed<'Note'>) {
 		// スポットライト対象のノートのリノートのみを通す。但し、リノートを
 		if (!(
-			(note.channelId == null && this.following.has(note.renote!.userId) && note.renote!.renoteCount == 3 && note.renoteId != null)||
-			(note.channelId == null && note.renote!.renoteCount == 5 && note.user.host && note.renoteId != null)||
-			(note.channelId == null && note.renote!.renoteCount == 10 && note.renoteId != null)) 
+			(note.channelId == null && this.following.has(note.renote!.userId) && note.renote!.renoteCount == 5 && note.renoteId != null)||
+			(note.channelId == null && note.renote!.renoteCount == 9 && note.user.host && note.renoteId != null)||
+			(note.channelId == null && note.renote!.renoteCount == 9 && note.renoteId != null)) 
 		) return;
 
 		let gnote = await this.noteEntityService.pack(note.renoteId, this.user!, {
