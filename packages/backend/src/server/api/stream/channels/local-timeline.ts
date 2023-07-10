@@ -101,7 +101,7 @@ class LocalTimelineChannel extends Channel {
 
 		this.connection.cacheNote(gnote);
 
-		this.send('gnote', gnote);
+		this.send('note', gnote);
 	}
 
 	@bindThis
