@@ -87,7 +87,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.score > :minscore) AND (note.fileIds.length > :minlength))`,{minscore: 2},{minlength: 0}) //フォローしているユーザーのメディア付き投稿
 						.orWhere(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.score > :minscore) AND (note.fileIds.length = :minlength))`, {minscore: 3},{minlength: 0}) //フォローしているユーザーのメディア無し投稿
 						.orWhere(`((note.score > :minscore) AND (note.fileIds.length = :minlength))`, {minscore: 4},{minlength: 0}) //フォローしていないユーザーのメディア無し投稿
-						.orWhere(`((note.score > :minscore) AND (note.fileIds.length > :minlength))`, {minscore: 5}),{minlength: 0}; //フォローしていないユーザーのメディア付き投稿
+						.orWhere(`((note.score > :minscore) AND (note.fileIds.length > :minlength))`, {minscore: 5},{minlength: 0}); //フォローしていないユーザーのメディア付き投稿
 				}))
 				.andWhere('(note.visibility = \'public\')')
 				.andWhere('(note.renote IS NULL)')
