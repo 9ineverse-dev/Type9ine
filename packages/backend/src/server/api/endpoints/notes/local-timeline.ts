@@ -92,7 +92,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere('(note.visibility = \'public\')')
 				.andWhere('(note.renote IS NULL)')
 				.andWhere('(note.channelId IS NULL)')
-				.andWhere('note.renoteCount > :minrenoteCount',{minrenoteCount: 5})
+				//.andWhere('note.renoteCount > :minrenoteCount',{minrenoteCount: 5})
 				.innerJoinAndSelect('note.user', 'user')
 				.leftJoinAndSelect('note.reply', 'reply')
 				.leftJoinAndSelect('note.renote', 'renote')
