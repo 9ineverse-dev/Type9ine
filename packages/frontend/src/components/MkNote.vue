@@ -133,7 +133,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, onMounted, ref, shallowRef, Ref, defineAsyncComponent } from 'vue';
+import { computed,provide, inject, onMounted, ref, shallowRef, Ref, defineAsyncComponent } from 'vue';
 import * as mfm from 'mfm-js';
 import * as misskey from 'misskey-js';
 import MkNoteSub from '@/components/MkNoteSub.vue';
@@ -169,11 +169,12 @@ import { showMovedDialog } from '@/scripts/show-moved-dialog';
 const props = defineProps<{
 	note: misskey.entities.Note;
 	pinned?: boolean;
+	src: string;
 }>();
 
 const inChannel = inject('inChannel', null);
 const currentClip = inject<Ref<misskey.entities.Clip> | null>('currentClip', null);
-
+provide('inChannel', computed(() => props.src === 'channel'));
 let note = $ref(deepClone(props.note));
 
 // plugin
@@ -191,7 +192,8 @@ const isRenote = (
 	note.renote != null &&
 	note.text == null &&
 	note.fileIds.length === 0 &&
-	note.poll == null
+	note.poll == null &&
+	props.src != "local"
 );
 
 const el = shallowRef<HTMLElement>();
