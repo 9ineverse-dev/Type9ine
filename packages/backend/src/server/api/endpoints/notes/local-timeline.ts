@@ -86,7 +86,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
 				.andWhere(new Brackets(qb => {
 					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.score > :minscore1))`,{minscore1: 3}) //フォローしているユーザーの投稿
-						.orWhere(`note.score > :minscore2`, {minscore2: 5}); //フォローしていないユーザーの投稿
+						.orWhere(`(note.score > :minscore2) AND (note.userHost IS NULL)`, {minscore2: 5})
+						.orWhere(`note.score > :minscore3`, {minscore3: 10}); //フォローしていないユーザーの投稿
 				}))
 				.andWhere('(note.visibility = \'public\')')
 				.andWhere('(note.renote IS NULL)')
