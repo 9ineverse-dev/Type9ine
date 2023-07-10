@@ -75,6 +75,7 @@ if (props.src === 'antenna') {
 	connection2 = stream.useChannel('main');
 } else if (props.src === 'local') {
 	endpoint = 'notes/local-timeline';
+	isRenote = false;
 	query = {
 		withReplies: defaultStore.state.showTimelineReplies,
 	};
@@ -165,12 +166,3 @@ const timetravel = (date?: Date) => {
 };
 */
 </script>
-<style>
-@if $props.src == home{
-	.I18n.style.renoteText{
-		display : none;
-	}
-}
-
-
-</style>
