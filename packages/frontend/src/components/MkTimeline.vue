@@ -165,3 +165,12 @@ const timetravel = (date?: Date) => {
 };
 */
 </script>
+<style>
+@if $props.src == home{
+	.I18n.style.renoteText{
+		display : none;
+	}
+}
+
+
+</style>
