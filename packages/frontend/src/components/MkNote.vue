@@ -12,12 +12,12 @@
 	<!--<div v-if="appearNote._prId_" class="tip"><i class="ti ti-speakerphone"></i> {{ i18n.ts.promotion }}<button class="_textButton hide" @click="readPromo()">{{ i18n.ts.hideThisNote }} <i class="ti ti-x"></i></button></div>-->
 	<!--<div v-if="appearNote._featuredId_" class="tip"><i class="ti ti-bolt"></i> {{ i18n.ts.featured }}</div>-->
 	<div v-if="isRenote" :class="$style.renote">
-		<div v-if="note.channel && props.src != 'local'" :class="$style.colorBar" :style="{ background: note.channel.color }"></div>
-		<MkAvatar v-if="props.src != 'local'" :class="$style.renoteAvatar" :user="note.user" link preview/>
-		<i v-if="note.channel && props.src != 'local'" class="ti ti-repeat" style="margin-right: 4px;"></i>
+		<div v-if="note.channel" :class="$style.colorBar" :style="{ background: note.channel.color }"></div>
+		<MkAvatar :class="$style.renoteAvatar" :user="note.user" link preview/>
+		<i v-if="note.channel" class="ti ti-repeat" style="margin-right: 4px;"></i>
 		<I18n v-if="props.src != 'local'" :src="i18n.ts.renotedBy" tag="span" :class="$style.renoteText">
 			<template #user>
-				<MkA v-if="props.src != 'local'" v-user-preview="note.userId" :class="$style.renoteUserName" :to="userPage(note.user)">
+				<MkA  v-user-preview="note.userId" :class="$style.renoteUserName" :to="userPage(note.user)">
 					<MkUserName :user="note.user"/>
 				</MkA>
 			</template>
