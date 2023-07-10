@@ -75,7 +75,7 @@ if (props.src === 'antenna') {
 	connection2 = stream.useChannel('main');
 } else if (props.src === 'local') {
 	endpoint = 'notes/local-timeline';
-	isRenote = false;
+	isRenote = true;
 	query = {
 		withReplies: defaultStore.state.showTimelineReplies,
 	};
