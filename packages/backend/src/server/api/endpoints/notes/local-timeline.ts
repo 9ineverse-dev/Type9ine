@@ -84,10 +84,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
 				.andWhere(new Brackets(qb => {
 					//
-					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.score > :minscore) AND (note.fileIds IS NOT NULL))`,{minscore: 2}) //フォローしているユーザーのメディア付き投稿
-						.orWhere(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.score > :minscore) AND (note.fileIds IS NULL))`, {minscore: 3}) //フォローしているユーザーのメディア無し投稿
-						.orWhere(`((note.score > :minscore) AND (note.fileIds IS NULL))`, {minscore: 4}) //フォローしていないユーザーのメディア無し投稿
-						.orWhere(`((note.score > :minscore) AND (note.fileIds IS NOT NULL))`, {minscore: 5}); //フォローしていなうユーザーのメディア付き投稿
+					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :minscore) AND (note.fileIds IS NOT NULL))`,{minscore: 2}) //フォローしているユーザーのメディア付き投稿
+						.orWhere(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :minscore) AND (note.fileIds IS NULL))`, {minscore: 3}) //フォローしているユーザーのメディア無し投稿
+						.orWhere(`((note.renoteCount > :minscore) AND (note.fileIds IS NULL))`, {minscore: 4}) //フォローしていないユーザーのメディア無し投稿
+						.orWhere(`((note.renoteCount > :minscore) AND (note.fileIds IS NOT NULL))`, {minscore: 5}); //フォローしていなうユーザーのメディア付き投稿
 				}))
 				.andWhere('(note.visibility = \'public\')')
 				.andWhere('(note.renote IS NULL)')
