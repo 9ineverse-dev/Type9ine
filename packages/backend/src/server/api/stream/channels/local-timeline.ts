@@ -51,6 +51,12 @@ class LocalTimelineChannel extends Channel {
 		let gnote = await this.noteEntityService.pack(note.renoteId, this.user!, {
 			detail: true,
 		});
+
+		if(this.following.has(note.userId) && !this.following.has(note.renote!.userId)){
+			gnote = await this.noteEntityService.pack(note.id, this.user!, {
+				detail: true,
+			});
+		}
 		if (['followers', 'specified'].includes(note.visibility)) {
 			gnote = await this.noteEntityService.pack(note.renoteId, this.user!, {
 				detail: true,
