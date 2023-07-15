@@ -36,7 +36,7 @@
 	<div v-if="instance.policies.ltlAvailable" :class="[$style.tl, $style.panel]">
 		<div :class="$style.tlHeader">{{ i18n.ts.letsLookAtTimeline }}</div>
 		<div :class="$style.tlBody">
-			<MkTimeline src="local"/>
+			<MkTimeline src="global"/>
 		</div>
 	</div>
 	<div :class="$style.panel">
