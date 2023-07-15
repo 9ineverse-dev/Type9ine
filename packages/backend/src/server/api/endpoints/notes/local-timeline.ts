@@ -113,7 +113,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.leftJoinAndSelect('note.renote', 'renote')
 				.leftJoinAndSelect('reply.user', 'replyUser')
 				.leftJoinAndSelect('renote.user', 'renoteUser')
-				.distinct(['note.id','note.renoteId']);
+				.distinct('note.id','note.renoteId');
 
 			this.queryService.generateChannelQuery(query, me);
 			this.queryService.generateRepliesQuery(query, ps.withReplies, me);
