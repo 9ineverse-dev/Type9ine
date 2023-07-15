@@ -40,7 +40,6 @@ class LocalTimelineChannel extends Channel {
 
 	@bindThis
 	private async onNote(note: Packed<'Note'>) {
-		// スポットライト対象のノートのリノートのみを通す。但し、リノートを
 		if (!(
 			(note.channelId == null && this.following.has(note.renote!.userId) && note.renote!.renoteCount == 5 && note.renoteId != null)||
 			(note.channelId == null && note.renote!.renoteCount == 10 && note.user.host && note.renoteId != null)||
