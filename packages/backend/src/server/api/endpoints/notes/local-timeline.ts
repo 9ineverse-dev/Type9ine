@@ -69,8 +69,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		private roleService: RoleService,
 		private activeUsersChart: ActiveUsersChart,
 		private idService: IdService,
-		private DynamicRenoteCount1 = 20,
-		private DynamicRenoteCount2 = 30,
 	) {
 		super(meta, paramDef, async (ps, me) => {
 			const policies = await this.roleService.getUserPolicies(me.id);
@@ -78,10 +76,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				throw new ApiError(meta.errors.ltlDisabled);
 			}
 
-			if(me.followingCount < 50){
-				 DynamicRenoteCount1 = 10;
-				 DynamicRenoteCount2 = 20;
-				}
 
 			const followingQuery = this.followingsRepository.createQueryBuilder('following')
 				.select('following.followeeId')
@@ -93,8 +87,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
 				.andWhere(new Brackets(qb => {
 					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :minrenoteCount1) AND (note.renote IS NULL))`,{minrenoteCount1: 5})
-						.orWhere(`((note.renoteCount > :minrenoteCount2) AND (note.userHost IS NULL) AND (note.renote IS NULL))`, {minrenoteCount2: this.DynamicRenoteCount1})
-						.orWhere(`((note.renoteCount > :minrenoteCount3) AND (note.renote IS NULL))`, {minrenoteCount3: this.DynamicRenoteCount2})
+						.orWhere(`((note.renoteCount > :minrenoteCount2) AND (note.userHost IS NULL) AND (note.renote IS NULL))`, {minrenoteCount2: 20})
+						.orWhere(`((note.renoteCount > :minrenoteCount3) AND (note.renote IS NULL))`, {minrenoteCount3: 30})
 						.orWhere(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.renote!.userId NOT IN (${ followingQuery.getQuery() })) AND (note.renote.renoteCount >= :minrenoteCount4))`,{minrenoteCount4: 10});
 				}))
 				.andWhere('(note.visibility = \'public\')')
