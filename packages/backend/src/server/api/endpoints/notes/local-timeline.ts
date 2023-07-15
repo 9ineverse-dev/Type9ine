@@ -96,7 +96,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.where('following.followerId = :followerId', { followerId: me.id });
 
 			//#region Construct query
-			const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note').distinctOn(['renoteId']),
+			const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note').distinctOn(['note.renoteId']),
 				ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
 				
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
