@@ -1,7 +1,7 @@
 {
 	"name": "misskey",
-	"version": "13.13.2-9ine-1.1.0",
-	"codename": "nasubi",
+	"version": "13.13.2-9ine-1.1.1",
+	"codename": "ezwin",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/9ineverse-dev/Type-9ine.git"
