@@ -96,7 +96,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.where('following.followerId = :followerId', { followerId: me.id });
 
 			//#region Construct query
-			const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
+			const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note').select('DISTINCT note.renoteId', 'note_renoteId'),
 				ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
 				.andWhere(new Brackets(qb => {
@@ -111,8 +111,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.leftJoinAndSelect('note.reply', 'reply')
 				.leftJoinAndSelect('note.renote', 'renote')
 				.leftJoinAndSelect('reply.user', 'replyUser')
-				.leftJoinAndSelect('renote.user', 'renoteUser')
-				.select('DISTINCT(note.renoteId)');
+				.leftJoinAndSelect('renote.user', 'renoteUser');
 
 			this.queryService.generateChannelQuery(query, me);
 			this.queryService.generateRepliesQuery(query, ps.withReplies, me);
