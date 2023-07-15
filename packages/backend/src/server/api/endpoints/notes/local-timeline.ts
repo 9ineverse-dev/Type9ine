@@ -109,8 +109,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere('(note.channelId IS NULL)')
 				.innerJoinAndSelect('note.user', 'user')
 				.leftJoinAndSelect('note.reply', 'reply')
-				.leftJoinAndSelect('note.renote', 'renote')
-				.distinct(true)
+				.leftJoinAndSelect('DISTINCT note.renote', 'renote')
 				.leftJoinAndSelect('reply.user', 'replyUser')
 				.leftJoinAndSelect('renote.user', 'renoteUser');
 
