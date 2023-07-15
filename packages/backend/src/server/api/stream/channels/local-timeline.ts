@@ -43,7 +43,7 @@ class LocalTimelineChannel extends Channel {
 		if (!(
 			(note.channelId == null && this.following.has(note.renote!.userId) && note.renote!.renoteCount == 5 && note.renoteId != null)||
 			(note.channelId == null && note.renote!.renoteCount == 20 && note.user.host == null && note.renoteId != null)||
-			(note.channelId == null && note.renote!.renoteCount == 10 && note.renoteId != null)||
+			(note.channelId == null && note.renote!.renoteCount == 30 && note.renoteId != null)||
 			(note.channelId == null && this.following.has(note.userId) && !this.following.has(note.renote!.userId) && note.renote!.renoteCount >= 10 && note.renote!.renoteCount <= 12  && note.renoteId != null)) 
 		) return;
 
