@@ -40,25 +40,16 @@ class LocalTimelineChannel extends Channel {
 
 	@bindThis
 	private async onNote(note: Packed<'Note'>) {
-		// ストリーミングについては、フォロー数によるリコメンド条件変更は実装しない。（ワイの理解不足のため）
+		// スポットライト対象のノートのリノートのみを通す。但し、リノートを
 		if (!(
 			(note.channelId == null && this.following.has(note.renote!.userId) && note.renote!.renoteCount == 5 && note.renoteId != null)||
-			(note.channelId == null && note.renote!.renoteCount == 20 && note.user.host == null && note.renoteId != null)||
-			(note.channelId == null && note.renote!.renoteCount == 30 && note.renoteId != null)||
-			(note.channelId == null && this.following.has(note.userId) && !this.following.has(note.renote!.userId) && note.renote!.renoteCount >= 10 && note.renote!.renoteCount <= 15 && note.renoteId != null)) 
+			(note.channelId == null && note.renote!.renoteCount == 9 && note.user.host && note.renoteId != null)||
+			(note.channelId == null && note.renote!.renoteCount == 9 && note.renoteId != null)) 
 		) return;
 
 		let gnote = await this.noteEntityService.pack(note.renoteId, this.user!, {
 			detail: true,
 		});
-
-		if(this.following.has(note.userId) && !this.following.has(note.renote!.userId))
-		{
-			gnote = await this.noteEntityService.pack(note.id, this.user!, {
-				detail: true,
-			})
-		};
-
 		if (['followers', 'specified'].includes(note.visibility)) {
 			gnote = await this.noteEntityService.pack(note.renoteId, this.user!, {
 				detail: true,
