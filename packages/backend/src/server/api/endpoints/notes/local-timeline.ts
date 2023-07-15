@@ -78,10 +78,17 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			
 			let DynamicRenoteCount1 = 20;
 			let DynamicRenoteCount2 = 30;
+			let hurdleTime = 8;
+			let limitTime = 24;
 			
 			if(me.followingCount < 50){ 
 				DynamicRenoteCount1 = 10;
 				DynamicRenoteCount2 = 20;
+				hurdleTime = 0;
+				limitTime = 48;
+			}else if(me.followingCount < 100){
+				hurdleTime = 12;
+				limitTime = hurdleTime * 8;
 			}
 
 			const followingQuery = this.followingsRepository.createQueryBuilder('following')
@@ -103,6 +110,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.innerJoinAndSelect('note.user', 'user')
 				.leftJoinAndSelect('note.reply', 'reply')
 				.leftJoinAndSelect('note.renote', 'renote')
+				.distinct(true)
 				.leftJoinAndSelect('reply.user', 'replyUser')
 				.leftJoinAndSelect('renote.user', 'renoteUser');
 
