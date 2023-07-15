@@ -98,6 +98,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			//#region Construct query
 			const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
 				ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
+				.distinctOn(['note.renoteid'])
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
 				.andWhere(new Brackets(qb => {
 					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :minrenoteCount1) AND (note.renote IS NULL))`,{minrenoteCount1: 5})
@@ -110,7 +111,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.innerJoinAndSelect('note.user', 'user')
 				.leftJoinAndSelect('note.reply', 'reply')
 				.leftJoinAndSelect('note.renote', 'renote')
-				.distinctOn(['note.renote'])
 				.leftJoinAndSelect('reply.user', 'replyUser')
 				.leftJoinAndSelect('renote.user', 'renoteUser');
 
