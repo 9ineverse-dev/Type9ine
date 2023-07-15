@@ -81,7 +81,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			
 			if(me.followingCount < 50){ 
 				DynamicRenoteCount1 = 10;
-				DynamicRenoteCount2 = 15;
+				DynamicRenoteCount2 = 20;
 			}
 
 			const followingQuery = this.followingsRepository.createQueryBuilder('following')
