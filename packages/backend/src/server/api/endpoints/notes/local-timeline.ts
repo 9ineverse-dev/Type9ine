@@ -98,8 +98,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			//#region Construct query
 			const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
 				ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
-				.distinctOn(['note.renoteId','note.id'])
-				.orderBy({ 'note.id': 'DESC', 'note.renoteId': 'DESC' })
+				.distinctOn(['note.renoteId','renote.id'])
+				.orderBy({ 'note.id': 'DESC', 'renote.id': 'DESC' })
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
 				.andWhere(new Brackets(qb => {
 					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :minrenoteCount1) AND (note.renote IS NULL))`,{minrenoteCount1: 5})
