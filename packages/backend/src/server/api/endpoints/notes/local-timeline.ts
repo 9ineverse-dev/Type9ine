@@ -103,7 +103,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :minrenoteCount1) AND (note.renote IS NULL))`,{minrenoteCount1: 5})
 						.orWhere(`((note.renoteCount > :minrenoteCount2) AND (note.userHost IS NULL) AND (note.renote IS NULL))`, {minrenoteCount2: DynamicRenoteCount1})
 						.orWhere(`((note.renoteCount > :minrenoteCount3) AND (note.renote IS NULL))`, {minrenoteCount3: DynamicRenoteCount2})
-						.orWhere(`((note.userId IN (${ followingQuery.getQuery() })) AND (renote.userId NOT IN (${ followingQuery.getQuery() })) AND (renote.renoteCount > :minrenoteCount4)) AND (note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note GROUP BY note.renoteId) temp))`,{minrenoteCount4: 5});
+						.orWhere(`((note.userId IN (${ followingQuery.getQuery() })) AND (renote.userId NOT IN (${ followingQuery.getQuery() })) AND (renote.renoteCount > :minrenoteCount4)) AND (note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE (note.userId IN (${ followingQuery.getQuery() })) GROUP BY note.renoteId) temp))`,{minrenoteCount4: 5});
 				}))
 				.andWhere('(note.visibility = \'public\')')
 				.andWhere('(note.channelId IS NULL)')
