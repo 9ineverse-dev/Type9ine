@@ -107,7 +107,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				}))
 				.andWhere('(note.visibility = \'public\')')
 				.andWhere('(note.channelId IS NULL)')
-				.andWhere('note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note GROUP BY note_rinoteId) temp)')
+				.andWhere('note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note GROUP BY note.renoteId) temp)')
 				.innerJoinAndSelect('note.user', 'user')
 				.leftJoinAndSelect('note.reply', 'reply')
 				.leftJoinAndSelect('note.renote', 'renote')
