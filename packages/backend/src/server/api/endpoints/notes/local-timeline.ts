@@ -107,6 +107,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				}))
 				.andWhere('(note.visibility = \'public\')')
 				.andWhere('(note.channelId IS NULL)')
+				.andWhere('note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note GROUP BY note_rinoteId) temp)')
 				.innerJoinAndSelect('note.user', 'user')
 				.leftJoinAndSelect('note.reply', 'reply')
 				.leftJoinAndSelect('note.renote', 'renote')
@@ -141,7 +142,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			}
 			//#endregion
 
-			const timeline = await query.take(ps.limit).select('note.id','renote.id').destinct(true).getMany();
+			const timeline = await query.take(ps.limit).getMany();
 
 			process.nextTick(() => {
 				if (me) {
