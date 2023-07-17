@@ -37,25 +37,30 @@ class LocalTimelineChannel extends Channel {
 		// Subscribe events
 		this.subscriber.on('notesStream', this.onNote);
 	}
-
+//将来的にはstreamもソートに準拠させたい
 	@bindThis
 	private async onNote(note: Packed<'Note'>) {
+		let DynamicRenoteCount1 = 10;
+		let DynamicRenoteCount2 = 40;
+		let DynamicRenoteCount3 = 60;
+		if(this.connection.user!.followersCount < 50){
+			DynamicRenoteCount1 = 5;
+			DynamicRenoteCount2 = 10;
+			DynamicRenoteCount3 = 20;
+		}else if(this.connection.user!.followersCount < 500){
+			DynamicRenoteCount2 = 20;
+			DynamicRenoteCount3 = 30;
+		}
 		if (!(
-			(note.channelId == null && this.following.has(note.renote!.userId) && note.renote!.renoteCount == 5 && note.renoteId != null)||
-			(note.channelId == null && note.renote!.renoteCount == 20 && note.user.host == null && note.renoteId != null)||
-			(note.channelId == null && note.renote!.renoteCount == 30 && note.renoteId != null)||
-			(note.channelId == null && this.following.has(note.userId) && !this.following.has(note.renote!.userId) && note.renote!.renoteCount >= 10 && note.renote!.renoteCount <= 15  && note.renoteId != null)) 
+			(note.channelId == null && this.following.has(note.renote!.userId) && note.renote!.renoteCount == DynamicRenoteCount1 && note.renoteId != null)||
+			(note.channelId == null && note.renote!.renoteCount == DynamicRenoteCount2 && note.user.host == null && note.renoteId != null)||
+			(note.channelId == null && note.renote!.renoteCount == DynamicRenoteCount3 && note.renoteId != null))
 		) return;
 
 		let gnote = await this.noteEntityService.pack(note.renoteId, this.user!, {
 			detail: true,
 		});
 
-		if(this.following.has(note.userId) && !this.following.has(note.renote!.userId)){
-			gnote = await this.noteEntityService.pack(note.id, this.user!, {
-				detail: true,
-			});
-		}
 		if (['followers', 'specified'].includes(note.visibility)) {
 			gnote = await this.noteEntityService.pack(note.renoteId, this.user!, {
 				detail: true,

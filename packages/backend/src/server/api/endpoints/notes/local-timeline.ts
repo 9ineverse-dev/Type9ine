@@ -53,6 +53,7 @@ export const paramDef = {
 	required: [],
 } as const;
 
+
 // eslint-disable-next-line import/no-default-export
 @Injectable()
 export default class extends Endpoint<typeof meta, typeof paramDef> {
@@ -76,19 +77,22 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				throw new ApiError(meta.errors.ltlDisabled);
 			}
 			
-			let DynamicRenoteCount1 = 20;
-			let DynamicRenoteCount2 = 30;
-			let hurdleTime = 8;
-			let limitTime = 24;
+			let DynamicRenoteCount1 = 10;
+			let DynamicRenoteCount2 = 40;
+			let DynamicRenoteCount3 = 60;
+			let DynamicRenoteCount4 = 15;
+			let DynamicRenoteCount5 = 3;
 			
-			if(me.followingCount < 50){ 
-				DynamicRenoteCount1 = 10;
+			
+			if(me.followingCount < 50){
+				DynamicRenoteCount1 = 5;
+				DynamicRenoteCount2 = 10;
+				DynamicRenoteCount3 = 20;
+				DynamicRenoteCount4 = 7;
+			}else if(me.followingCount < 500){
 				DynamicRenoteCount2 = 20;
-				hurdleTime = 0;
-				limitTime = 48;
-			}else if(me.followingCount < 100){
-				hurdleTime = 12;
-				limitTime = hurdleTime * 8;
+				DynamicRenoteCount3 = 30;
+				DynamicRenoteCount4 = 10;
 			}
 
 			const followingQuery = this.followingsRepository.createQueryBuilder('following')
@@ -100,10 +104,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
 				.andWhere(new Brackets(qb => {
-					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :minrenoteCount1) AND (note.renote IS NULL))`,{minrenoteCount1: 5})
-						.orWhere(`((note.renoteCount > :minrenoteCount2) AND (note.userHost IS NULL) AND (note.renote IS NULL))`, {minrenoteCount2: DynamicRenoteCount1})
-						.orWhere(`((note.renoteCount > :minrenoteCount3) AND (note.renote IS NULL))`, {minrenoteCount3: DynamicRenoteCount2})
-						.orWhere(`((note.userId IN (${ followingQuery.getQuery() })) AND (renote.userId NOT IN (${ followingQuery.getQuery() })) AND (renote.renoteCount > :minrenoteCount4)) AND (note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE (note.userId IN (${ followingQuery.getQuery() })) GROUP BY note.renoteId) temp))`,{minrenoteCount4: 5});
+					qb.where(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :minrenoteCount1) AND (note.renote IS NULL))`,{minrenoteCount1: DynamicRenoteCount1})
+						.orWhere(`((note.renoteCount > :minrenoteCount2) AND (note.userHost IS NULL) AND (note.renote IS NULL))`, {minrenoteCount2: DynamicRenoteCount2})
+						.orWhere(`((note.renoteCount > :minrenoteCount3) AND (note.renote IS NULL))`, {minrenoteCount3: DynamicRenoteCount3})
+						.orWhere(`((note.userId IN (${ followingQuery.getQuery() })) AND (renote.userId NOT IN (${ followingQuery.getQuery() })) AND (renote.renoteCount > :minrenoteCount4)) AND (note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE (note.userId IN (${ followingQuery.getQuery() })) GROUP BY note.renoteId) temp))`,{minrenoteCount4: DynamicRenoteCount4})
+						.orWhere(`((note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteId IS NOT NULL) AND (note.userHost IS NULL) AND (renote.userId IN (${ followingQuery.getQuery() })) AND (renote.fileId IS NOT NULL) AND (renote.userHost IS NULL) AND (renote.renoteCount > :minrenoteCount5)) AND (note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (${ followingQuery.getQuery() })) AND (note.userHost IS NULL)) GROUP BY note.renoteId) temp))`,{minrenoteCount5: DynamicRenoteCount5});
 				}))
 				.andWhere('(note.visibility = \'public\')')
 				.andWhere('(note.channelId IS NULL)')
