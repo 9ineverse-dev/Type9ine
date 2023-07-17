@@ -1,6 +1,6 @@
 {
-	"name": "misskey",
-	"version": "13.13.2-9ine-1.1.1",
+	"name": "misskey-type9ine",
+	"version": "13.13.2-9ine-1.1.2",
 	"codename": "ezwin",
 	"repository": {
 		"type": "git",
