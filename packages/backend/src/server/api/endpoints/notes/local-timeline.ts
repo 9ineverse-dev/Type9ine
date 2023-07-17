@@ -81,7 +81,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			let DynamicRenoteCount2 = 40;
 			let DynamicRenoteCount3 = 60;
 			let DynamicRenoteCount4 = 15;
-			let DynamicRenoteCount5 = 3;
+			let DynamicRenoteCount5 = 2;
 			
 			
 			if(me.followingCount < 50){
