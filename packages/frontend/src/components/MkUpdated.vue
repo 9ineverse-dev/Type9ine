@@ -22,7 +22,7 @@ const modal = shallowRef<InstanceType<typeof MkModal>>();
 
 const whatIsNew = () => {
 	modal.value.close();
-	window.open('https://github.com/9ineverse-dev/Type-9ine/releases', '_blank');
+	window.open('https://github.com/misskey-dev/misskey/releases', '_blank');
 };
 
 onMounted(() => {
