@@ -131,7 +131,7 @@
 		</I18n>
 	</div>
 	</template>
-	
+
 	<script lang="ts" setup>
 	import { computed, inject, onMounted, ref, shallowRef, Ref, defineAsyncComponent } from 'vue';
 	import * as mfm from 'mfm-js';
@@ -165,17 +165,18 @@
 	import { MenuItem } from '@/types/menu';
 	import MkRippleEffect from '@/components/MkRippleEffect.vue';
 	import { showMovedDialog } from '@/scripts/show-moved-dialog';
-	
+	import { shouldCollapsed } from '@/scripts/collapsed';
+
 	const props = defineProps<{
 		note: misskey.entities.Note;
 		pinned?: boolean;
 	}>();
-	
+
 	const inChannel = inject('inChannel', null);
 	const currentClip = inject<Ref<misskey.entities.Clip> | null>('currentClip', null);
-	
+
 	let note = $ref(deepClone(props.note));
-	
+
 	// plugin
 	if (noteViewInterruptors.length > 0) {
 		onMounted(async () => {
@@ -186,14 +187,14 @@
 			note = result;
 		});
 	}
-	
+
 	const isRenote = (
 		note.renote != null &&
 		note.text == null &&
 		note.fileIds.length === 0 &&
 		note.poll == null
 	);
-	
+
 	const el = shallowRef<HTMLElement>();
 	const menuButton = shallowRef<HTMLElement>();
 	const renoteButton = shallowRef<HTMLElement>();
@@ -204,17 +205,7 @@
 	const isMyRenote = $i && ($i.id === note.userId);
 	const showContent = ref(false);
 	const urls = appearNote.text ? extractUrlFromMfm(mfm.parse(appearNote.text)) : null;
-	const isLong = (appearNote.cw == null && appearNote.text != null && (
-		(appearNote.text.includes('$[x2')) ||
-		(appearNote.text.includes('$[x3')) ||
-		(appearNote.text.includes('$[x4')) ||
-		(appearNote.text.includes('$[scale')) ||
-		(appearNote.text.includes('$[position')) ||
-		(appearNote.text.split('\n').length > 9) ||
-		(appearNote.text.length > 500) ||
-		(appearNote.files.length >= 5) ||
-		(urls && urls.length >= 4)
-	));
+	const isLong = shouldCollapsed(appearNote);
 	const collapsed = ref(appearNote.cw == null && isLong);
 	const isDeleted = ref(false);
 	const muted = ref(checkWordMute(appearNote, $i, defaultStore.state.mutedWords));
@@ -223,7 +214,7 @@
 	const showTicker = (defaultStore.state.instanceTicker === 'always') || (defaultStore.state.instanceTicker === 'remote' && appearNote.user.instance);
 	const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibility) || appearNote.userId === $i.id);
 	let renoteCollapsed = $ref(defaultStore.state.collapseRenotes && isRenote && (($i && ($i.id === note.userId || $i.id === appearNote.userId)) || (appearNote.myReaction != null)));
-	
+
 	const keymap = {
 		'r': () => reply(true),
 		'e|a|plus': () => react(true),
@@ -234,23 +225,23 @@
 		'm|o': () => menu(true),
 		's': () => showContent.value !== showContent.value,
 	};
-	
+
 	useNoteCapture({
 		rootEl: el,
 		note: $$(appearNote),
 		isDeletedRef: isDeleted,
 	});
-	
+
 	useTooltip(renoteButton, async (showing) => {
 		const renotes = await os.api('notes/renotes', {
 			noteId: appearNote.id,
 			limit: 11,
 		});
-	
+
 		const users = renotes.map(x => x.user);
-	
+
 		if (users.length < 1) return;
-	
+
 		os.popup(MkUsersTooltip, {
 			showing,
 			users,
@@ -258,13 +249,24 @@
 			targetElement: renoteButton.value,
 		}, {}, 'closed');
 	});
-	
+
+	type Visibility = 'public' | 'home' | 'followers' | 'specified';
+
+	// defaultStore.state.visibilityがstringなためstringも受け付けている
+	function smallerVisibility(a: Visibility | string, b: Visibility | string): Visibility {
+		if (a === 'specified' || b === 'specified') return 'specified';
+		if (a === 'followers' || b === 'followers') return 'followers';
+		if (a === 'home' || b === 'home') return 'home';
+		// if (a === 'public' || b === 'public')
+		return 'public';
+	}
+
 	function renote(viaKeyboard = false) {
 		pleaseLogin();
 		showMovedDialog();
-	
+
 		let items = [] as MenuItem[];
-	
+
 		if (appearNote.channel) {
 			items = items.concat([{
 				text: i18n.ts.inChannelRenote,
@@ -277,7 +279,7 @@
 						const y = rect.top + (el.offsetHeight / 2);
 						os.popup(MkRippleEffect, { x, y }, {}, 'end');
 					}
-	
+
 					os.api('notes/create', {
 						renoteId: appearNote.id,
 						channelId: appearNote.channelId,
@@ -296,7 +298,7 @@
 				},
 			}, null]);
 		}
-	
+
 		items = items.concat([{
 			text: i18n.ts.renote,
 			icon: 'ti ti-repeat',
@@ -308,8 +310,13 @@
 					const y = rect.top + (el.offsetHeight / 2);
 					os.popup(MkRippleEffect, { x, y }, {}, 'end');
 				}
-	
+
+				const configuredVisibility = defaultStore.state.rememberNoteVisibility ? defaultStore.state.visibility : defaultStore.state.defaultNoteVisibility;
+				const localOnly = defaultStore.state.rememberNoteVisibility ? defaultStore.state.localOnly : defaultStore.state.defaultNoteLocalOnly;
+
 				os.api('notes/create', {
+					localOnly,
+					visibility: smallerVisibility(appearNote.visibility, configuredVisibility),
 					renoteId: appearNote.id,
 				}).then(() => {
 					os.toast(i18n.ts.renoted);
@@ -324,12 +331,12 @@
 				});
 			},
 		}]);
-	
+
 		os.popupMenu(items, renoteButton.value, {
 			viaKeyboard,
 		});
 	}
-	
+
 	function reply(viaKeyboard = false): void {
 		pleaseLogin();
 		os.post({
@@ -339,7 +346,7 @@
 			focus();
 		});
 	}
-	
+
 	function react(viaKeyboard = false): void {
 		pleaseLogin();
 		showMovedDialog();
@@ -370,7 +377,7 @@
 			});
 		}
 	}
-	
+
 	function undoReact(note): void {
 		const oldReaction = note.myReaction;
 		if (!oldReaction) return;
@@ -378,7 +385,7 @@
 			noteId: note.id,
 		});
 	}
-	
+
 	function onContextmenu(ev: MouseEvent): void {
 		const isLink = (el: HTMLElement) => {
 			if (el.tagName === 'A') return true;
@@ -390,7 +397,7 @@
 		};
 		if (isLink(ev.target)) return;
 		if (window.getSelection().toString() !== '') return;
-	
+
 		if (defaultStore.state.useReactionPickerForContextMenu) {
 			ev.preventDefault();
 			react();
@@ -398,17 +405,17 @@
 			os.contextMenu(getNoteMenu({ note: note, translating, translation, menuButton, isDeleted, currentClip: currentClip?.value }), ev).then(focus);
 		}
 	}
-	
+
 	function menu(viaKeyboard = false): void {
 		os.popupMenu(getNoteMenu({ note: note, translating, translation, menuButton, isDeleted, currentClip: currentClip?.value }), menuButton.value, {
 			viaKeyboard,
 		}).then(focus);
 	}
-	
+
 	async function clip() {
 		os.popupMenu(await getNoteClipMenu({ note: note, isDeleted, currentClip: currentClip?.value }), clipButton.value).then(focus);
 	}
-	
+
 	function showRenoteMenu(viaKeyboard = false): void {
 		if (!isMyRenote) return;
 		pleaseLogin();
@@ -426,37 +433,37 @@
 			viaKeyboard: viaKeyboard,
 		});
 	}
-	
+
 	function focus() {
 		el.value.focus();
 	}
-	
+
 	function blur() {
 		el.value.blur();
 	}
-	
+
 	function focusBefore() {
 		focusPrev(el.value);
 	}
-	
+
 	function focusAfter() {
 		focusNext(el.value);
 	}
-	
+
 	function readPromo() {
 		os.api('promo/read', {
 			noteId: appearNote.id,
 		});
 		isDeleted.value = true;
 	}
-	
+
 	function showReactions(): void {
 		os.popup(defineAsyncComponent(() => import('@/components/MkReactedUsersDialog.vue')), {
 			noteId: appearNote.id,
 		}, {}, 'closed');
 	}
 	</script>
-	
+
 	<style lang="scss" module>
 	.root {
 		position: relative;
@@ -464,7 +471,7 @@
 		font-size: 1.05em;
 		overflow: clip;
 		contain: content;
-	
+
 		// これらの指定はパフォーマンス向上には有効だが、ノートの高さは一定でないため、
 		// 下の方までスクロールすると上のノートの高さがここで決め打ちされたものに変化し、表示しているノートの位置が変わってしまう
 		// ノートがマウントされたときに自身の高さを取得し contain-intrinsic-size を設定しなおせばほぼ解決できそうだが、
@@ -472,10 +479,10 @@
 		// 一度レンダリングされた要素はブラウザがよしなにサイズを覚えておいてくれるような実装になるまで待った方が良さそう(なるのか？)
 		//content-visibility: auto;
 		//contain-intrinsic-size: 0 128px;
-	
+
 		&:focus-visible {
 			outline: none;
-	
+
 			&:after {
 				content: "";
 				pointer-events: none;
@@ -494,16 +501,16 @@
 				box-sizing: border-box;
 			}
 		}
-	
+
 		.footer {
 			position: relative;
 			z-index: 1;
 		}
-	
+
 		&:hover > .article > .main > .footer > .footerButton {
 			opacity: 1;
 		}
-	
+
 		&.showActionsOnlyHover {
 			.footer {
 				visibility: hidden;
@@ -516,23 +523,23 @@
 				border-radius: 8px;
 				box-shadow: 0px 4px 32px var(--shadow);
 			}
-	
+
 			.footerButton {
 				font-size: 90%;
-	
+
 				&:not(:last-child) {
 					margin-right: 0;
 				}
 			}
 		}
-	
+
 		&.showActionsOnlyHover:hover {
 			.footer {
 				visibility: visible;
 			}
 		}
 	}
-	
+
 	.tip {
 		display: flex;
 		align-items: center;
@@ -542,16 +549,16 @@
 		white-space: pre;
 		color: #d28a3f;
 	}
-	
+
 	.tip + .article {
 		padding-top: 8px;
 	}
-	
+
 	.replyTo {
 		opacity: 0.7;
 		padding-bottom: 0;
 	}
-	
+
 	.renote {
 		position: relative;
 		display: flex;
@@ -560,16 +567,16 @@
 		line-height: 28px;
 		white-space: pre;
 		color: var(--renote);
-	
+
 		& + .article {
 			padding-top: 8px;
 		}
-	
+
 		> .colorBar {
 			height: calc(100% - 6px);
 		}
 	}
-	
+
 	.renoteAvatar {
 		flex-shrink: 0;
 		display: inline-block;
@@ -577,32 +584,32 @@
 		height: 28px;
 		margin: 0 8px 0 0;
 	}
-	
+
 	.renoteText {
 		overflow: hidden;
 		flex-shrink: 1;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-	
+
 	.renoteUserName {
 		font-weight: bold;
 	}
-	
+
 	.renoteInfo {
 		margin-left: auto;
 		font-size: 0.9em;
 	}
-	
+
 	.renoteTime {
 		flex-shrink: 0;
 		color: inherit;
 	}
-	
+
 	.renoteMenu {
 		margin-right: 4px;
 	}
-	
+
 	.collapsedRenoteTarget {
 		display: flex;
 		align-items: center;
@@ -610,7 +617,7 @@
 		white-space: pre;
 		padding: 0 32px 18px;
 	}
-	
+
 	.collapsedRenoteTargetAvatar {
 		flex-shrink: 0;
 		display: inline-block;
@@ -618,7 +625,7 @@
 		height: 28px;
 		margin: 0 8px 0 0;
 	}
-	
+
 	.collapsedRenoteTargetText {
 		overflow: hidden;
 		flex-shrink: 1;
@@ -627,18 +634,18 @@
 		font-size: 90%;
 		opacity: 0.7;
 		cursor: pointer;
-	
+
 		&:hover {
 			text-decoration: underline;
 		}
 	}
-	
+
 	.article {
 		position: relative;
 		display: flex;
 		padding: 28px 32px;
 	}
-	
+
 	.colorBar {
 		position: absolute;
 		top: 8px;
@@ -648,7 +655,7 @@
 		border-radius: 999px;
 		pointer-events: none;
 	}
-	
+
 	.avatar {
 		flex-shrink: 0;
 		display: block !important;
@@ -659,12 +666,12 @@
 		top: calc(22px + var(--stickyTop, 0px));
 		left: 0;
 	}
-	
+
 	.main {
 		flex: 1;
 		min-width: 0;
 	}
-	
+
 	.cw {
 		cursor: default;
 		display: block;
@@ -672,14 +679,14 @@
 		padding: 0;
 		overflow-wrap: break-word;
 	}
-	
+
 	.showLess {
 		width: 100%;
 		margin-top: 14px;
 		position: sticky;
 		bottom: calc(var(--stickyBottom, 0px) + 14px);
 	}
-	
+
 	.showLessLabel {
 		display: inline-block;
 		background: var(--popup);
@@ -688,13 +695,13 @@
 		border-radius: 999px;
 		box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
 	}
-	
+
 	.contentCollapsed {
 		position: relative;
 		max-height: 9em;
 		overflow: clip;
 	}
-	
+
 	.collapsed {
 		display: block;
 		position: absolute;
@@ -704,12 +711,12 @@
 		width: 100%;
 		height: 64px;
 		background: linear-gradient(0deg, var(--panel), var(--X15));
-	
+
 		&:hover > .collapsedLabel {
 			background: var(--panelHighlight);
 		}
 	}
-	
+
 	.collapsedLabel {
 		display: inline-block;
 		background: var(--panel);
@@ -718,126 +725,126 @@
 		border-radius: 999px;
 		box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
 	}
-	
+
 	.text {
 		overflow-wrap: break-word;
 	}
-	
+
 	.replyIcon {
 		color: var(--accent);
 		margin-right: 0.5em;
 	}
-	
+
 	.translation {
 		border: solid 0.5px var(--divider);
 		border-radius: var(--radius);
 		padding: 12px;
 		margin-top: 8px;
 	}
-	
+
 	.urlPreview {
 		margin-top: 8px;
 	}
-	
+
 	.poll {
 		font-size: 80%;
 	}
-	
+
 	.quote {
 		padding: 8px 0;
 	}
-	
+
 	.quoteNote {
 		padding: 16px;
 		border: dashed 1px var(--renote);
 		border-radius: 8px;
 	}
-	
+
 	.channel {
 		opacity: 0.7;
 		font-size: 80%;
 	}
-	
+
 	.footer {
 		margin-bottom: -14px;
 	}
-	
+
 	.footerButton {
 		margin: 0;
 		padding: 8px;
 		opacity: 0.7;
-	
+
 		&:not(:last-child) {
 			margin-right: 28px;
 		}
-	
+
 		&:hover {
 			color: var(--fgHighlighted);
 		}
 	}
-	
+
 	.footerButtonCount {
 		display: inline;
 		margin: 0 0 0 8px;
 		opacity: 0.7;
 	}
-	
+
 	@container (max-width: 580px) {
 		.root {
 			font-size: 0.95em;
 		}
-	
+
 		.renote {
 			padding: 12px 26px 0 26px;
 		}
-	
+
 		.article {
 			padding: 24px 26px;
 		}
-	
+
 		.avatar {
 			width: 50px;
 			height: 50px;
 		}
 	}
-	
+
 	@container (max-width: 500px) {
 		.root {
 			font-size: 0.9em;
 		}
-	
+
 		.renote {
 			padding: 10px 22px 0 22px;
 		}
-	
+
 		.article {
 			padding: 20px 22px;
 		}
-	
+
 		.footer {
 			margin-bottom: -8px;
 		}
 	}
-	
+
 	@container (max-width: 480px) {
 		.renote {
 			padding: 8px 16px 0 16px;
 		}
-	
+
 		.tip {
 			padding: 8px 16px 0 16px;
 		}
-	
+
 		.collapsedRenoteTarget {
 			padding: 0 16px 9px;
 			margin-top: 4px;
 		}
-	
+
 		.article {
 			padding: 14px 16px;
 		}
 	}
-	
+
 	@container (max-width: 450px) {
 		.avatar {
 			margin: 0 10px 0 0;
@@ -846,7 +853,7 @@
 			top: calc(14px + var(--stickyTop, 0px));
 		}
 	}
-	
+
 	@container (max-width: 400px) {
 		.root:not(.showActionsOnlyHover) {
 			.footerButton {
@@ -856,7 +863,7 @@
 			}
 		}
 	}
-	
+
 	@container (max-width: 350px) {
 		.root:not(.showActionsOnlyHover) {
 			.footerButton {
@@ -865,7 +872,7 @@
 				}
 			}
 		}
-	
+
 		.colorBar {
 			top: 6px;
 			left: 6px;
@@ -873,13 +880,13 @@
 			height: calc(100% - 12px);
 		}
 	}
-	
+
 	@container (max-width: 300px) {
 		.avatar {
 			width: 44px;
 			height: 44px;
 		}
-	
+
 		.root:not(.showActionsOnlyHover) {
 			.footerButton {
 				&:not(:last-child) {
@@ -888,19 +895,19 @@
 			}
 		}
 	}
-	
+
 	@container (max-width: 250px) {
 		.quoteNote {
 			padding: 12px;
 		}
 	}
-	
+
 	.muted {
 		padding: 8px;
 		text-align: center;
 		opacity: 0.7;
 	}
-	
+
 	.reactionDetailsButton {
 		display: inline-block;
 		height: 32px;
@@ -910,7 +917,7 @@
 		border-radius: 4px;
 		background: transparent;
 		opacity: .8;
-	
+
 		&:hover {
 			background: var(--X5);
 		}
