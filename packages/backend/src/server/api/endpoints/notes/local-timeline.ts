@@ -76,14 +76,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (!policies.ltlAvailable) {
 				throw new ApiError(meta.errors.ltlDisabled);
 			}
-			
+
 			let DynamicRenoteCount1 = 10;
 			let DynamicRenoteCount2 = 40;
 			let DynamicRenoteCount3 = 60;
 			let DynamicRenoteCount4 = 15;
 			let DynamicRenoteCount5 = 2;
-			
-			
+
+
 			if(me.followingCount < 50){
 				DynamicRenoteCount1 = 5;
 				DynamicRenoteCount2 = 10;
