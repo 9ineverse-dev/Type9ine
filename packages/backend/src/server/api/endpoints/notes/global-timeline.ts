@@ -101,7 +101,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.limit(ps.limit)
 			.getMany();
 
-			const distinctRns = [ ...rnDistinct.map(d => d.id) ]
+			const distinctRns = [ rnDistinct.map(d => d.id) ]
 
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
