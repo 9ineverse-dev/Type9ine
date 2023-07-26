@@ -84,7 +84,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			const rnDistinct = await this.notesRepository.createQueryBuilder('note')
 			.select('note.id')
-			.select('DISTINCT note.renoteId')
+			.select('note.renoteId')
+			.distinctOn(['note.renoteId'])
 			.select('note.renoteId')
 			.select('note.userId')
 			.select('note.userHost')
