@@ -101,7 +101,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.limit(ps.limit)
 			.getMany();
 
-			const distinctRns = [...rnDistinct.map(d => d.id)]
+			const distinctRns = [ rnDistinct.map(d => d.id) ]
 
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
@@ -120,7 +120,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			query.andWhere(new Brackets(qb =>{
 			qb.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter1)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:10 });
 			qb.orWhere('(note.renoteCount > :renoteCounter2) AND (note.renote IS NULL)',{renoteCounter2:60});
-			qb.orWhere('note.id IN (:...distinctRns)',{ distinctRns : distinctRns});
+			qb.orWhere('note.id IN (:distinctRns)',{ distinctRns : distinctRns});
 		  }));
 		} else {
 			query.andWhere('note.userId = :meId', { meId: me.id });
