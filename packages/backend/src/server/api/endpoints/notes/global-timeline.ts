@@ -90,7 +90,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.select('note.userId')
 			.select('note.userHost')
 			//.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
-			.Where(new Brackets(qb =>{
+			.andWhere(new Brackets(qb =>{
 				qb.orWhere('(renote.renoteCount > :drrenoteCounter1)',{drrenoteCounter1:1})
 				.orWhere('(renote.renoteCount > :drrenoteCounter2) AND (renote.userHost IS NULL)',{drrenoteCounter2:1})
 				.orWhere('(renote.renoteCount > :drrenoteCounter3) AND (note.userHost IS NULL)',{drrenoteCounter3:1})
