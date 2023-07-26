@@ -92,10 +92,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('note.renote', 'renote')
 			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere(new Brackets(qb =>{
-				qb.orWhere('(renote.renoteCount > drrenoteCounter1)',{drrenoteCounter1:3})
-				.orWhere('(renote.renoteCount > drrenoteCounter2) AND (renote.userHost IS NULL)',{drrenoteCounter2:2})
-				.orWhere('(renote.renoteCount > drrenoteCounter3) AND (note.userHost IS NULL)',{drrenoteCounter3:1})
-				.orWhere('(renote.renoteCount > drrenoteCounter4) AND (note.userHost = renote.userHost)',{drrenoteCounter4:1});
+				qb.orWhere('(renote.renoteCount > :drrenoteCounter1)',{drrenoteCounter1:3})
+				.orWhere('(renote.renoteCount > :drrenoteCounter2) AND (renote.userHost IS NULL)',{drrenoteCounter2:2})
+				.orWhere('(renote.renoteCount > :drrenoteCounter3) AND (note.userHost IS NULL)',{drrenoteCounter3:1})
+				.orWhere('(renote.renoteCount > :drrenoteCounter4) AND (note.userHost = renote.userHost)',{drrenoteCounter4:1});
 			}))
 			.orderBy({'note.renoteId':'DESC' , 'note.id':'DESC'})
 			.limit(ps.limit)
@@ -118,8 +118,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		if (followees.length > 0) {
 
 			query.andWhere(new Brackets(qb =>{
-			qb.orWhere('((note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > renoteCounter1))', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:10 })
-			.orWhere('((note.renoteCount > renoteCounter2) AND (note.renote IS NULL))',{renoteCounter2:60})
+			qb.orWhere('((note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter1))', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:10 })
+			.orWhere('((note.renoteCount > :renoteCounter2) AND (note.renote IS NULL))',{renoteCounter2:60})
 			.orWhere('(note.id IN (:...distinctRns))',{ distinctRns : distinctRns})
 		  }));
 		} else {
