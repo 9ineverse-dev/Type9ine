@@ -118,8 +118,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		if (followees.length > 0) {
 
 			query.andWhere(new Brackets(qb =>{
-			qb.orWhere('(note.userId IN (:...meOrFolloweeIds) AND (note.renoteCount > 10))', { meOrFolloweeIds: meOrFolloweeIds })
-			.orWhere('(note.renoteCount > 60) AND (note.renote IS NULL)')
+			qb.Where('((note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > 10))', { meOrFolloweeIds: meOrFolloweeIds })
+			.orWhere('((note.renoteCount > 60) AND (note.renote IS NULL))')
 			.orWhere('(note.id IN (:...distinctRns))',{ distinctRns : distinctRns})
 		  }));
 		} else {
