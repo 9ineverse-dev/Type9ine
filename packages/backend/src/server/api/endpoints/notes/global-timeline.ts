@@ -115,11 +115,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('renote.user', 'renoteUser');
 
 		if (followees.length > 0) {
-
-
-			query.andWhere('(note.userId IN (:...meOrFolloweeIds) AND (note.renoteCount > 10)', { meOrFolloweeIds: meOrFolloweeIds })
+			
+			query.andWhere(new Brackets(qb =>{
+			qb.orWhere('(note.userId IN (:...meOrFolloweeIds) AND (note.renoteCount > 10)', { meOrFolloweeIds: meOrFolloweeIds })
 			.orWhere('(note.renoteCount > 60) AND (note.renote IS NULL)')
-			.orWhere('note.id IN (:...distinctRns)',{distinctRns: distinctRns});
+			.orWhere('note.id IN (:...distinctRns)',{distinctRns: distinctRns})
+		  }));
 		} else {
 			query.andWhere('note.userId = :meId', { meId: me.id });
 		}
