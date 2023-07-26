@@ -89,7 +89,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.select('note.renoteId')
 			.select('note.userId')
 			.select('note.userHost')
-			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+			//.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere(new Brackets(qb =>{
 				qb.orWhere('(renote.renoteCount > :drrenoteCounter1)',{drrenoteCounter1:3})
 				.orWhere('(renote.renoteCount > :drrenoteCounter2) AND (renote.userHost IS NULL)',{drrenoteCounter2:2})
@@ -118,7 +118,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		if (followees.length > 0 /*|| distinctRns.length > 0*/) {
 
 			query.andWhere(new Brackets(qb =>{
-			qb.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter1)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:10 })
+			qb.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter1)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:3 })
 			.orWhere('(note.renoteCount > :renoteCounter2) AND (note.renote IS NULL)',{renoteCounter2:60})
 			.orWhere('(note.id IN (:...distinctRns))',{ distinctRns : distinctRns});
 		  }));
