@@ -93,9 +93,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere(new Brackets(qb =>{
 				qb.orWhere('(renote.renoteCount > DRrenoteCounter1)',{DRrenoteCounter1:3})
-				.orWhere('(renote.renoteCount > DRrenoteCounter2) AND (renote.userHost IS NULL)',{DRrenoteCounter1:2})
-				.orWhere('(renote.renoteCount > DRrenoteCounter3) AND (note.userHost IS NULL)',{DRrenoteCounter1:1})
-				.orWhere('(renote.renoteCount > DRrenoteCounter4) AND (note.userHost = renote.userHost)',{DRrenoteCounter1:1});
+				.orWhere('(renote.renoteCount > DRrenoteCounter2) AND (renote.userHost IS NULL)',{DRrenoteCounter2:2})
+				.orWhere('(renote.renoteCount > DRrenoteCounter3) AND (note.userHost IS NULL)',{DRrenoteCounter3:1})
+				.orWhere('(renote.renoteCount > DRrenoteCounter4) AND (note.userHost = renote.userHost)',{DRrenoteCounter4:1});
 			}))
 			.orderBy({'note.renoteId':'DESC' , 'note.id':'DESC'})
 			.limit(ps.limit)
