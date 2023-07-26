@@ -96,7 +96,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.orWhere('(renote.renoteCount > :drrenoteCounter3) AND (note.userHost IS NULL)',{drrenoteCounter3:1})
 				.orWhere('(renote.renoteCount > :drrenoteCounter4) AND (note.userHost = renote.userHost)',{drrenoteCounter4:1});
 			}))
-			.orderBy({'note.id':'DESC','note.renoteId':'DESC' })
+			.orderBy({'note.renoteId':'DESC','note.id':'DESC'})
 			.leftJoinAndSelect('note.renote', 'renote')
 			.limit(ps.limit)
 			.getMany();
