@@ -89,7 +89,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.select('note.userId')
 			.select('note.userHost')
 			.leftJoinAndSelect('note.renote', 'renote')
-			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+			.andwhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere(new Brackets(qb =>{
 				qb.orWhere('(renote.renoteCount > 3)')
 				.orWhere('(renote.renoteCount > 2) AND (renote.userHost IS NULL)')
