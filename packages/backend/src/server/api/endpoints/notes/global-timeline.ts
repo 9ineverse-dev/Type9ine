@@ -90,7 +90,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.select('note.userId')
 			.select('note.userHost')
 			.leftJoinAndSelect('note.renote', 'renote')
-			.andwhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere(new Brackets(qb =>{
 				qb.orWhere('(renote.renoteCount > :drrenoteCounter1)',{drrenoteCounter1:3})
 				.orWhere('(renote.renoteCount > :drrenoteCounter2) AND (renote.userHost IS NULL)',{drrenoteCounter2:2})
@@ -115,7 +115,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
 
-		if (meOrFolloweeIds.length > 0 || distinctRns.length > 0) {
+		if (followees.length > 0 || rnDistinct.length > 0) {
 
 			query.andWhere(new Brackets(qb =>{
 			qb.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter1)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:10 });
