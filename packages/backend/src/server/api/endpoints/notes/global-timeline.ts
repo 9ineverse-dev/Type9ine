@@ -89,7 +89,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.select('note.renoteId')
 			.select('note.userId')
 			.select('note.userHost')
-			.leftJoinAndSelect('note.renote', 'renote')
 			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere(new Brackets(qb =>{
 				qb.orWhere('(renote.renoteCount > :drrenoteCounter1)',{drrenoteCounter1:3})
@@ -98,6 +97,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.orWhere('(renote.renoteCount > :drrenoteCounter4) AND (note.userHost = renote.userHost)',{drrenoteCounter4:1});
 			}))
 			.orderBy({'note.renoteId':'DESC' , 'note.id':'DESC'})
+			.leftJoinAndSelect('note.renote', 'renote')
 			.limit(ps.limit)
 			.getMany();
 
@@ -120,7 +120,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			query.andWhere(new Brackets(qb =>{
 			qb.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter1)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:10 })
 			.orWhere('(note.renoteCount > :renoteCounter2) AND (note.renote IS NULL)',{renoteCounter2:60})
-			.orWhere('note.id IN (:...distinctRns)',{ distinctRns : distinctRns});
+			.orWhere('(note.id IN (:...distinctRns))',{ distinctRns : distinctRns});
 		  }));
 		} else {
 			query.andWhere('note.userId = :meId', { meId: me.id });
