@@ -121,8 +121,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			qb.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter1)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:3 })
 			.orWhere('(note.renoteCount > :renoteCounter2) AND (note.renote IS NULL)',{renoteCounter2:60})
 			//.orWhere('(note.id IN (:...distinctRns))',{ distinctRns : distinctRns});
-			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND ((note.userHost = renote.userHost) OR (note.userHost IS NULL)) AND (renote.remnoteCount > 10 ) LIMIT 100 ) GROUP BY note.renoteId) temp)',{ meOrFolloweeIds: meOrFolloweeIds})
-			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.remnoteCount > 10 ) LIMIT 100 ) GROUP BY note.renoteId) temp)',{ meOrFolloweeIds: meOrFolloweeIds});
+			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND ((note.userHost = renote.userHost) OR (note.userHost IS NULL)) AND (renote.remnoteCount > 3 ) LIMIT 100 ) GROUP BY note.renoteId) temp)',{ meOrFolloweeIds: meOrFolloweeIds})
+			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.remnoteCount > 2 ) LIMIT 100 ) GROUP BY note.renoteId) temp)',{ meOrFolloweeIds: meOrFolloweeIds});
 		  }));
 		} else {
 			query.andWhere('note.userId = :meId', { meId: me.id });
