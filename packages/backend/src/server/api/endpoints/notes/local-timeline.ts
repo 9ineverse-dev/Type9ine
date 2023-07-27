@@ -77,11 +77,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				throw new ApiError(meta.errors.ltlDisabled);
 			}
 
-			let DynamicRenoteCount1 = 10;
-			let DynamicRenoteCount2 = 40;
-			let DynamicRenoteCount3 = 60;
-			let DynamicRenoteCount4 = 15;
-			let DynamicRenoteCount5 = 2;
+			let DynamicRenoteCount1 = 3;
+			let DynamicRenoteCount2 = 4;
+			let DynamicRenoteCount3 = 5;
+			let DynamicRenoteCount4 = 2;
+			let DynamicRenoteCount5 = 1;
 
 
 			if(me.followingCount < 50){
