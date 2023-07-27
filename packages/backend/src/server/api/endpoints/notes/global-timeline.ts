@@ -82,26 +82,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
-			/*const rnDistinct = await this.notesRepository.createQueryBuilder('note')
-			.select('note.id')
-			.select('note.renoteId')
-			.distinctOn(['note.renoteId'])
-			.select('note.renoteId')
-			.select('note.userId')
-			.select('note.userHost')
-			//.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
-			.where(new Brackets(qb =>{
-				qb.where('(renote.renoteCount > :drrenoteCounter1)',{drrenoteCounter1:1})
-				.orWhere('(renote.renoteCount > :drrenoteCounter2) AND (renote.userHost IS NULL)',{drrenoteCounter2:1})
-				.orWhere('(renote.renoteCount > :drrenoteCounter3) AND (note.userHost IS NULL)',{drrenoteCounter3:1})
-				.orWhere('(renote.renoteCount > :drrenoteCounter4) AND (note.userHost = renote.userHost)',{drrenoteCounter4:1});
-			}))
-			.orderBy({'note.renoteId':'DESC'})
-			.leftJoinAndSelect('note.renote', 'renote')
-			.limit(ps.limit)
-			.getMany();
-
-			const distinctRns = [ 1, ...rnDistinct.map(d => d.id) ];*/
 
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
@@ -115,12 +95,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
 
-		if (followees.length > 0 /*|| distinctRns.length > 0*/) {
+		if (followees.length > 0 ) {
 
 			query.andWhere(new Brackets(qb =>{
 			qb.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter1)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:3 })
 			.orWhere('(note.renoteCount > :renoteCounter2) AND (note.renote IS NULL)',{renoteCounter2:60})
-			//.orWhere('(note.id IN (:...distinctRns))',{ distinctRns : distinctRns});
 			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND ((note.userHost = renote.userHost) OR (note.userHost IS NULL)) AND (renote.renoteCount > 3 ) ) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds})
 			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > 2 )  ) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds});
 		  }));
