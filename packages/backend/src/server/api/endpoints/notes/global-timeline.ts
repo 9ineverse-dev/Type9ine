@@ -94,8 +94,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
 			ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
 			.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 7))) })// 7日前まで
-			.andWhere('note.renoteCount > :renoteCounter1',{renoteCounter1:DynamicRenoteCount1})
-			.andWhere('note.score > :scoreCounter1',{scoreCounter1: DynamicRenoteCount1 * 2})
+			.andWhere('(note.renoteCount > :renoteCounter1) OR (renote.renoteCount > :renoteCounter1)',{renoteCounter1:DynamicRenoteCount1})
+			.andWhere('(note.score > :scoreCounter1) OR (renote.score > :scoreCounter1)',{scoreCounter1: DynamicRenoteCount1 * 2})
 			.andWhere('(note.visibility = \'public\')')
 			.andWhere('(note.channelId IS NULL)')
 			.innerJoinAndSelect('note.user', 'user')
