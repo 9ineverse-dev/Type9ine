@@ -83,10 +83,19 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
 
+			let DynamicRenoteCount1 = 2;
+			let DynamicRenoteCount2 = 3;
+			let DynamicRenoteCount3 = 4;
+			let DynamicRenoteCount4 = 5;
+			let DynamicRenoteCount5 = 6;
+
+
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
 			ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
-			.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 10))) }) // 10日前まで
+			.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 7))) })// 7日前まで
+			.andWhere('note.renoteCount > :renoteCounter1',{renoteCounter1:DynamicRenoteCount1})
+			.andWhere('note.score > :scoreCounter1',{scoreCounter1: DynamicRenoteCount1 * 2})
 			.andWhere('(note.visibility = \'public\')')
 			.andWhere('(note.channelId IS NULL)')
 			.innerJoinAndSelect('note.user', 'user')
@@ -98,16 +107,17 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		if (followees.length > 0 ) {
 
 			query.andWhere(new Brackets(qb =>{
-			qb.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter1)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:3 })
-			.orWhere('(note.renoteCount > :renoteCounter2) AND (note.renote IS NULL)',{renoteCounter2:60})
-			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND ((((note.userHost = renote.userHost) OR (note.userHost IS NULL)) AND (renote.renoteCount > 3 )) OR ((renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > 2 )) OR ((renote.renoteCount > 2 )))) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds})
-			//.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND ((note.userHost = renote.userHost) OR (note.userHost IS NULL)) AND (renote.renoteCount > 3 )) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds})
-			//.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > 2 )) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds});
+			qb.orWhere('(note.renoteCount > :renoteCounter5) AND (note.score > :scoreCounter5) AND (note.renote IS NULL)',{renoteCounter5:DynamicRenoteCount5,scoreCounter5: DynamicRenoteCount5 * 2})
+			.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter3) AND (note.score > :scoreCounter3)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter3:DynamicRenoteCount3 ,scoreCounter3: DynamicRenoteCount3 * 2})
+			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND ((((note.userHost = renote.userHost) OR (note.userHost IS NULL)) AND (renote.renoteCount > renoteCounter2 )AND (note.score > :scoreCounter2)) OR ((renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > renoteCounter1 ) AND (note.score > :scoreCounter1)) OR ((renote.renoteCount > renoteCounter4 ) AND (note.score > :scoreCounter4)))) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds,renoteCounter4:DynamicRenoteCount4 ,scoreCounter4: DynamicRenoteCount4 * 2,renoteCounter2:DynamicRenoteCount2 ,scoreCounter2: DynamicRenoteCount2 * 2,renoteCounter1:DynamicRenoteCount1 ,scoreCounter1: DynamicRenoteCount1 * 2})
+			/*今後の参考・コードリーディング参考用に残しとくね。
+			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND ((note.userHost = renote.userHost) OR (note.userHost IS NULL)) AND (renote.renoteCount > 3 )) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds})
+			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > 2 )) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds});
+			*/
 		  }));
 		} else {
 			query.andWhere('note.userId = :meId', { meId: me.id });
 		}
-
 
 		this.queryService.generateChannelQuery(query, me);
 		this.queryService.generateRepliesQuery(query, ps.withReplies, me);
