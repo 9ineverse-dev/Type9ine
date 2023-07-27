@@ -82,7 +82,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
-			const rnDistinct = await this.notesRepository.createQueryBuilder('note')
+			/*const rnDistinct = await this.notesRepository.createQueryBuilder('note')
 			.select('note.id')
 			.select('note.renoteId')
 			.distinctOn(['note.renoteId'])
@@ -101,7 +101,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.limit(ps.limit)
 			.getMany();
 
-			const distinctRns = [ 1, ...rnDistinct.map(d => d.id) ];
+			const distinctRns = [ 1, ...rnDistinct.map(d => d.id) ];*/
 
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
@@ -120,7 +120,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			query.andWhere(new Brackets(qb =>{
 			qb.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter1)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter1:3 })
 			.orWhere('(note.renoteCount > :renoteCounter2) AND (note.renote IS NULL)',{renoteCounter2:60})
-			.orWhere('(note.id IN (:...distinctRns))',{ distinctRns : distinctRns});
+			//.orWhere('(note.id IN (:...distinctRns))',{ distinctRns : distinctRns});
+			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND ((note.userHost = renote.userHost) OR (note.userHost IS NULL)) AND (renote.remnoteCount > 10 ) LIMIT 100 ) GROUP BY note.renoteId) temp)',{ meOrFolloweeIds: meOrFolloweeIds})
+			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.remnoteCount > 10 ) LIMIT 100 ) GROUP BY note.renoteId) temp)',{ meOrFolloweeIds: meOrFolloweeIds});
 		  }));
 		} else {
 			query.andWhere('note.userId = :meId', { meId: me.id });
