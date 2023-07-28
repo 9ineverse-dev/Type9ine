@@ -1881,9 +1881,9 @@ _instanceCharts:
   filesTotal: "檔案總數累計"
 _timelines:
   home: "首頁"
-  local: "腳燈"
+  local: "本地"
   social: "社交"
-  global: "公開"
+  global: "腳燈"
 _play:
   new: "新增 Play"
   edit: "編輯 Play"

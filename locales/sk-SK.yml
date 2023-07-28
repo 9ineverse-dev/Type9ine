@@ -1328,9 +1328,9 @@ _instanceCharts:
   filesTotal: "Celkom spolu počet súborov"
 _timelines:
   home: "Domov"
-  local: "Reflektor"
+  local: "Lokálne"
   social: "Sociálne"
-  global: "Globálne"
+  global: "Reflektor"
 _play:
   viewSource: "Ukázať zdroj"
   featured: "Význačné"

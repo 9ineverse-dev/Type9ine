@@ -365,9 +365,9 @@ _charts:
   federation: "Ομοσπονδία"
 _timelines:
   home: "Κεντρικό"
-  local: "Κέντρο προσοχής"
+  local: "Τοπικό"
   social: "Κοινωνικό"
-  global: "Παγκόσμιο"
+  global: "Κέντρο προσοχής"
 _pages:
   viewPage: "Δείτε τις Σελίδες σας"
   blocks:

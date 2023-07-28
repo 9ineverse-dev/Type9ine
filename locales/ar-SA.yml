@@ -1424,9 +1424,9 @@ _instanceCharts:
   filesTotal: "تباين عدد الملفات"
 _timelines:
   home: "الرئيسي"
-  local: "بقعة ضوء"
+  local: "المحلي"
   social: "الاجتماعي"
-  global: "الشامل"
+  global: "بقعة ضوء"
 _play:
   viewSource: "اظهر المصدر"
   featured: "الأكثر شعبية"

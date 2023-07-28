@@ -1878,9 +1878,9 @@ _instanceCharts:
   filesTotal: "누적 파일 수"
 _timelines:
   home: "홈"
-  local: "주시"
+  local: "로컬"
   social: "소셜"
-  global: "글로벌"
+  global: "주시"
 _play:
   new: "Play 만들기"
   edit: "Play 수정하기"

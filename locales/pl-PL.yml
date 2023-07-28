@@ -1232,9 +1232,9 @@ _instanceCharts:
   filesTotal: "Łącznie # plików"
 _timelines:
   home: "Strona główna"
-  local: "światło reflektora"
+  local: "Lokalne"
   social: "Społeczność"
-  global: "Globalna"
+  global: "światło reflektora"
 _play:
   viewSource: "Zobacz źródło"
   featured: "Wyróżnione"

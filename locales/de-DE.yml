@@ -1881,9 +1881,9 @@ _instanceCharts:
   filesTotal: "Gesamtanzahl an Dateien"
 _timelines:
   home: "Startseite"
-  local: "Spotlight"
+  local: "Lokal"
   social: "Sozial"
-  global: "Global"
+  global: "der Strahler"
 _play:
   new: "Play erstellen"
   edit: "Play bearbeiten"

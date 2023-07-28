@@ -1499,9 +1499,9 @@ _instanceCharts:
   filesTotal: "Сумарна кількість файлів"
 _timelines:
   home: "Домівка"
-  local: "Прожектор"
+  local: "Локальна"
   social: "Соціальна"
-  global: "Глобальна"
+  global: "Прожектор"
 _play:
   viewSource: "Переглянути вихідний код"
   featured: "Популярні"

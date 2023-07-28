@@ -491,7 +491,7 @@ limitTo: "{x}を上限に"
 noFollowRequests: "フォロー申請はありません"
 openImageInNewTab: "画像を新しいタブで開く"
 dashboard: "ダッシュボード"
-local: "サーバー内"
+local: "ローカル"
 remote: "リモート"
 total: "合計"
 weekOverWeekChanges: "前週比"
@@ -1927,9 +1927,9 @@ _instanceCharts:
 
 _timelines:
   home: "ホーム"
-  local: "スポットライト"
+  local: "ローカル"
   social: "ソーシャル"
-  global: "グローバル"
+  global: "スポットライト"
 
 _play:
   new: "Playの作成"

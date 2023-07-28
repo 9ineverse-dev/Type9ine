@@ -1216,9 +1216,9 @@ _instanceCharts:
   filesTotal: "ক্রমবর্ধমান ফাইলের সংখ্যা"
 _timelines:
   home: "মূল পাতা"
-  local: "স্পটলাইট"
+  local: "স্থানীয়"
   social: "সামাজিক"
-  global: "গ্লোবাল"
+  global: "স্পটলাইট"
 _play:
   viewSource: "উৎস দেখুন"
   featured: "জনপ্রিয়"

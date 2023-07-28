@@ -417,9 +417,9 @@ _charts:
   federation: "Federació"
 _timelines:
   home: "Inici"
-  local: "Destacar"
+  local: "Local"
   social: "Social"
-  global: "Global"
+  global: "Spotlight"
 _pages:
   contents: "Contingut"
   blocks:
