@@ -118,9 +118,8 @@ export const defaultStore = markRaw(new Storage('base', {
 			'lookup',
 			'explore',
 			'-',
-			'favorites',
+			'reload',
 			'channels',
-			'antennas',
 		],
 	},
 	visibility: {
