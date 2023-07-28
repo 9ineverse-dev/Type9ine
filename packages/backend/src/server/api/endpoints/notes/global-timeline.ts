@@ -95,7 +95,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			//.andWhere('(note.renoteCount > :renoteCounter1) OR (renote.renoteCount > :renoteCounter1)',{renoteCounter1:DynamicRenoteCount1})
 			//.andWhere('(note.score > :scoreCounter1) OR (renote.score > :scoreCounter1)',{scoreCounter1: DynamicRenoteCount1 * 2})
 			.andWhere('(note.visibility = \'public\')')
-			.andWhere('(note.channelId IS NULL)')
+			//.andWhere('(note.channelId IS NULL)')
 			.innerJoinAndSelect('note.user', 'user')
 			.leftJoinAndSelect('note.reply', 'reply')
 			.leftJoinAndSelect('note.renote', 'renote')
