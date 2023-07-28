@@ -75,27 +75,25 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			}
 
 			//#region Construct query
-			const followees = await this.followingsRepository.createQueryBuilder('following')
-			.select('following.followeeId')
-			.where('following.followerId = :followerId', { followerId: me.id })
-			.getMany();
-			const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
+			const followingQuery = this.followingsRepository.createQueryBuilder('following')
+				.select('following.followeeId')
+				.where('following.followerId = :followerId', { followerId: me.id });
 
 
 
-			let DynamicRenoteCount1 = 50;
-			let DynamicRenoteCount2 = 10;
-			let DynamicRenoteCount3 = 15;
-			let DynamicRenoteCount4 = 30;
-			let DynamicRenoteCount5 = 50;
+			const DynamicRenoteCount1 = 4;
+			const DynamicRenoteCount2 = 10;
+			const DynamicRenoteCount3 = 15;
+			const DynamicRenoteCount4 = 30;
+			const DynamicRenoteCount5 = 30;
 
 
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
 			ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
-			.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 5))) })// 7日前まで
-			.andWhere('(note.renoteCount > :renoteCounter1) OR (renote.renoteCount > :renoteCounter1)',{renoteCounter1:DynamicRenoteCount1})
-			.andWhere('(note.score > :scoreCounter1) OR (renote.score > :scoreCounter1)',{scoreCounter1: DynamicRenoteCount1 * 2})
+			.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 1))) })// 7日前まで
+			//.andWhere('(note.renoteCount > :renoteCounter1) OR (renote.renoteCount > :renoteCounter1)',{renoteCounter1:DynamicRenoteCount1})
+			//.andWhere('(note.score > :scoreCounter1) OR (renote.score > :scoreCounter1)',{scoreCounter1: DynamicRenoteCount1 * 2})
 			.andWhere('(note.visibility = \'public\')')
 			.andWhere('(note.channelId IS NULL)')
 			.innerJoinAndSelect('note.user', 'user')
@@ -104,12 +102,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
 
-		if (followees.length > 0 ) {
+		if (me.followingCount > 0 ) {
 
 
 			query.andWhere(new Brackets(qb =>{
 			qb.where('(note.renoteCount > :renoteCounter5) AND (note.renote IS NULL)',{renoteCounter5:DynamicRenoteCount5})
-			.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter3)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter3:DynamicRenoteCount3 })
+			.orWhere('(note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :renoteCounter3)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter3:DynamicRenoteCount3 })
 			//.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (note.id > :minId) AND ((((note.userHost = renote.userHost) OR (renote.userHost IS NULL)) AND (renote.renoteCount > :renoteCounter3 )) OR ((renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > :renoteCounter1 )) OR ((renote.renoteCount > :renoteCounter4 )))) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds , renoteCounter4:DynamicRenoteCount4 ,renoteCounter3:DynamicRenoteCount3 ,renoteCounter1:DynamicRenoteCount1,minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 5)))})
 			//.orWhere('((((note.userHost = renote.userHost) OR (renote.userHost IS NULL)) AND (renote.renoteCount > :renoteCounter3 )) OR ((renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > :renoteCounter1 )) OR ((renote.renoteCount > :renoteCounter4 ))) AND (note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (note.id > :minId) AND ((((note.userHost = renote.userHost) OR (renote.userHost IS NULL)) AND (renote.renoteCount > :renoteCounter3 )) OR ((renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > :renoteCounter1 )) OR ((renote.renoteCount > :renoteCounter4 )))) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds , renoteCounter4:DynamicRenoteCount4 ,renoteCounter3:DynamicRenoteCount3 ,renoteCounter1:DynamicRenoteCount1,minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 5)))})
 			//今後の参考・コードリーディング参考用に残しとくね。
