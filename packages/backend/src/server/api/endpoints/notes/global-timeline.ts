@@ -79,15 +79,15 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.select('following.followeeId')
 			.where('following.followerId = :followerId', { followerId: me.id })
 			.getMany();
-      const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
 
 
-			let DynamicRenoteCount1 = 3;
+
+			let DynamicRenoteCount1 = 50;
 			let DynamicRenoteCount2 = 10;
 			let DynamicRenoteCount3 = 15;
 			let DynamicRenoteCount4 = 30;
-			let DynamicRenoteCount5 = 1;
+			let DynamicRenoteCount5 = 50;
 
 
 		//#region Construct query
@@ -105,7 +105,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('renote.user', 'renoteUser');
 
 		if (followees.length > 0 ) {
-
+			const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
 			query.andWhere(new Brackets(qb =>{
 			qb.where('(note.renoteCount > :renoteCounter5) AND (note.renote IS NULL)',{renoteCounter5:DynamicRenoteCount5})
@@ -123,25 +123,27 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		}
 
 		this.queryService.generateRepliesQuery(query, ps.withReplies, me);
-		if (me) {
-			this.queryService.generateMutedUserQuery(query, me);
-			this.queryService.generateMutedNoteQuery(query, me);
-			this.queryService.generateBlockedUserQuery(query, me);
-			this.queryService.generateMutedUserRenotesQueryForNotes(query, me);
-		}
-
-		if (ps.withFiles) {
-			query.andWhere('note.fileIds != \'{}\'');
-		}
-		//#endregion
-
-		const timeline = await query.limit(ps.limit).getMany();
-
-		process.nextTick(() => {
 			if (me) {
-				this.activeUsersChart.read(me);
+				this.queryService.generateMutedUserQuery(query, me);
+				this.queryService.generateMutedNoteQuery(query, me);
+				this.queryService.generateBlockedUserQuery(query, me);
+				this.queryService.generateMutedUserRenotesQueryForNotes(query, me);
 			}
-		});
+
+			if (ps.withFiles) {
+				query.andWhere('note.fileIds != \'{}\'');
+			}
+			//#endregion
+
+			const timeline = await query.limit(ps.limit).getMany();
+
+			process.nextTick(() => {
+				if (me) {
+					this.activeUsersChart.read(me);
+				}
+			});
+
+			return await this.noteEntityService.packMany(timeline, me);
 		});
 	}
 }
