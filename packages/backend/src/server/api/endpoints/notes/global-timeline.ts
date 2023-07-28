@@ -80,7 +80,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.where('following.followerId = :followerId', { followerId: me.id })
 			.getMany();
 
-			const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
+
 
 
 			let DynamicRenoteCount1 = 3;
@@ -105,9 +105,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('renote.user', 'renoteUser');
 
 		if (followees.length > 0 ) {
+			const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
 			query.andWhere(new Brackets(qb =>{
-			qb.orWhere('(note.renoteCount > :renoteCounter5) AND (note.renote IS NULL)',{renoteCounter5:DynamicRenoteCount5})
+			qb.where('(note.renoteCount > :renoteCounter5) AND (note.renote IS NULL)',{renoteCounter5:DynamicRenoteCount5})
 			.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter3)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter2:DynamicRenoteCount2 })
 			//.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (note.id > :minId) AND ((((note.userHost = renote.userHost) OR (renote.userHost IS NULL)) AND (renote.renoteCount > :renoteCounter3 )) OR ((renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > :renoteCounter1 )) OR ((renote.renoteCount > :renoteCounter4 )))) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds , renoteCounter4:DynamicRenoteCount4 ,renoteCounter3:DynamicRenoteCount3 ,renoteCounter1:DynamicRenoteCount1,minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 5)))})
 			//.orWhere('((((note.userHost = renote.userHost) OR (renote.userHost IS NULL)) AND (renote.renoteCount > :renoteCounter3 )) OR ((renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > :renoteCounter1 )) OR ((renote.renoteCount > :renoteCounter4 ))) AND (note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (note.id > :minId) AND ((((note.userHost = renote.userHost) OR (renote.userHost IS NULL)) AND (renote.renoteCount > :renoteCounter3 )) OR ((renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > :renoteCounter1 )) OR ((renote.renoteCount > :renoteCounter4 )))) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds , renoteCounter4:DynamicRenoteCount4 ,renoteCounter3:DynamicRenoteCount3 ,renoteCounter1:DynamicRenoteCount1,minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 5)))})
@@ -121,42 +122,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				}));
 		}
 
-		this.queryService.generateChannelQuery(query, me);
 		this.queryService.generateRepliesQuery(query, ps.withReplies, me);
-		this.queryService.generateVisibilityQuery(query, me);
-		this.queryService.generateMutedUserQuery(query, me);
-		this.queryService.generateMutedNoteQuery(query, me);
-		this.queryService.generateBlockedUserQuery(query, me);
-		this.queryService.generateMutedUserRenotesQueryForNotes(query, me);
-
-		if (ps.includeMyRenotes === false) {
-			query.andWhere(new Brackets(qb => {
-				qb.orWhere('note.userId != :meId', { meId: me.id });
-				qb.orWhere('note.renoteId IS NULL');
-				qb.orWhere('note.text IS NOT NULL');
-				qb.orWhere('note.fileIds != \'{}\'');
-				qb.orWhere('0 < (SELECT COUNT(*) FROM poll WHERE poll."noteId" = note.id)');
-			}));
-		}
-
-		if (ps.includeRenotedMyNotes === false) {
-			query.andWhere(new Brackets(qb => {
-				qb.orWhere('note.renoteUserId != :meId', { meId: me.id });
-				qb.orWhere('note.renoteId IS NULL');
-				qb.orWhere('note.text IS NOT NULL');
-				qb.orWhere('note.fileIds != \'{}\'');
-				qb.orWhere('0 < (SELECT COUNT(*) FROM poll WHERE poll."noteId" = note.id)');
-			}));
-		}
-
-		if (ps.includeLocalRenotes === false) {
-			query.andWhere(new Brackets(qb => {
-				qb.orWhere('note.renoteUserHost IS NOT NULL');
-				qb.orWhere('note.renoteId IS NULL');
-				qb.orWhere('note.text IS NOT NULL');
-				qb.orWhere('note.fileIds != \'{}\'');
-				qb.orWhere('0 < (SELECT COUNT(*) FROM poll WHERE poll."noteId" = note.id)');
-			}));
+		if (me) {
+			this.queryService.generateMutedUserQuery(query, me);
+			this.queryService.generateMutedNoteQuery(query, me);
+			this.queryService.generateBlockedUserQuery(query, me);
+			this.queryService.generateMutedUserRenotesQueryForNotes(query, me);
 		}
 
 		if (ps.withFiles) {
@@ -167,10 +138,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		const timeline = await query.limit(ps.limit).getMany();
 
 		process.nextTick(() => {
-			this.activeUsersChart.read(me);
+			if (me) {
+				this.activeUsersChart.read(me);
+			}
 		});
-
-		return await this.noteEntityService.packMany(timeline, me);
 		});
 	}
 }
