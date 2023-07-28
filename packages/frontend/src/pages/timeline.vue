@@ -126,7 +126,7 @@ const headerTabs = $computed(() => [{
 }, ...(isLocalTimelineAvailable ? [{
 	key: 'local',
 	title: i18n.ts._timelines.local,
-	icon: 'ti ti-bolt',
+	icon: 'ti ti-planet',
 	iconOnly: true,
 }, {
 	key: 'social',
@@ -136,7 +136,7 @@ const headerTabs = $computed(() => [{
 }] : []), ...(isGlobalTimelineAvailable ? [{
 	key: 'global',
 	title: i18n.ts._timelines.global,
-	icon: 'ti ti-whirl',
+	icon: 'ti ti-bolt',
 	iconOnly: true,
 }] : []), {
 	icon: 'ti ti-list',
