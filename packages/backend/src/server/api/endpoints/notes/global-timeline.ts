@@ -83,11 +83,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
 
-			let DynamicRenoteCount1 = 2;
-			let DynamicRenoteCount2 = 3;
-			let DynamicRenoteCount3 = 4;
-			let DynamicRenoteCount4 = 5;
-			let DynamicRenoteCount5 = 6;
+			let DynamicRenoteCount1 = 3;
+			let DynamicRenoteCount2 = 10;
+			let DynamicRenoteCount3 = 15;
+			let DynamicRenoteCount4 = 30;
+			let DynamicRenoteCount5 = 50;
 
 
 		//#region Construct query
@@ -108,15 +108,17 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			query.andWhere(new Brackets(qb =>{
 			qb.orWhere('(note.renoteCount > :renoteCounter5) AND (note.score > :scoreCounter5) AND (note.renote IS NULL)',{renoteCounter5:DynamicRenoteCount5,scoreCounter5: DynamicRenoteCount5 * 2})
-			.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter3) AND (note.score > :scoreCounter3)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter3:DynamicRenoteCount3 ,scoreCounter3: DynamicRenoteCount3 * 2})
-			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (note.id > :minId) AND((((note.userHost = renote.userHost) OR (renote.userHost IS NULL)) AND (renote.renoteCount > :renoteCounter2 )AND (renote.score > :scoreCounter2)) OR ((renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > :renoteCounter1 ) AND (renote.score > :scoreCounter1)) OR ((renote.renoteCount > :renoteCounter4 ) AND (renote.score > :scoreCounter4)))) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds,renoteCounter4:DynamicRenoteCount4 ,scoreCounter4: DynamicRenoteCount4 * 2,renoteCounter2:DynamicRenoteCount2 ,scoreCounter2: DynamicRenoteCount2 * 2,renoteCounter1:DynamicRenoteCount1 ,scoreCounter1: DynamicRenoteCount1 * 2})
+			.orWhere('(note.userId IN (:...meOrFolloweeIds)) AND (note.renoteCount > :renoteCounter3) AND (note.score > :scoreCounter3)', { meOrFolloweeIds: meOrFolloweeIds ,renoteCounter2:DynamicRenoteCount2 ,scoreCounter2: DynamicRenoteCount2 * 2})
+			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (note.id > :minId) AND((((note.userHost = renote.userHost) OR (renote.userHost IS NULL)) AND (renote.renoteCount > :renoteCounter3 )AND (renote.score > :scoreCounter3)) OR ((renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > :renoteCounter1 ) AND (renote.score > :scoreCounter1)) OR ((renote.renoteCount > :renoteCounter4 ) AND (renote.score > :scoreCounter4)))) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds,renoteCounter4:DynamicRenoteCount4 ,scoreCounter4: DynamicRenoteCount4 * 2,renoteCounter3:DynamicRenoteCount3 ,scoreCounter3: DynamicRenoteCount3 * 2,renoteCounter1:DynamicRenoteCount1 ,scoreCounter1: DynamicRenoteCount1 * 2})
 			/*今後の参考・コードリーディング参考用に残しとくね。
 			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND ((note.userHost = renote.userHost) OR (note.userHost IS NULL)) AND (renote.renoteCount > 3 )) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds})
 			.orWhere('(note.id IN (SELECT max_id from (SELECT MAX(note.id) max_id FROM note WHERE ((note.userId IN (:...meOrFolloweeIds)) AND (renote.userId IN (:...meOrFolloweeIds)) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > 2 )) GROUP BY note.renoteId ORDER BY max_id DESC LIMIT 100) temp))',{ meOrFolloweeIds: meOrFolloweeIds});
 			*/
 		  }));
 		} else {
-			query.andWhere('note.userId = :meId', { meId: me.id });
+			query.andWhere(new Brackets(qb =>{
+				qb.orWhere('(note.renoteCount > :renoteCounter5) AND (note.score > :scoreCounter5) AND (note.renote IS NULL)',{renoteCounter5:DynamicRenoteCount5,scoreCounter5: DynamicRenoteCount5 * 2})
+				}));
 		}
 
 		this.queryService.generateChannelQuery(query, me);
