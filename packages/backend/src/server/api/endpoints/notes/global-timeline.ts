@@ -85,13 +85,13 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			const DynamicRenoteCount2 = 10;
 			const DynamicRenoteCount3 = 15;
 			const DynamicRenoteCount4 = 30;
-			const DynamicRenoteCount5 = 30;
+			const DynamicRenoteCount5 = 15;
 
 
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
 			ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
-			.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 1))) })// 7日前まで
+			.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 7))) })// 7日前まで
 			//.andWhere('(note.renoteCount > :renoteCounter1) OR (renote.renoteCount > :renoteCounter1)',{renoteCounter1:DynamicRenoteCount1})
 			//.andWhere('(note.score > :scoreCounter1) OR (renote.score > :scoreCounter1)',{scoreCounter1: DynamicRenoteCount1 * 2})
 			.andWhere('(note.visibility = \'public\')')
