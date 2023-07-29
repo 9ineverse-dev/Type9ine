@@ -77,9 +77,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			//#region Construct query
 			const followingQuery = this.followingsRepository.createQueryBuilder('following')
 				.select('following.followeeId')
-				.where('following.followerId = :followerId', { followerId: me.id });
+				.where('following.followerId = :followerId', { followerId: me.id })
 
+			const distinctrns =await this.notesRepository.query(
 
+			);
 
 			const DynamicRenoteCount1 = 5;
 			const DynamicRenoteCount2 = 10;
@@ -101,6 +103,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser')
+			.distincton('renote.id')
 			.setParameters(followingQuery.getParameters());
 
 		if (me.followingCount > 0 ) {
@@ -109,7 +112,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			qb.where(`(note.renoteCount > :renoteCounter5) AND (note.renote IS NULL) AND (note.userHost IS NULL)`,{renoteCounter5:DynamicRenoteCount5})
 			.orWhere(`(note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :renoteCounter1)`, {renoteCounter1:DynamicRenoteCount1 })
 			//.orWhere(`(note.id IN (SELECT max_id FROM (SELECT MAX(note.id) max_id FROM note WHERE ((note.id > :minId) AND (note.userId IN (${ followingQuery.getQuery() })) AND ((((note.userHost = renote.userHost) OR (renote.userHost IS NULL)) AND (renote.renoteCount > :renoteCounter3 )) OR ((renote.userId IN (${ followingQuery.getQuery() }))) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > :renoteCounter1 )) OR ((renote.renoteCount > :renoteCounter4 )))) AS distinct_renotes GROUP BY note.renoteId , max_id ORDER BY max_id DESC LIMIT 100))`,{ renoteCounter4:DynamicRenoteCount4 ,renoteCounter3:DynamicRenoteCount3 ,renoteCounter1:DynamicRenoteCount1,minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 5)))})
-			.orWhere(`((renote.renoteCount > :renoteCounter3) AND (note.id IN (SELECT DISTINCT max_id FROM (SELECT note.id max_id FROM note WHERE ((note.userId != renote.userId) AND (note.userId IN (${ followingQuery.getQuery() })))) AS distinct_renotes ORDER BY max_id DESC LIMIT 100)))`,{renoteCounter3:DynamicRenoteCount3})
+			//.orWhere(`((renote.renoteCount > :renoteCounter3) AND (note.id IN (SELECT DISTINCT max_id FROM (SELECT note.id max_id FROM note WHERE ((note.userId != renote.userId) AND (note.userId IN (${ followingQuery.getQuery() })))) AS distinct_renotes ORDER BY max_id DESC LIMIT 100)))`,{renoteCounter3:DynamicRenoteCount3})
 			.setParameters(followingQuery.getParameters());
 		  }));
 		} else {
