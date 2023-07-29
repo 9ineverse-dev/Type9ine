@@ -83,7 +83,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			const DynamicRenoteCount1 = 5;
 			const DynamicRenoteCount2 = 10;
-			const DynamicRenoteCount3 = 15;
+			const DynamicRenoteCount3 = 3;
 			const DynamicRenoteCount4 = 20;
 			const DynamicRenoteCount5 = 30;
 
@@ -109,7 +109,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			qb.where(`(note.renoteCount > :renoteCounter5) AND (note.renote IS NULL) AND (note.userHost IS NULL)`,{renoteCounter5:DynamicRenoteCount5})
 			.orWhere(`(note.userId IN (${ followingQuery.getQuery() })) AND (note.renoteCount > :renoteCounter1)`, {renoteCounter1:DynamicRenoteCount1 })
 			//.orWhere(`(note.id IN (SELECT max_id FROM (SELECT MAX(note.id) max_id FROM note WHERE ((note.id > :minId) AND (note.userId IN (${ followingQuery.getQuery() })) AND ((((note.userHost = renote.userHost) OR (renote.userHost IS NULL)) AND (renote.renoteCount > :renoteCounter3 )) OR ((renote.userId IN (${ followingQuery.getQuery() }))) AND (renote.userHost IS NULL) AND (note.userHost IS NULL) AND (renote.renoteCount > :renoteCounter1 )) OR ((renote.renoteCount > :renoteCounter4 )))) AS distinct_renotes GROUP BY note.renoteId , max_id ORDER BY max_id DESC LIMIT 100))`,{ renoteCounter4:DynamicRenoteCount4 ,renoteCounter3:DynamicRenoteCount3 ,renoteCounter1:DynamicRenoteCount1,minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 5)))})
-			.orWhere(`((renote.renoteCount > :renoteCounter3) AND ( EXISTS (SELECT DISTINCT max_id FROM (SELECT note.id max_id FROM note WHERE ((note.id > :rnminId) AND (note.userId != renote.userId) AND (note.userId IN (${ followingQuery.getQuery() })))) AS distinct_renotes ORDER BY max_id DESC LIMIT 100)))`,{renoteCounter3:DynamicRenoteCount3,rnminId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 7)))})
+			.orWhere(`((renote.renoteCount > :renoteCounter3) AND (EXISTS (SELECT DISTINCT max_id FROM (SELECT note.id max_id FROM note WHERE ((note.id > :rnminId) AND (note.userId != renote.userId) AND (note.userId IN (${ followingQuery.getQuery() })))) AS distinct_renotes ORDER BY max_id DESC LIMIT 100)))`,{renoteCounter3:DynamicRenoteCount3,rnminId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 7)))})
 			.setParameters(followingQuery.getParameters());
 		  }));
 		} else {
