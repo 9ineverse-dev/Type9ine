@@ -99,7 +99,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser')
-			.distincton('note.renoteId')
+			.distinctOn('note.renoteId')
 			.setParameters(followingQuery.getParameters());
 
 		if (me.followingCount > 0 ) {
