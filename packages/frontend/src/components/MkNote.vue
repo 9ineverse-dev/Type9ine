@@ -386,6 +386,7 @@
 		});
 	}
 
+<<<<<<< HEAD
 	function onContextmenu(ev: MouseEvent): void {
 		const isLink = (el: HTMLElement) => {
 			if (el.tagName === 'A') return true;
@@ -397,6 +398,18 @@
 		};
 		if (isLink(ev.target)) return;
 		if (window.getSelection().toString() !== '') return;
+=======
+function reply(viaKeyboard = false): void {
+	pleaseLogin();
+	os.post({
+		reply: appearNote,
+		channel: appearNote.channel,
+		animation: !viaKeyboard,
+	}, () => {
+		focus();
+	});
+}
+>>>>>>> upstream/master
 
 		if (defaultStore.state.useReactionPickerForContextMenu) {
 			ev.preventDefault();
@@ -533,11 +546,276 @@
 			}
 		}
 
+<<<<<<< HEAD
 		&.showActionsOnlyHover:hover {
 			.footer {
 				visibility: visible;
 			}
 		}
+=======
+	& + .article {
+		padding-top: 8px;
+	}
+
+	> .colorBar {
+		height: calc(100% - 6px);
+	}
+}
+
+.renoteAvatar {
+	flex-shrink: 0;
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+	margin: 0 8px 0 0;
+}
+
+.renoteText {
+	overflow: hidden;
+	flex-shrink: 1;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.renoteUserName {
+	font-weight: bold;
+}
+
+.renoteInfo {
+	margin-left: auto;
+	font-size: 0.9em;
+}
+
+.renoteTime {
+	flex-shrink: 0;
+	color: inherit;
+}
+
+.renoteMenu {
+	margin-right: 4px;
+}
+
+.collapsedRenoteTarget {
+	display: flex;
+	align-items: center;
+	line-height: 28px;
+	white-space: pre;
+	padding: 0 32px 18px;
+}
+
+.collapsedRenoteTargetAvatar {
+	flex-shrink: 0;
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+	margin: 0 8px 0 0;
+}
+
+.collapsedRenoteTargetText {
+	overflow: hidden;
+	flex-shrink: 1;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 90%;
+	opacity: 0.7;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.article {
+	position: relative;
+	display: flex;
+	padding: 28px 32px;
+}
+
+.colorBar {
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	width: 5px;
+	height: calc(100% - 16px);
+	border-radius: 999px;
+	pointer-events: none;
+}
+
+.avatar {
+	flex-shrink: 0;
+	display: block !important;
+	margin: 0 14px 0 0;
+	width: 58px;
+	height: 58px;
+	position: sticky !important;
+	top: calc(22px + var(--stickyTop, 0px));
+	left: 0;
+}
+
+.main {
+	flex: 1;
+	min-width: 0;
+}
+
+.cw {
+	cursor: default;
+	display: block;
+	margin: 0;
+	padding: 0;
+	overflow-wrap: break-word;
+}
+
+.showLess {
+	width: 100%;
+	margin-top: 14px;
+	position: sticky;
+	bottom: calc(var(--stickyBottom, 0px) + 14px);
+}
+
+.showLessLabel {
+	display: inline-block;
+	background: var(--popup);
+	padding: 6px 10px;
+	font-size: 0.8em;
+	border-radius: 999px;
+	box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+}
+
+.contentCollapsed {
+	position: relative;
+	max-height: 9em;
+	overflow: clip;
+}
+
+.collapsed {
+	display: block;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: 2;
+	width: 100%;
+	height: 64px;
+	background: linear-gradient(0deg, var(--panel), var(--X15));
+
+	&:hover > .collapsedLabel {
+		background: var(--panelHighlight);
+	}
+}
+
+.collapsedLabel {
+	display: inline-block;
+	background: var(--panel);
+	padding: 6px 10px;
+	font-size: 0.8em;
+	border-radius: 999px;
+	box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+}
+
+.text {
+	overflow-wrap: break-word;
+}
+
+.replyIcon {
+	color: var(--accent);
+	margin-right: 0.5em;
+}
+
+.translation {
+	border: solid 0.5px var(--divider);
+	border-radius: var(--radius);
+	padding: 12px;
+	margin-top: 8px;
+}
+
+.urlPreview {
+	margin-top: 8px;
+}
+
+.poll {
+	font-size: 80%;
+}
+
+.quote {
+	padding: 8px 0;
+}
+
+.quoteNote {
+	padding: 16px;
+	border: dashed 1px var(--renote);
+	border-radius: 8px;
+	overflow: clip;
+}
+
+.channel {
+	opacity: 0.7;
+	font-size: 80%;
+}
+
+.footer {
+	margin-bottom: -14px;
+}
+
+.footerButton {
+	margin: 0;
+	padding: 8px;
+	opacity: 0.7;
+
+	&:not(:last-child) {
+		margin-right: 28px;
+	}
+
+	&:hover {
+		color: var(--fgHighlighted);
+	}
+}
+
+.footerButtonCount {
+	display: inline;
+	margin: 0 0 0 8px;
+	opacity: 0.7;
+}
+
+@container (max-width: 580px) {
+	.root {
+		font-size: 0.95em;
+	}
+
+	.renote {
+		padding: 12px 26px 0 26px;
+	}
+
+	.article {
+		padding: 24px 26px;
+	}
+
+	.avatar {
+		width: 50px;
+		height: 50px;
+	}
+}
+
+@container (max-width: 500px) {
+	.root {
+		font-size: 0.9em;
+	}
+
+	.renote {
+		padding: 10px 22px 0 22px;
+	}
+
+	.article {
+		padding: 20px 22px;
+	}
+
+	.footer {
+		margin-bottom: -8px;
+	}
+}
+
+@container (max-width: 480px) {
+	.renote {
+		padding: 8px 16px 0 16px;
+>>>>>>> upstream/master
 	}
 
 	.tip {

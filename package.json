@@ -1,12 +1,16 @@
 {
 	"name": "misskey",
+<<<<<<< HEAD
 	"version": "13.14.1-9ine-1.2.1",
+=======
+	"version": "13.14.2",
+>>>>>>> upstream/master
 	"codename": "nasubi",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/9ineverse-dev/Type-9ine.git"
 	},
-	"packageManager": "pnpm@8.6.9",
+	"packageManager": "pnpm@8.6.10",
 	"workspaces": [
 		"packages/frontend",
 		"packages/backend",
