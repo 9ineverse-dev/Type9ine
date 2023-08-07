@@ -102,7 +102,7 @@
 						<p v-if="appearNote.renoteCount > 0" :class="$style.footerButtonCount">{{ appearNote.renoteCount }}</p>
 					</button>
 					<button v-if="canRenote" ref="menuButton" :class="$style.footerButton" class="_button" @mousedown="chooseRnChannel()">
-						<i class="ti ti-dots"></i>
+						<i class="ti ti-device-tv"></i>
 					</button>
 					<button v-else :class="$style.footerButton" class="_button" disabled>
 						<i class="ti ti-ban"></i>
@@ -327,7 +327,7 @@
 			},
 		}, {
 			text: i18n.ts.quote,
-			icon: 'ti ti-quote',
+			icon: 'ti ti-repeat',
 			action: () => {
 				os.post({
 					renote: appearNote,
