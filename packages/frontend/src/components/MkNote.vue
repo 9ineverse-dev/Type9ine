@@ -409,7 +409,6 @@
 		});
 	}
 
-<<<<<<< HEAD
 	function onContextmenu(ev: MouseEvent): void {
 		const isLink = (el: HTMLElement) => {
 			if (el.tagName === 'A') return true;
@@ -421,7 +420,6 @@
 		};
 		if (isLink(ev.target)) return;
 		if (window.getSelection().toString() !== '') return;
-=======
 function reply(viaKeyboard = false): void {
 	pleaseLogin();
 	os.post({
@@ -432,7 +430,6 @@ function reply(viaKeyboard = false): void {
 		focus();
 	});
 }
->>>>>>> upstream/master
 
 		if (defaultStore.state.useReactionPickerForContextMenu) {
 			ev.preventDefault();
@@ -569,13 +566,11 @@ function reply(viaKeyboard = false): void {
 			}
 		}
 
-<<<<<<< HEAD
 		&.showActionsOnlyHover:hover {
 			.footer {
 				visibility: visible;
 			}
 		}
-=======
 	& + .article {
 		padding-top: 8px;
 	}
@@ -838,7 +833,6 @@ function reply(viaKeyboard = false): void {
 @container (max-width: 480px) {
 	.renote {
 		padding: 8px 16px 0 16px;
->>>>>>> upstream/master
 	}
 
 	.tip {
