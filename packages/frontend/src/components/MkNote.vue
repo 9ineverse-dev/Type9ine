@@ -342,7 +342,7 @@
 
 	async function chooseRnChannel(ev: MouseEvent): Promise<void> {
 	const channels = await os.api('channels/my-favorites', {
-		limit: 100,
+		limit: 20,
 	});
 	const items = channels.map(channel => ({
 		type: 'link' as const,
@@ -350,7 +350,7 @@
 		indicate: channel.hasUnreadNote,
 		to: `/channels/${channel.id}`,
 	}));
-	os.popupMenu(items, ev.currentTarget ?? ev.target);
+	os.popupMenu(items);
 }
 
 
