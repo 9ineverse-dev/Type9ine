@@ -345,10 +345,14 @@
 		limit: 20,
 	});
 	const items = channels.map(channel => ({
-		type: 'link' as const,
 		text: channel.name,
-		indicate: channel.hasUnreadNote,
-		to: `/channels/${channel.id}`,
+			icon: 'ti ti-quote',
+			action: () => {
+				os.post({
+					renote: appearNote,
+					channel: channel,
+				});
+			},
 	}));
 	os.popupMenu(items,renoteButton.value, {
 			viaKeyboard,
