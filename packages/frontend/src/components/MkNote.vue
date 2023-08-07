@@ -327,7 +327,7 @@
 			},
 		}, {
 			text: i18n.ts.quote,
-			icon: 'ti ti-repeat',
+			icon: 'ti ti-quote',
 			action: () => {
 				os.post({
 					renote: appearNote,
@@ -346,7 +346,7 @@
 	});
 	const items = channels.map(channel => ({
 		text: channel.name,
-			icon: 'ti ti-quote',
+			icon: 'ti ti-repeat',
 			action: () => {
 				os.post({
 					renote: appearNote,
