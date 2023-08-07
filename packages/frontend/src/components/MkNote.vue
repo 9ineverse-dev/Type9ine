@@ -340,7 +340,7 @@
 		});
 	}
 
-	async function chooseRnChannel(ev: MouseEvent): Promise<void> {
+	async function chooseRnChannel(viaKeyboard = false): Promise<void> {
 	const channels = await os.api('channels/my-favorites', {
 		limit: 20,
 	});
@@ -350,7 +350,9 @@
 		indicate: channel.hasUnreadNote,
 		to: `/channels/${channel.id}`,
 	}));
-	os.popupMenu(items);
+	os.popupMenu(items,renoteButton.value, {
+			viaKeyboard,
+		});
 }
 
 
