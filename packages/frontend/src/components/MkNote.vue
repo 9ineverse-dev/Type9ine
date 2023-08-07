@@ -101,6 +101,9 @@
 						<i class="ti ti-repeat"></i>
 						<p v-if="appearNote.renoteCount > 0" :class="$style.footerButtonCount">{{ appearNote.renoteCount }}</p>
 					</button>
+					<button v-if="canRenote" ref="menuButton" :class="$style.footerButton" class="_button" @mousedown="chooseRnChannel()">
+						<i class="ti ti-dots"></i>
+					</button>
 					<button v-else :class="$style.footerButton" class="_button" disabled>
 						<i class="ti ti-ban"></i>
 					</button>
@@ -336,6 +339,20 @@
 			viaKeyboard,
 		});
 	}
+
+	async function chooseRnChannel(ev: MouseEvent): Promise<void> {
+	const channels = await os.api('channels/my-favorites', {
+		limit: 100,
+	});
+	const items = channels.map(channel => ({
+		type: 'link' as const,
+		text: channel.name,
+		indicate: channel.hasUnreadNote,
+		to: `/channels/${channel.id}`,
+	}));
+	os.popupMenu(items, ev.currentTarget ?? ev.target);
+}
+
 
 	function reply(viaKeyboard = false): void {
 		pleaseLogin();
