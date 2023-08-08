@@ -79,7 +79,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.select('following.followeeId')
 				.where('following.followerId = :followerId', { followerId: me.id })
 				.limit(500)
-				.orderBy('following.id','DESC');
+				.orderBy('following.id','DESC')
 
 			const DynamicRenoteCount1 = 5;
 			const DynamicRenoteCount2 = 10;
