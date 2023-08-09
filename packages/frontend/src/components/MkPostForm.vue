@@ -14,6 +14,9 @@
 			</button>
 		</div>
 		<div :class="$style.headerRight">
+			<button  ref="visibilityButton" v-click-anime :class="['_button', $style.headerRightItem, $style.visibility]" @click="setChannel">
+					<i class="ti ti-device-tv"></i>
+			</button>
 			<template v-if="!(channel != null && fixed)">
 				<button v-if="channel == null" ref="visibilityButton" v-click-anime v-tooltip="i18n.ts.visibility" :class="['_button', $style.headerRightItem, $style.visibility]" @click="setVisibility">
 					<span v-if="visibility === 'public'"><i class="ti ti-world"></i></span>
@@ -419,6 +422,33 @@ function upload(file: File, name?: string): void {
 		files.push(res);
 	});
 }
+
+async function setChannel(viaKeyboard = false): Promise<void> {
+	const channels = await os.api('channels/my-favorites', {
+		limit: 9,
+	});
+	let items = channels.map(channel => ({
+		text: channel.name,
+			icon: 'ti ti-repeat',
+			action: () => {
+				props.channel = channel;
+			},
+	}));
+
+	items = items + {
+		text: 'NoChannels',
+			icon: 'ti ti-repeat',
+			action: () => {
+				props.channel = null;
+			},
+	}
+
+	os.popupMenu(items,visibilityButton.value, {
+			viaKeyboard,
+		});
+}
+
+
 
 function setVisibility() {
 	if (props.channel) {
