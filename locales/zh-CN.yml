@@ -1882,7 +1882,7 @@ _instanceCharts:
 _timelines:
   home: "首页"
   local: "本地"
-  social: "社交"
+  social: "社区"
   global: "脚灯"
 _play:
   new: "创建 Play"

@@ -1882,7 +1882,7 @@ _instanceCharts:
 _timelines:
   home: "Home"
   local: "Local"
-  social: "Social"
+  social: "Community"
   global: "Spotlight"
 _play:
   new: "Create Play"

@@ -644,8 +644,8 @@ _instanceCharts:
 _timelines:
   home: "Bosh sahifa"
   local: "Mahalliy"
-  social: "Ijtimoiy"
-  global: "Global"
+  social: "Jamiyat"
+  global: "diqqat markazida"
 _play:
   featured: "Mashhur"
   title: "Sarlavha"

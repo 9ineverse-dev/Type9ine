@@ -1882,7 +1882,7 @@ _instanceCharts:
 _timelines:
   home: "ホーム"
   local: "ローカル"
-  social: "ソーシャル"
+  social: "界隈"
   global: "スポットライト"
 _play:
   new: "Playの作成"

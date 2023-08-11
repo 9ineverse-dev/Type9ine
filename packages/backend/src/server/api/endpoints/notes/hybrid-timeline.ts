@@ -59,9 +59,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		@Inject(DI.notesRepository)
 		private notesRepository: NotesRepository,
 
-		@Inject(DI.followingsRepository)
-		private followingsRepository: FollowingsRepository,
-
 		private noteEntityService: NoteEntityService,
 		private queryService: QueryService,
 		private metaService: MetaService,

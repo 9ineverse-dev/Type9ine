@@ -1431,7 +1431,7 @@ _instanceCharts:
 _timelines:
   home: "Principal"
   local: "Local"
-  social: "Social"
+  social: "Communauté"
   global: "Projecteur"
 _play:
   viewSource: "Afficher la source"

@@ -1879,7 +1879,7 @@ _instanceCharts:
 _timelines:
   home: "홈"
   local: "로컬"
-  social: "소셜"
+  social: "지역 사회"
   global: "주시"
 _play:
   new: "Play 만들기"

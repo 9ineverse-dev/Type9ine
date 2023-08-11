@@ -1546,7 +1546,7 @@ _instanceCharts:
 _timelines:
   home: "Trang chính"
   local: "Máy chủ này"
-  social: "Xã hội"
+  social: "Cộng đồng"
   global: "Điểm sáng"
 _play:
   new: "Tạo Play mới"

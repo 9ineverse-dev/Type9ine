@@ -1500,7 +1500,7 @@ _instanceCharts:
 _timelines:
   home: "Домівка"
   local: "Локальна"
-  social: "Соціальна"
+  social: "Спільнота"
   global: "Прожектор"
 _play:
   viewSource: "Переглянути вихідний код"
