@@ -119,7 +119,7 @@ const choose = async (ev) => {
 		action: () => { setSrc('local'); },
 	}, {
 		text: i18n.ts._timelines.social,
-		icon: 'ti ti-rocket',
+		icon: 'ti ti-users',
 		action: () => { setSrc('social'); },
 	}, {
 		text: i18n.ts._timelines.global,
