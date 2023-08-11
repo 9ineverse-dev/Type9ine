@@ -1,7 +1,7 @@
 {
 	"name": "misskey",
-	"version": "13.14.2",
-	"codename": "nasubi",
+	"version": "13.14.2-9ine-2.0.0",
+	"codename": "Pseed",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/9ineverse-dev/Type-9ine.git"
