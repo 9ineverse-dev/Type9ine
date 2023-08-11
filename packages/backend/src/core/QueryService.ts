@@ -137,10 +137,11 @@ export class QueryService {
 			const channelFollowingQuery = this.channelFollowingsRepository.createQueryBuilder('channelFollowing')
 				.select('channelFollowing.followeeId')
 				.where('channelFollowing.followerId = :followerId', { followerId: me.id });
-
+			q.andWhere('note.channelId IS NOT NULL');
 			q.andWhere(new Brackets(qb => { qb
 				// followしているユーザーのチャンネルノート
-				.where(`(note.userId IN (${ followingQuery.getQuery() })) AND (note.channelId IS NOT NULL)`)
+				.where(`(note.userId IN (${ followingQuery.getQuery() }))`)
+				.orWhere(`(note.userId = :meId)`, { meId: me.id })
 				// または自分がフォローしているチャンネルのノート
 				.orWhere(`note.channelId IN (${ channelFollowingQuery.getQuery() })`);
 			}));
