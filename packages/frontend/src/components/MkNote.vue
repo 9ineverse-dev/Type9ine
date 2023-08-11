@@ -101,9 +101,9 @@
 						<i class="ti ti-repeat"></i>
 						<p v-if="appearNote.renoteCount > 0" :class="$style.footerButtonCount">{{ appearNote.renoteCount }}</p>
 					</button>
-<!--					<button v-if="canRenote" ref="ChannelrenoteButton" :class="$style.footerButton" class="_button" @mousedown="chooseRnChannel()">
+					<button v-if="canRenote" ref="ChannelrenoteButton" :class="$style.footerButton" class="_button" @mousedown="chooseRnChannel()">
 						<i class="ti ti-device-tv"></i>
-					</button> -->
+					</button>
 					<button v-else :class="$style.footerButton" class="_button" disabled>
 						<i class="ti ti-ban"></i>
 					</button>
@@ -344,7 +344,7 @@
 	const channels = await os.api('channels/my-favorites', {
 		limit: 20,
 	});
-	const items = channels.map(channel => ({
+	const Channelitems = channels.map(channel => ({
 		text: channel.name,
 			icon: 'ti ti-repeat',
 			action: () => {
@@ -354,7 +354,7 @@
 				});
 			},
 	}));
-	os.popupMenu(items,renoteButton.value, {
+	os.popupMenu(Channelitems,renoteButton.value, {
 			viaKeyboard,
 		});
 }
