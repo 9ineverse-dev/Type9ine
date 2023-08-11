@@ -139,8 +139,8 @@ export class QueryService {
 				.where('channelFollowing.followerId = :followerId', { followerId: me.id });
 			q.andWhere('note.channelId IS NOT NULL');
 			q.andWhere(new Brackets(qb => { qb
-				// followしているユーザーのチャンネルノート
-				.where(`(note.userId IN (${ followingQuery.getQuery() }))`)
+				// followしているユーザーの非棲み分けチャンネルノート
+				.where(`(note.userId IN (${ followingQuery.getQuery() })) AND (channel.isSensitive = false)`)
 				.orWhere(`(note.userId = :meId)`, { meId: me.id })
 				// または自分がフォローしているチャンネルのノート
 				.orWhere(`note.channelId IN (${ channelFollowingQuery.getQuery() })`);

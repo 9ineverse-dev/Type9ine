@@ -40,13 +40,9 @@ class HybridTimelineChannel extends Channel {
 
 	@bindThis
 	private async onNote(note: Packed<'Note'>) {
-		// チャンネルの投稿ではなく、自分自身の投稿 または
-		// チャンネルの投稿ではなく、その投稿のユーザーをフォローしている または
-		// チャンネルの投稿ではなく、全体公開のローカルの投稿 または
-		// フォローしているチャンネルの投稿 の場合だけ
 		if (!(
 			(note.channelId != null && this.user!.id === note.userId) ||
-			(note.channelId != null && this.following.has(note.userId)) ||
+			(note.channelId != null && this.following.has(note.userId) && note.channel.isSensitive == false) ||
 			(note.channelId != null && this.followingChannels.has(note.channelId))
 		)) return;
 
