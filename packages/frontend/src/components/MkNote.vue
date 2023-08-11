@@ -137,173 +137,142 @@
 
 	<script lang="ts" setup>
 	import { computed, inject, onMounted, ref, shallowRef, Ref, defineAsyncComponent } from 'vue';
-	import * as mfm from 'mfm-js';
-	import * as misskey from 'misskey-js';
-	import MkNoteSub from '@/components/MkNoteSub.vue';
-	import MkNoteHeader from '@/components/MkNoteHeader.vue';
-	import MkNoteSimple from '@/components/MkNoteSimple.vue';
-	import MkReactionsViewer from '@/components/MkReactionsViewer.vue';
-	import MkMediaList from '@/components/MkMediaList.vue';
-	import MkCwButton from '@/components/MkCwButton.vue';
-	import MkPoll from '@/components/MkPoll.vue';
-	import MkUsersTooltip from '@/components/MkUsersTooltip.vue';
-	import MkUrlPreview from '@/components/MkUrlPreview.vue';
-	import MkInstanceTicker from '@/components/MkInstanceTicker.vue';
-	import { pleaseLogin } from '@/scripts/please-login';
-	import { focusPrev, focusNext } from '@/scripts/focus';
-	import { checkWordMute } from '@/scripts/check-word-mute';
-	import { userPage } from '@/filters/user';
-	import * as os from '@/os';
-	import { defaultStore, noteViewInterruptors } from '@/store';
-	import { reactionPicker } from '@/scripts/reaction-picker';
-	import { extractUrlFromMfm } from '@/scripts/extract-url-from-mfm';
-	import { $i } from '@/account';
-	import { i18n } from '@/i18n';
-	import { getNoteClipMenu, getNoteMenu } from '@/scripts/get-note-menu';
-	import { useNoteCapture } from '@/scripts/use-note-capture';
-	import { deepClone } from '@/scripts/clone';
-	import { useTooltip } from '@/scripts/use-tooltip';
-	import { claimAchievement } from '@/scripts/achievements';
-	import { getNoteSummary } from '@/scripts/get-note-summary';
-	import { MenuItem } from '@/types/menu';
-	import MkRippleEffect from '@/components/MkRippleEffect.vue';
-	import { showMovedDialog } from '@/scripts/show-moved-dialog';
-	import { shouldCollapsed } from '@/scripts/collapsed';
+import * as mfm from 'mfm-js';
+import * as misskey from 'misskey-js';
+import MkNoteSub from '@/components/MkNoteSub.vue';
+import MkNoteHeader from '@/components/MkNoteHeader.vue';
+import MkNoteSimple from '@/components/MkNoteSimple.vue';
+import MkReactionsViewer from '@/components/MkReactionsViewer.vue';
+import MkMediaList from '@/components/MkMediaList.vue';
+import MkCwButton from '@/components/MkCwButton.vue';
+import MkPoll from '@/components/MkPoll.vue';
+import MkUsersTooltip from '@/components/MkUsersTooltip.vue';
+import MkUrlPreview from '@/components/MkUrlPreview.vue';
+import MkInstanceTicker from '@/components/MkInstanceTicker.vue';
+import { pleaseLogin } from '@/scripts/please-login';
+import { focusPrev, focusNext } from '@/scripts/focus';
+import { checkWordMute } from '@/scripts/check-word-mute';
+import { userPage } from '@/filters/user';
+import * as os from '@/os';
+import { defaultStore, noteViewInterruptors } from '@/store';
+import { reactionPicker } from '@/scripts/reaction-picker';
+import { extractUrlFromMfm } from '@/scripts/extract-url-from-mfm';
+import { $i } from '@/account';
+import { i18n } from '@/i18n';
+import { getNoteClipMenu, getNoteMenu } from '@/scripts/get-note-menu';
+import { useNoteCapture } from '@/scripts/use-note-capture';
+import { deepClone } from '@/scripts/clone';
+import { useTooltip } from '@/scripts/use-tooltip';
+import { claimAchievement } from '@/scripts/achievements';
+import { getNoteSummary } from '@/scripts/get-note-summary';
+import { MenuItem } from '@/types/menu';
+import MkRippleEffect from '@/components/MkRippleEffect.vue';
+import { showMovedDialog } from '@/scripts/show-moved-dialog';
+import { shouldCollapsed } from '@/scripts/collapsed';
 
-	const props = defineProps<{
-		note: misskey.entities.Note;
-		pinned?: boolean;
-	}>();
+const props = defineProps<{
+	note: misskey.entities.Note;
+	pinned?: boolean;
+}>();
 
-	const inChannel = inject('inChannel', null);
-	const currentClip = inject<Ref<misskey.entities.Clip> | null>('currentClip', null);
+const inChannel = inject('inChannel', null);
+const currentClip = inject<Ref<misskey.entities.Clip> | null>('currentClip', null);
 
-	let note = $ref(deepClone(props.note));
+let note = $ref(deepClone(props.note));
 
-	// plugin
-	if (noteViewInterruptors.length > 0) {
-		onMounted(async () => {
-			let result = deepClone(note);
-			for (const interruptor of noteViewInterruptors) {
-				result = await interruptor.handler(result);
-			}
-			note = result;
-		});
-	}
-
-	const isRenote = (
-		note.renote != null &&
-		note.text == null &&
-		note.fileIds.length === 0 &&
-		note.poll == null
-	);
-
-	const el = shallowRef<HTMLElement>();
-	const menuButton = shallowRef<HTMLElement>();
-	const renoteButton = shallowRef<HTMLElement>();
-	const renoteTime = shallowRef<HTMLElement>();
-	const reactButton = shallowRef<HTMLElement>();
-	const clipButton = shallowRef<HTMLElement>();
-	let appearNote = $computed(() => isRenote ? note.renote as misskey.entities.Note : note);
-	const isMyRenote = $i && ($i.id === note.userId);
-	const showContent = ref(false);
-	const urls = appearNote.text ? extractUrlFromMfm(mfm.parse(appearNote.text)) : null;
-	const isLong = shouldCollapsed(appearNote);
-	const collapsed = ref(appearNote.cw == null && isLong);
-	const isDeleted = ref(false);
-	const muted = ref(checkWordMute(appearNote, $i, defaultStore.state.mutedWords));
-	const translation = ref<any>(null);
-	const translating = ref(false);
-	const showTicker = (defaultStore.state.instanceTicker === 'always') || (defaultStore.state.instanceTicker === 'remote' && appearNote.user.instance);
-	const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibility) || appearNote.userId === $i.id);
-	let renoteCollapsed = $ref(defaultStore.state.collapseRenotes && isRenote && (($i && ($i.id === note.userId || $i.id === appearNote.userId)) || (appearNote.myReaction != null)));
-
-	const keymap = {
-		'r': () => reply(true),
-		'e|a|plus': () => react(true),
-		'q': () => renoteButton.value.renote(true),
-		'up|k|shift+tab': focusBefore,
-		'down|j|tab': focusAfter,
-		'esc': blur,
-		'm|o': () => menu(true),
-		's': () => showContent.value !== showContent.value,
-	};
-
-	useNoteCapture({
-		rootEl: el,
-		note: $$(appearNote),
-		isDeletedRef: isDeleted,
-	});
-
-	useTooltip(renoteButton, async (showing) => {
-		const renotes = await os.api('notes/renotes', {
-			noteId: appearNote.id,
-			limit: 11,
-		});
-
-		const users = renotes.map(x => x.user);
-
-		if (users.length < 1) return;
-
-		os.popup(MkUsersTooltip, {
-			showing,
-			users,
-			count: appearNote.renoteCount,
-			targetElement: renoteButton.value,
-		}, {}, 'closed');
-	});
-
-	type Visibility = 'public' | 'home' | 'followers' | 'specified';
-
-	// defaultStore.state.visibilityがstringなためstringも受け付けている
-	function smallerVisibility(a: Visibility | string, b: Visibility | string): Visibility {
-		if (a === 'specified' || b === 'specified') return 'specified';
-		if (a === 'followers' || b === 'followers') return 'followers';
-		if (a === 'home' || b === 'home') return 'home';
-		// if (a === 'public' || b === 'public')
-		return 'public';
-	}
-
-	function renote(viaKeyboard = false) {
-		pleaseLogin();
-		showMovedDialog();
-
-		let items = [] as MenuItem[];
-
-		if (appearNote.channel) {
-			items = items.concat([{
-				text: i18n.ts.inChannelRenote,
-				icon: 'ti ti-repeat',
-				action: () => {
-					const el = renoteButton.value as HTMLElement | null | undefined;
-					if (el) {
-						const rect = el.getBoundingClientRect();
-						const x = rect.left + (el.offsetWidth / 2);
-						const y = rect.top + (el.offsetHeight / 2);
-						os.popup(MkRippleEffect, { x, y }, {}, 'end');
-					}
-
-					os.api('notes/create', {
-						renoteId: appearNote.id,
-						channelId: appearNote.channelId,
-					}).then(() => {
-						os.toast(i18n.ts.renoted);
-					});
-				},
-			}, {
-				text: i18n.ts.inChannelQuote,
-				icon: 'ti ti-quote',
-				action: () => {
-					os.post({
-						renote: appearNote,
-						channel: appearNote.channel,
-					});
-				},
-			}, null]);
+// plugin
+if (noteViewInterruptors.length > 0) {
+	onMounted(async () => {
+		let result = deepClone(note);
+		for (const interruptor of noteViewInterruptors) {
+			result = await interruptor.handler(result);
 		}
+		note = result;
+	});
+}
 
+const isRenote = (
+	note.renote != null &&
+	note.text == null &&
+	note.fileIds.length === 0 &&
+	note.poll == null
+);
+
+const el = shallowRef<HTMLElement>();
+const menuButton = shallowRef<HTMLElement>();
+const renoteButton = shallowRef<HTMLElement>();
+const renoteTime = shallowRef<HTMLElement>();
+const reactButton = shallowRef<HTMLElement>();
+const clipButton = shallowRef<HTMLElement>();
+let appearNote = $computed(() => isRenote ? note.renote as misskey.entities.Note : note);
+const isMyRenote = $i && ($i.id === note.userId);
+const showContent = ref(false);
+const urls = appearNote.text ? extractUrlFromMfm(mfm.parse(appearNote.text)) : null;
+const isLong = shouldCollapsed(appearNote);
+const collapsed = ref(appearNote.cw == null && isLong);
+const isDeleted = ref(false);
+const muted = ref(checkWordMute(appearNote, $i, defaultStore.state.mutedWords));
+const translation = ref<any>(null);
+const translating = ref(false);
+const showTicker = (defaultStore.state.instanceTicker === 'always') || (defaultStore.state.instanceTicker === 'remote' && appearNote.user.instance);
+const canRenote = computed(() => ['public', 'home'].includes(appearNote.visibility) || appearNote.userId === $i.id);
+let renoteCollapsed = $ref(defaultStore.state.collapseRenotes && isRenote && (($i && ($i.id === note.userId || $i.id === appearNote.userId)) || (appearNote.myReaction != null)));
+
+const keymap = {
+	'r': () => reply(true),
+	'e|a|plus': () => react(true),
+	'q': () => renoteButton.value.renote(true),
+	'up|k|shift+tab': focusBefore,
+	'down|j|tab': focusAfter,
+	'esc': blur,
+	'm|o': () => menu(true),
+	's': () => showContent.value !== showContent.value,
+};
+
+useNoteCapture({
+	rootEl: el,
+	note: $$(appearNote),
+	isDeletedRef: isDeleted,
+});
+
+useTooltip(renoteButton, async (showing) => {
+	const renotes = await os.api('notes/renotes', {
+		noteId: appearNote.id,
+		limit: 11,
+	});
+
+	const users = renotes.map(x => x.user);
+
+	if (users.length < 1) return;
+
+	os.popup(MkUsersTooltip, {
+		showing,
+		users,
+		count: appearNote.renoteCount,
+		targetElement: renoteButton.value,
+	}, {}, 'closed');
+});
+
+type Visibility = 'public' | 'home' | 'followers' | 'specified';
+
+// defaultStore.state.visibilityがstringなためstringも受け付けている
+function smallerVisibility(a: Visibility | string, b: Visibility | string): Visibility {
+	if (a === 'specified' || b === 'specified') return 'specified';
+	if (a === 'followers' || b === 'followers') return 'followers';
+	if (a === 'home' || b === 'home') return 'home';
+	// if (a === 'public' || b === 'public')
+	return 'public';
+}
+
+function renote(viaKeyboard = false) {
+	pleaseLogin();
+	showMovedDialog();
+
+	let items = [] as MenuItem[];
+
+	if (appearNote.channel) {
 		items = items.concat([{
-			text: i18n.ts.renote,
+			text: i18n.ts.inChannelRenote,
 			icon: 'ti ti-repeat',
 			action: () => {
 				const el = renoteButton.value as HTMLElement | null | undefined;
@@ -314,33 +283,64 @@
 					os.popup(MkRippleEffect, { x, y }, {}, 'end');
 				}
 
-				const configuredVisibility = defaultStore.state.rememberNoteVisibility ? defaultStore.state.visibility : defaultStore.state.defaultNoteVisibility;
-				const localOnly = defaultStore.state.rememberNoteVisibility ? defaultStore.state.localOnly : defaultStore.state.defaultNoteLocalOnly;
-
 				os.api('notes/create', {
-					localOnly,
-					visibility: smallerVisibility(appearNote.visibility, configuredVisibility),
 					renoteId: appearNote.id,
+					channelId: appearNote.channelId,
 				}).then(() => {
 					os.toast(i18n.ts.renoted);
 				});
 			},
 		}, {
-			text: i18n.ts.quote,
+			text: i18n.ts.inChannelQuote,
 			icon: 'ti ti-quote',
 			action: () => {
 				os.post({
 					renote: appearNote,
+					channel: appearNote.channel,
 				});
 			},
-		}]);
-
-		os.popupMenu(items, renoteButton.value, {
-			viaKeyboard,
-		});
+		}, null]);
 	}
 
-	async function chooseRnChannel(viaKeyboard = false): Promise<void> {
+	items = items.concat([{
+		text: i18n.ts.renote,
+		icon: 'ti ti-repeat',
+		action: () => {
+			const el = renoteButton.value as HTMLElement | null | undefined;
+			if (el) {
+				const rect = el.getBoundingClientRect();
+				const x = rect.left + (el.offsetWidth / 2);
+				const y = rect.top + (el.offsetHeight / 2);
+				os.popup(MkRippleEffect, { x, y }, {}, 'end');
+			}
+
+			const configuredVisibility = defaultStore.state.rememberNoteVisibility ? defaultStore.state.visibility : defaultStore.state.defaultNoteVisibility;
+			const localOnly = defaultStore.state.rememberNoteVisibility ? defaultStore.state.localOnly : defaultStore.state.defaultNoteLocalOnly;
+
+			os.api('notes/create', {
+				localOnly,
+				visibility: smallerVisibility(appearNote.visibility, configuredVisibility),
+				renoteId: appearNote.id,
+			}).then(() => {
+				os.toast(i18n.ts.renoted);
+			});
+		},
+	}, {
+		text: i18n.ts.quote,
+		icon: 'ti ti-quote',
+		action: () => {
+			os.post({
+				renote: appearNote,
+			});
+		},
+	}]);
+
+	os.popupMenu(items, renoteButton.value, {
+		viaKeyboard,
+	});
+}
+
+/*	async function chooseRnChannel(viaKeyboard = false): Promise<void> {
 	const channels = await os.api('channels/my-favorites', {
 		limit: 20,
 	});
@@ -357,7 +357,7 @@
 	os.popupMenu(Channelitems,renoteButton.value, {
 			viaKeyboard,
 		});
-}
+}*/
 
 function reply(viaKeyboard = false): void {
 	pleaseLogin();
