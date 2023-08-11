@@ -140,7 +140,7 @@ export class QueryService {
 
 			q.andWhere(new Brackets(qb => { qb
 				// followしているユーザーのチャンネルノート
-				.Where(`(note.userId IN (${ followingQuery.getQuery() })) AND (note.channelId IS NOT NULL)`)
+				.where(`(note.userId IN (${ followingQuery.getQuery() })) AND (note.channelId IS NOT NULL)`)
 				// または自分がフォローしているチャンネルのノート
 				.orWhere(`note.channelId IN (${ channelFollowingQuery.getQuery() })`);
 			}));

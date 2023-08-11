@@ -75,11 +75,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				throw new ApiError(meta.errors.stlDisabled);
 			}
 
-			//#region Construct query
-			const followingQuery = this.followingsRepository.createQueryBuilder('following')
-				.select('following.followeeId')
-				.where('following.followerId = :followerId', { followerId: me.id });
-
 			const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
 				ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 7))) }) // 7日前まで
@@ -89,7 +84,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.leftJoinAndSelect('note.renote', 'renote')
 				.leftJoinAndSelect('reply.user', 'replyUser')
 				.leftJoinAndSelect('renote.user', 'renoteUser')
-				.setParameters(followingQuery.getParameters());
 
 			this.queryService.generateComunityQuery(query, me);
 			this.queryService.generateRepliesQuery(query, ps.withReplies, me);
