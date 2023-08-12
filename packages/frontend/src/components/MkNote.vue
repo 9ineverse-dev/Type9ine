@@ -345,7 +345,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 		});
 	}
 
-
 	async function chooseRnChannel(viaKeyboard = false): Promise<void> {
 	const channels = await os.api('channels/my-favorites', {
 		limit: 20,
@@ -432,13 +431,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 			react();
 		} else {
 			const { menu, cleanup } = getNoteMenu({ note: note, translating, translation, menuButton, isDeleted, currentClip: currentClip?.value });
-		os.contextMenu(menu, ev).then(focus).finally(cleanup);
+			os.contextMenu(menu, ev).then(focus).finally(cleanup);
 		}
 	}
 
 	function menu(viaKeyboard = false): void {
 		const { menu, cleanup } = getNoteMenu({ note: note, translating, translation, menuButton, isDeleted, currentClip: currentClip?.value });
-	os.popupMenu(menu, menuButton.value, {
+		os.popupMenu(menu, menuButton.value, {
 			viaKeyboard,
 		}).then(focus).finally(cleanup);
 	}
