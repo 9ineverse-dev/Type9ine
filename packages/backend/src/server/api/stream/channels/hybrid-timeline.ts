@@ -5,7 +5,6 @@ import { isInstanceMuted } from '@/misc/is-instance-muted.js';
 import type { Packed } from '@/misc/json-schema.js';
 import { MetaService } from '@/core/MetaService.js';
 import { NoteEntityService } from '@/core/entities/NoteEntityService.js';
-import { ChannelEntityService } from '@/core/entities/ChannelEntityService.js';
 import { bindThis } from '@/decorators.js';
 import { RoleService } from '@/core/RoleService.js';
 import Channel from '../channel.js';
@@ -20,7 +19,7 @@ class HybridTimelineChannel extends Channel {
 		private metaService: MetaService,
 		private roleService: RoleService,
 		private noteEntityService: NoteEntityService,
-		private ChannelEntityService: ChannelEntityService,
+
 
 		id: string,
 		connection: Channel['connection'],
@@ -44,11 +43,10 @@ class HybridTimelineChannel extends Channel {
 	private async onNote(note: Packed<'Note'>) {
 		if(note.channelId == null)return;
 
-		//const notechannel = await this.ChannelEntityService.pack(note.channelId, this.user!, true);
 		const notechannel = false;
 		if (!(
 			(this.user!.id === note.userId) ||
-			(this.following.has(note.userId) && notechannel.isSensitive == false) ||
+			(this.following.has(note.userId) && note.isSensitive == false) ||
 			(this.followingChannels.has(note.channelId))
 		)) return;
 
