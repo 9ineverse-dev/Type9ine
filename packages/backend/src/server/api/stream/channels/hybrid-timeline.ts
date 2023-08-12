@@ -42,12 +42,12 @@ class HybridTimelineChannel extends Channel {
 	@bindThis
 	private async onNote(note: Packed<'Note'>) {
 		if(note.channelId == null)return;
-		if(note.channel!.isSensitive == true)return;
+//		if(note.channel!.isSensitive == true)return;
 
 		const notechannel = false;
 		if (!(
 			(this.user!.id === note.userId) ||
-			(this.following.has(note.userId) && note.channel!.isSensitive == false) ||
+			(this.following.has(note.userId) && note.channel!.isSensitive === false) ||
 			(this.followingChannels.has(note.channelId))
 		)) return;
 
