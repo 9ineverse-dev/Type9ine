@@ -120,7 +120,6 @@ export interface Locale {
     "you": string;
     "clickToShow": string;
     "sensitive": string;
-		"compartmentalization": string;
     "add": string;
     "reaction": string;
     "reactions": string;
