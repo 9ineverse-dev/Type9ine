@@ -46,7 +46,7 @@ class HybridTimelineChannel extends Channel {
 		const notechannel = false;
 		if (!(
 			(this.user!.id === note.userId) ||
-			(this.following.has(note.userId) && note.isSensitive == false) ||
+			(this.following.has(note.userId) && note.channel.isSensitive == true) ||
 			(this.followingChannels.has(note.channelId))
 		)) return;
 
