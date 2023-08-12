@@ -24,7 +24,7 @@ class HybridTimelineChannel extends Channel {
 		id: string,
 		connection: Channel['connection'],
 	) {
-		super(id, connection);
+		super(id, connection,);
 		//this.onNote = this.onNote.bind(this);
 	}
 
@@ -46,7 +46,7 @@ class HybridTimelineChannel extends Channel {
 		const notechannel = false;
 		if (!(
 			(this.user!.id === note.userId) ||
-			(this.following.has(note.userId) && note.isSensitive == false) ||
+			(this.following.has(note.userId) && note.channel!.isSensitive == false) ||
 			(this.followingChannels.has(note.channelId))
 		)) return;
 
