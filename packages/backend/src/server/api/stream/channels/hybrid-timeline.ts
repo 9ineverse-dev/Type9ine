@@ -42,6 +42,7 @@ class HybridTimelineChannel extends Channel {
 	@bindThis
 	private async onNote(note: Packed<'Note'>) {
 		if(note.channelId == null)return;
+		if(note.channel!.isSensitive == true)return;
 
 		const notechannel = false;
 		if (!(
