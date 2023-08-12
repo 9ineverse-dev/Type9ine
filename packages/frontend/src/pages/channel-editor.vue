@@ -16,7 +16,7 @@
 			</MkColorInput>
 
 			<MkSwitch v-model="isSensitive">
-				<template #label>{{ i18n.ts.sensitive }}</template>
+				<template #label>{{ i18n.ts.compartmentalization }}</template>
 			</MkSwitch>
 
 			<div>
