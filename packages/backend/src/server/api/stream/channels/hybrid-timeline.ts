@@ -44,11 +44,11 @@ class HybridTimelineChannel extends Channel {
 	private async onNote(note: Packed<'Note'>) {
 		if(note.channelId == null)return;
 
-		const channel = await this.ChannelEntityService.pack(note.channelId, this.user!, true);
-
+		//const notechannel = await this.ChannelEntityService.pack(note.channelId, this.user!, true);
+		const notechannel = false;
 		if (!(
-			( this.user!.id === note.userId) ||
-			(this.following.has(note.userId) && channel.isSensitive == false) ||
+			(this.user!.id === note.userId) ||
+			(this.following.has(note.userId) && notechannel.isSensitive == false) ||
 			(this.followingChannels.has(note.channelId))
 		)) return;
 
