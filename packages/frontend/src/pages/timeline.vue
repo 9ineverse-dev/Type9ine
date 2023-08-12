@@ -123,20 +123,20 @@ const headerTabs = $computed(() => [{
 	title: i18n.ts._timelines.home,
 	icon: 'ti ti-home',
 	iconOnly: true,
-}, ...(isGlobalTimelineAvailable ? [{
-	key: 'global',
-	title: i18n.ts._timelines.global,
-	icon: 'ti ti-bolt',
+}, ...(isLocalTimelineAvailable ? [ {
+	key: 'local',
+	title: i18n.ts._timelines.local,
+	icon: 'ti ti-planet',
 	iconOnly: true,
-}] : []),...(isLocalTimelineAvailable ? [ {
+},{
 	key: 'social',
 	title: i18n.ts._timelines.social,
 	icon: 'ti ti ti-users',
 	iconOnly: true,
-},{
-	key: 'local',
-	title: i18n.ts._timelines.local,
-	icon: 'ti ti-planet',
+}] : []),...(isGlobalTimelineAvailable ? [{
+	key: 'global',
+	title: i18n.ts._timelines.global,
+	icon: 'ti ti-bolt',
 	iconOnly: true,
 }] : []),  {
 	icon: 'ti ti-list',
