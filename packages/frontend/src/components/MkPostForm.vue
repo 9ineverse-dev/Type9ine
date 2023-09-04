@@ -659,6 +659,10 @@ async function post(ev?: MouseEvent) {
 		os.popup(MkRippleEffect, { x, y }, {}, 'end');
 	}
 
+	if(props.channel){
+		props.visibility = 'specified';
+	}
+
 	const annoying =
 		text.includes('$[x2') ||
 		text.includes('$[x3') ||
@@ -703,10 +707,6 @@ async function post(ev?: MouseEvent) {
 		visibleUserIds: visibility === 'specified' ? visibleUsers.map(u => u.id) : undefined,
 		reactionAcceptance,
 	};
-
-	if(!props.channel){
-		postData.visibility = 'specified';
-	}
 
 	if (withHashtags && hashtags && hashtags.trim() !== '') {
 		const hashtags_ = hashtags.trim().split(' ').map(x => x.startsWith('#') ? x : '#' + x).join(' ');
