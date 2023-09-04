@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { In } from 'typeorm';
+import { In, Brackets } from 'typeorm';
 import { DI } from '@/di-symbols.js';
 import type { Config } from '@/config.js';
 import { bindThis } from '@/decorators.js';
@@ -200,7 +200,7 @@ export class SearchService {
 						qb.orWhere('channel.searchable = true');
 					}));
 			}
-			
+
 			query
 				.andWhere('note.text ILIKE :q', { q: `%${ sqlLikeEscape(q) }%` })
 				.innerJoinAndSelect('note.user', 'user')
