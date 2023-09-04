@@ -33,17 +33,27 @@ class ChannelChannel extends Channel {
 	private async onNote(note: Packed<'Note'>) {
 		if (note.channelId !== this.channelId) return;
 
-		// リプライなら再pack
-		if (note.replyId != null) {
-			note.reply = await this.noteEntityService.pack(note.replyId, this.user, {
+		if (['specified'].includes(note.visibility)) {
+			note = await this.noteEntityService.pack(note.id, this.user!, {
 				detail: true,
 			});
-		}
-		// Renoteなら再pack
-		if (note.renoteId != null) {
-			note.renote = await this.noteEntityService.pack(note.renoteId, this.user, {
-				detail: true,
-			});
+
+			if (note.isHidden) {
+				return;
+			}
+		} else {
+			// リプライなら再pack
+			if (note.replyId != null) {
+				note.reply = await this.noteEntityService.pack(note.replyId, this.user!, {
+					detail: true,
+				});
+			}
+			// Renoteなら再pack
+			if (note.renoteId != null) {
+				note.renote = await this.noteEntityService.pack(note.renoteId, this.user!, {
+					detail: true,
+				});
+			}
 		}
 
 		// 流れてきたNoteがミュートしているユーザーが関わるものだったら無視する
