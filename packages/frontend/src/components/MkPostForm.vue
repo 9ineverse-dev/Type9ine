@@ -27,7 +27,7 @@
 					<span :class="$style.headerRightButtonText">{{ channel.name }}</span>
 				</button>
 			</template>
-			<button v-click-anime v-tooltip="i18n.ts._visibility.disableFederation" class="_button" :class="[$style.headerRightItem, { [$style.danger]: localOnly }]" :disabled="channel != null /*|| visibility === 'specified'*/" @click="toggleLocalOnly">
+			<button v-click-anime v-tooltip="i18n.ts._visibility.disableFederation" class="_button" :class="[$style.headerRightItem, { [$style.danger]: localOnly }]" :disabled="channel != null || visibility === 'specified'" @click="toggleLocalOnly">
 				<span v-if="!localOnly"><i class="ti ti-rocket"></i></span>
 				<span v-else><i class="ti ti-rocket-off"></i></span>
 			</button>
@@ -703,6 +703,10 @@ async function post(ev?: MouseEvent) {
 		visibleUserIds: visibility === 'specified' ? visibleUsers.map(u => u.id) : undefined,
 		reactionAcceptance,
 	};
+	
+	if(props.channel.id){
+		postData.visibility = 'specified';
+	}
 
 	if (withHashtags && hashtags && hashtags.trim() !== '') {
 		const hashtags_ = hashtags.trim().split(' ').map(x => x.startsWith('#') ? x : '#' + x).join(' ');
