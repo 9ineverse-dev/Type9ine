@@ -19,6 +19,10 @@
 				<template #label>{{ i18n.ts.compartmentalization }}</template>
 			</MkSwitch>
 
+			<MkSwitch v-model="searchable" :disabled="federation">
+				{{ i18n.ts.channelSearchable }}
+			</MkSwitch>
+
 			<div>
 				<MkButton v-if="bannerId == null" @click="setBannerImage"><i class="ti ti-plus"></i> {{ i18n.ts._channel.setBanner }}</MkButton>
 				<div v-else-if="bannerUrl">
@@ -88,6 +92,7 @@ let bannerUrl = $ref<string | null>(null);
 let bannerId = $ref<string | null>(null);
 let color = $ref('#000');
 let isSensitive = $ref(false);
+let searchable = ref(true);
 const pinnedNotes = ref([]);
 
 watch(() => bannerId, async () => {
@@ -111,6 +116,7 @@ async function fetchChannel() {
 	description = channel.description;
 	bannerId = channel.bannerId;
 	bannerUrl = channel.bannerUrl;
+	searchable.value = channel.searchable;
 	isSensitive = channel.isSensitive;
 	pinnedNotes.value = channel.pinnedNoteIds.map(id => ({
 		id,
@@ -144,6 +150,7 @@ function save() {
 		bannerId: bannerId,
 		pinnedNoteIds: pinnedNotes.value.map(x => x.id),
 		color: color,
+		searchable: searchable.value,
 		isSensitive: isSensitive,
 	};
 

@@ -149,6 +149,7 @@ export class SearchService {
 		userId?: Note['userId'] | null;
 		channelId?: Note['channelId'] | null;
 		host?: string | null;
+		checkChannelSearchable?: boolean;
 	}, pagination: {
 		untilId?: Note['id'];
 		sinceId?: Note['id'];
@@ -191,6 +192,15 @@ export class SearchService {
 				query.andWhere('note.channelId = :channelId', { channelId: opts.channelId });
 			}
 
+			if (opts.checkChannelSearchable) {
+				query
+					.leftJoinAndSelect('note.channel', 'channel')
+					.andWhere(new Brackets(qb => {
+						qb.orWhere('channel.searchable IS NULL');
+						qb.orWhere('channel.searchable = true');
+					}));
+			}
+			
 			query
 				.andWhere('note.text ILIKE :q', { q: `%${ sqlLikeEscape(q) }%` })
 				.innerJoinAndSelect('note.user', 'user')
