@@ -288,7 +288,7 @@ if (props.reply && props.reply.text != null) {
 }
 
 if (props.channel) {
-	visibility = 'public';
+	visibility = 'specified';
 	localOnly = true; // TODO: チャンネルが連合するようになった折には消す
 }
 
