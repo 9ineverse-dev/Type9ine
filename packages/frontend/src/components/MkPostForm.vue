@@ -703,8 +703,8 @@ async function post(ev?: MouseEvent) {
 		visibleUserIds: visibility === 'specified' ? visibleUsers.map(u => u.id) : undefined,
 		reactionAcceptance,
 	};
-	
-	if(props.channel.id){
+
+	if(!props.channel.id){
 		postData.visibility = 'specified';
 	}
 
