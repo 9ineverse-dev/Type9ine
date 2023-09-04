@@ -704,8 +704,8 @@ async function post(ev?: MouseEvent) {
 		reactionAcceptance,
 	};
 
-	if(props.channel){
-		postData.visibility === 'specified';
+	if(!props.channel){
+		postData.visibility = 'specified';
 	}
 
 	if (withHashtags && hashtags && hashtags.trim() !== '') {
