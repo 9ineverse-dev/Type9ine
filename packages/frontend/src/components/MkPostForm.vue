@@ -422,7 +422,7 @@ function upload(file: File, name?: string): void {
 
 function setVisibility() {
 	if (props.channel) {
-		visibility = 'public';
+		visibility = 'specified';
 		localOnly = true; // TODO: チャンネルが連合するようになった折には消す
 		return;
 	}
@@ -657,10 +657,6 @@ async function post(ev?: MouseEvent) {
 		const x = rect.left + (el.offsetWidth / 2);
 		const y = rect.top + (el.offsetHeight / 2);
 		os.popup(MkRippleEffect, { x, y }, {}, 'end');
-	}
-
-	if(props.channel){
-		props.visibility = 'specified';
 	}
 
 	const annoying =
