@@ -81,7 +81,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.limit(500)
 				.orderBy('following.id','DESC');
 
-			const DynamicRenoteCount1 = 5;
+			const DynamicRenoteCount1 = 0;
 			const DynamicRenoteCount2 = 10;
 			const DynamicRenoteCount3 = 15;
 			const DynamicRenoteCount4 = 20;
