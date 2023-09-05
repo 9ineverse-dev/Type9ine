@@ -100,7 +100,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser')
 			.setParameters(followingQuery.getParameters())
-			.distinctOn(['note.renoteId']);
+			.distinctOn(['note.renoteId'])
+			orderBy({'note.renoteId': 'DESC'});
 
 			if (me) this.queryService.generateMutedUserQuery(query, me);
 			if (me) this.queryService.generateMutedNoteQuery(query, me);
