@@ -91,6 +91,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
 			ps.sinceId, ps.untilId, ps.sinceDate, ps.untilDate)
+			.select('note.renoteId')
 			.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 5))) })// 5日前まで
 			.andWhere('(note.visibility = \'public\')')
 			.andWhere('(note.channelId IS NULL)')
@@ -106,7 +107,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (me) this.queryService.generateBlockedUserQuery(query, me);
 			if (me) this.queryService.generateMutedUserRenotesQueryForNotes(query, me);
 
-		if (me.followingCount > 0 ) {
+		if (me.followingCount > 100000 ) {
 
 			query.andWhere(new Brackets(qb =>{
 			qb.where(`(note.renoteCount > :renoteCounter5) AND (note.renote IS NULL) AND (note.userHost IS NULL)`,{renoteCounter5:DynamicRenoteCount5})
