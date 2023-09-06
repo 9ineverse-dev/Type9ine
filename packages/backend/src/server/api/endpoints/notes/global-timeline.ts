@@ -114,7 +114,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 				.getMany();
 
-				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.followeeId), ...followees.map(f => f.followeeId)];
+				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.renoteUserId), ...followees.map(f => f.followeeId)];
 
 				query.andWhere('note.userId IN (:...meOrfollowingNetworks)', { meOrfollowingNetworks: meOrfollowingNetworks })
 				.andWhere(new Brackets(qb =>{
