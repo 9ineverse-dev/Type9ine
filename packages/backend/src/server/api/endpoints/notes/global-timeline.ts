@@ -105,7 +105,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (followees.length > 0) {
 				const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
-				const followingNetworks = await this.followingsRepository.createQueryBuilder('note')
+				const followingNetworks = await this.notesRepository.createQueryBuilder('note')
 				.select('note.renoteUserId')
 				.distinct(true)
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 3))) })
