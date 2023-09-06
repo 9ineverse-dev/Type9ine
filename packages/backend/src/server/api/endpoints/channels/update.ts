@@ -55,6 +55,13 @@ export const paramDef = {
 				type: 'string', format: 'misskey:id',
 			},
 		},
+		isPrivate: { type: 'boolean', nullable: true },
+		privateUserIds: {
+			type: 'array',
+			items: {
+				type: 'string', format: 'misskey:id',
+			},
+		},
 		color: { type: 'string', minLength: 1, maxLength: 16 },
 		isSensitive: { type: 'boolean', nullable: true },
 	},
@@ -113,6 +120,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				...(typeof ps.searchable === 'boolean' ? { searchable: ps.searchable } : {}),
 				...(banner ? { bannerId: banner.id } : {}),
 				...(typeof ps.isSensitive === 'boolean' ? { isSensitive: ps.isSensitive } : {}),
+				...(typeof ps.isPrivate === 'boolean' ? { isPrivate: ps.isPrivate } : {}),
+				...(ps.privateUserIds !== undefined ? { privateUserIds: ps.privateUserIds } : {}),
 			});
 
 			return await this.channelEntityService.pack(channel.id, me);

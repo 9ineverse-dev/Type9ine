@@ -86,6 +86,8 @@ export class ChannelEntityService {
 			color: channel.color,
 			isArchived: channel.isArchived,
 			searchable: channel.searchable,
+			isPrivate: channel.isPrivate,
+			privateUserIds: channel.privateUserIds,
 			usersCount: channel.usersCount,
 			notesCount: channel.notesCount,
 			isSensitive: channel.isSensitive,

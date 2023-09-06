@@ -164,6 +164,7 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
+import Multiselect from '@vueform/multiselect';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkSelect from '@/components/MkSelect.vue';
 import MkRadios from '@/components/MkRadios.vue';
