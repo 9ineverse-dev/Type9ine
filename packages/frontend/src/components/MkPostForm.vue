@@ -288,7 +288,7 @@ if (props.reply && props.reply.text != null) {
 }
 
 if (props.channel) {
-	visibility = 'specified';
+	visibility = 'public';
 	localOnly = true; // TODO: チャンネルが連合するようになった折には消す
 }
 
@@ -422,7 +422,7 @@ function upload(file: File, name?: string): void {
 
 function setVisibility() {
 	if (props.channel) {
-		visibility = 'specified';
+		visibility = 'public';
 		localOnly = true; // TODO: チャンネルが連合するようになった折には消す
 		return;
 	}
