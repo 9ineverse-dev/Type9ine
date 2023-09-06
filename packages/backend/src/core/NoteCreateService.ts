@@ -76,6 +76,7 @@ class NotificationManager {
 	public push(notifiee: LocalUser['id'], reason: NotificationType) {
 		// 自分自身へは通知しない
 		if (this.notifier.id === notifiee) return;
+		if ( this.note.visibility === 'specified' || this.note.channelId ) return;
 
 		const exist = this.queue.find(x => x.target === notifiee);
 
@@ -536,7 +537,6 @@ export class NoteCreateService implements OnApplicationShutdown {
 				for (const u of data.visibleUsers) {
 					// ローカルユーザーのみ
 					if (!this.userEntityService.isLocalUser(u)) continue;
-					if ( !data.channel ) continue;
 
 					this.noteReadService.insertNoteUnread(u.id, note, {
 						isSpecified: true,
