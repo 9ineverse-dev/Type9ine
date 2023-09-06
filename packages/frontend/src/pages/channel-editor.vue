@@ -41,7 +41,7 @@
 				</div>
 			</MkFolder>
 
-			<MkSwitch v-model="searchable" :disabled="isPrivate">
+			<MkSwitch v-model="searchable">
 				{{ i18n.ts.channelSearchable }}
 			</MkSwitch>
 
