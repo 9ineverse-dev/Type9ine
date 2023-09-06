@@ -85,11 +85,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 //				.limit(500)
 //				.orderBy('following.id','DESC');
 
-			const DynamicRenoteCount1 = 1;
-			const DynamicRenoteCount2 = 2;
-			const DynamicRenoteCount3 = 3;
-			const DynamicRenoteCount4 = 4;
-			const DynamicRenoteCount5 = 5;
+			const FolloweeNoteScore = 1;
+			const LocalRenoteCount = 2;
+			const GlobalRenoteCount = 3;
 
 
 		//#region Construct query
@@ -114,7 +112,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere('following.followerId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 				.getMany();
 
-				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.followeeId)];
+				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.followeeId), ...followees.map(f => f.followeeId)];
 				query.andWhere('note.userId IN (:...meOrfollowingNetworks)', { meOrfollowingNetworks: meOrfollowingNetworks });
 			}
 
