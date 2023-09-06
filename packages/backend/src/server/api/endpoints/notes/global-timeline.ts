@@ -111,7 +111,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				const followingNetworks = await this.followingsRepository.createQueryBuilder('following')
 				.select('following.followeeId')
 				.distinct(true)
-				.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+				.andWhere('following.followerId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 				.getMany();
 
 				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.followeeId)];
