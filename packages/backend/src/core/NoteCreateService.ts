@@ -76,7 +76,10 @@ class NotificationManager {
 	public push(notifiee: LocalUser['id'], reason: NotificationType) {
 		// 自分自身へは通知しない
 		if (this.notifier.id === notifiee) return;
-		if ( this.note.visibility === 'specified' || this.note.channelId ) return;
+		if ( this.note.visibility === 'specified' || this.note.channelId ) {
+			if ( !( notifiee in this.note.visibleUserIds ) ) return;
+			if ( this.note.mentions.length === 0 ) return;
+		}
 
 		const exist = this.queue.find(x => x.target === notifiee);
 
