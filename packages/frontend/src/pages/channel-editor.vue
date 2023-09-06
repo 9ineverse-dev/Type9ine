@@ -41,11 +41,7 @@
 				</div>
 			</MkFolder>
 
-			<MkSwitch v-model="federation" :disabled="isPrivate">
-				{{ i18n.ts.channelFederation }}
-			</MkSwitch>
-
-			<MkSwitch v-model="searchable" :disabled="federation || isPrivate">
+			<MkSwitch v-model="searchable" :disabled="isPrivate">
 				{{ i18n.ts.channelSearchable }}
 			</MkSwitch>
 
