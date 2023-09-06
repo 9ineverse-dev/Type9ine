@@ -78,12 +78,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.where('following.followerId = :followerId', { followerId: me.id })
 			.getMany();
 
-			//#region Construct query
-//			const followingQuery = this.followingsRepository.createQueryBuilder('following')
-//				.select('following.followeeId')
-//				.where('following.followerId = :followerId', { followerId: me.id })
-//				.limit(500)
-//				.orderBy('following.id','DESC');
 
 			const FolloweeNoteScore = 1;
 			const LocalRenoteCount = 2;

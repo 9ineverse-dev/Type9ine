@@ -234,8 +234,17 @@ export class NoteCreateService implements OnApplicationShutdown {
 		if (data.createdAt == null) data.createdAt = new Date();
 		if (data.visibility == null) data.visibility = 'public';
 		if (data.localOnly == null) data.localOnly = false;
-//		if (data.channel != null) data.visibility = 'public';
-//		if (data.channel != null) data.visibleUsers = [];
+		if (data.channel != null) {
+			data.visibility = 'public';
+			data.visibleUsers = [];
+			if (data.channel.isPrivate === true) {
+				data.visibility = 'specified';
+				data.channel.privateUserIds.push( data.channel!.userId );
+				const channelvisibleUsers = await this.userEntityService.packMany( data.channel.privateUserIds );
+				const minChannelvisibleUsers = MinimumUser(channelvisibleUsers);
+				data.visibleUsers = minChannelvisibleUsers;
+			}
+		}
 		if (data.channel != null) data.localOnly = true;
 
 		if (data.visibility === 'public' && data.channel == null) {
