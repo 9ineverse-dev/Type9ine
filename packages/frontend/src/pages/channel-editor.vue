@@ -19,7 +19,7 @@
 				<template #label>{{ i18n.ts.compartmentalization }}</template>
 			</MkSwitch>
 
-			<MkSwitch v-model="isPrivate">
+			<MkSwitch v-model="isPrivate" :disabled="!$i.policies.canCreatePrivateChannel">
 				{{ i18n.ts._channel.isPrivate }}
 			</MkSwitch>
 
@@ -99,6 +99,7 @@ import { definePageMetadata } from '@/scripts/page-metadata';
 import { i18n } from '@/i18n';
 import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from "@/components/MkSwitch.vue";
+import { $i } from '@/account';
 
 const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
 

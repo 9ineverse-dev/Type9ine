@@ -186,6 +186,8 @@ export interface Locale {
     "recipient": string;
     "annotation": string;
     "federation": string;
+		"channelSearchable": string;
+		"noteNotSearchable": string;
     "instances": string;
     "registeredAt": string;
     "latestRequestReceivedAt": string;
@@ -1649,6 +1651,8 @@ export interface Locale {
         "notesCount": string;
         "nameAndDescription": string;
         "nameOnly": string;
+				"isPrivate": string;
+				"privateUserIds": string;
     };
     "_menuDisplay": {
         "sideFull": string;

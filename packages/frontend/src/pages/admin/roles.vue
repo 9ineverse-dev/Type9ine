@@ -57,7 +57,7 @@
 							<MkInput v-model="policies.inviteLimit" type="number">
 							</MkInput>
 						</MkFolder>
-						
+
 						<MkFolder v-if="matchQuery([i18n.ts._role._options.inviteLimitCycle, 'inviteLimitCycle'])">
 							<template #label>{{ i18n.ts._role._options.inviteLimitCycle }}</template>
 							<template #suffix>{{ policies.inviteLimitCycle + i18n.ts._time.minute }}</template>
@@ -86,6 +86,14 @@
 							<template #label>{{ i18n.ts._role._options.canSearchNotes }}</template>
 							<template #suffix>{{ policies.canSearchNotes ? i18n.ts.yes : i18n.ts.no }}</template>
 							<MkSwitch v-model="policies.canSearchNotes">
+								<template #label>{{ i18n.ts.enable }}</template>
+							</MkSwitch>
+						</MkFolder>
+
+						<MkFolder v-if="matchQuery([i18n.ts._role._options.canCreatePrivateChannel, 'canCreatePrivateChannel'])">
+							<template #label>{{ i18n.ts._role._options.canCreatePrivateChannel }}</template>
+							<template #suffix>{{ policies.canCreatePrivateChannel ? i18n.ts.yes : i18n.ts.no }}</template>
+							<MkSwitch v-model="policies.canCreatePrivateChannel">
 								<template #label>{{ i18n.ts.enable }}</template>
 							</MkSwitch>
 						</MkFolder>
