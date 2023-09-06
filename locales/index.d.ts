@@ -1503,6 +1503,7 @@ export interface Locale {
             "noteEachClipsMax": string;
             "userListMax": string;
             "userEachUserListsMax": string;
+						"canCreatePrivateChannel": string;
             "rateLimitFactor": string;
             "descriptionOfRateLimitFactor": string;
             "canHideAds": string;
