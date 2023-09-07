@@ -77,9 +77,7 @@ class NotificationManager {
 		// 自分自身へは通知しない
 		if (this.notifier.id === notifiee) return;
 
-		if ( this.note.visibility === 'specified' && this.note.channelId ) {
-			if ( !( notifiee in this.note.channel?.privateUserIds )) return;
-		}
+		if ( this.note.visibility === 'specified' && this.note.channelId && !( notifiee in this.note.channel?.privateUserIds ) ) return;
 
 		const exist = this.queue.find(x => x.target === notifiee);
 
