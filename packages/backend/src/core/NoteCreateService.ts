@@ -548,7 +548,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 					for (const u of mentionedUsers) {
 						// ローカルユーザーのみ
 						if (!this.userEntityService.isLocalUser(u)) continue;
-						if (!(u.id in data.visibleUsers)) continue;
+						if (u.id in data.visibleUsers === false) continue;
 						this.noteReadService.insertNoteUnread(u.id, note, {
 							isSpecified: false,
 							isMentioned: true,
