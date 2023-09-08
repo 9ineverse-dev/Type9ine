@@ -537,15 +537,23 @@ export class NoteCreateService implements OnApplicationShutdown {
 			// 未読通知を作成
 			if (data.visibility === 'specified') {
 				if (data.visibleUsers == null) throw new Error('invalid param');
-				for (const u of mentionedUsers) {
+				if (!data.channel?.id) { for (const u of data.visibleUsers) {
 					// ローカルユーザーのみ
 					if (!this.userEntityService.isLocalUser(u)) continue;
-					if (u.id in data.visibleUsers === false) continue;
 					this.noteReadService.insertNoteUnread(u.id, note, {
-						isSpecified: false,
-						isMentioned: true,
-					});
-				}
+						isSpecified: true,
+						isMentioned: false,
+					});}
+				} else {
+					for (const u of mentionedUsers) {
+						// ローカルユーザーのみ
+						if (!this.userEntityService.isLocalUser(u)) continue;
+						if (u.id in data.visibleUsers === false) continue;
+						this.noteReadService.insertNoteUnread(u.id, note, {
+							isSpecified: true,
+							isMentioned: true,
+						});
+					}
 				}
 			} else {
 				for (const u of mentionedUsers) {
