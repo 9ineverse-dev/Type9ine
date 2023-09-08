@@ -78,7 +78,10 @@ class NotificationManager {
 		if (this.notifier.id === notifiee) return;
 
 		const exist = this.queue.find(x => x.target === notifiee);
-		if (this.note.visibility === 'specified' && notifiee in this.note.visibleUserIds === false) return;
+		if (this.note.visibility === 'specified') {
+			const notificationVisiable = this.note.visibleUserIds.some((id: any) => notifiee === id);
+			if (notificationVisiable === false) return;
+		}
 
 		if (exist) {
 			// 「メンションされているかつ返信されている」場合は、メンションとしての通知ではなく返信としての通知にする
