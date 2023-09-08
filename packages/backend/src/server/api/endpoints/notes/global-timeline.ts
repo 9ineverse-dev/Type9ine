@@ -89,15 +89,15 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			} else if (followees.length >= 50) {
 				FolloweeRenoteCount = 10;
 				LocalRenoteCount = 15;
-				GlobalRenoteCount = 30;
+				GlobalRenoteCount = 35;
 			} else if (followees.length >= 250) {
 				FolloweeRenoteCount = 15;
 				LocalRenoteCount = 20;
-				GlobalRenoteCount = 35;
+				GlobalRenoteCount = 45;
 			} else if (followees.length >= 500) {
 				FolloweeRenoteCount = 20;
 				LocalRenoteCount = 25;
-				GlobalRenoteCount = 40;
+				GlobalRenoteCount = 55;
 			}
 
 
@@ -117,7 +117,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (followees.length > 0) {
 				const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
-				const followingNetworks = await this.notesRepository.createQueryBuilder('note')
+				const followingNetworksQuery = await this.notesRepository.createQueryBuilder('note')
 				.select('note.renoteUserId')
 				.distinct(true)
 				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 2))) })
@@ -127,8 +127,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere(new Brackets(qb =>{
 					qb.where(`(note.renoteCount > :GlobalRenoteCount) `,{ GlobalRenoteCount: GlobalRenoteCount })
 					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount });
-				}))
-				.getMany();
+				}));
+
+
+				this.queryService.generateMutedUserRenotesQueryForNotes(followingNetworksQuery, me);
+				
+				const followingNetworks = await followingNetworksQuery;
 
 				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.renoteUserId), ...followees.map(f => f.followeeId)];
 
