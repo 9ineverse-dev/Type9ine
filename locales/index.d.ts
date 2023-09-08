@@ -1559,6 +1559,7 @@ export interface Locale {
         "requestAccountDelete": string;
         "started": string;
         "inProgress": string;
+				"canAccountDelete": string;
     };
     "_ad": {
         "back": string;
