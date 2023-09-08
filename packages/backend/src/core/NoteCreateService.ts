@@ -325,6 +325,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 			if (data.visibleUsers == null) throw new Error('invalid param');
 
 			for (const u of data.visibleUsers) {
+				if ( data.channel && u.id in mentionedUsers === false ) continue;
 				if (!mentionedUsers.some(x => x.id === u.id)) {
 					mentionedUsers.push(u);
 				}
