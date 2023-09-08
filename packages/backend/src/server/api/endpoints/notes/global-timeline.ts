@@ -78,10 +78,28 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.where('following.followerId = :followerId', { followerId: me.id })
 			.getMany();
 
+			let FolloweeNoteScore = 10;
+			let LocalRenoteCount = 5;
+			let GlobalRenoteCount = 20;
 
-			const FolloweeNoteScore = 1;
-			const LocalRenoteCount = 2;
-			const GlobalRenoteCount = 3;
+			if (followees.length >= 50) {
+				FolloweeNoteScore = 20;
+				LocalRenoteCount = 10;
+				GlobalRenoteCount = 30;
+			} else if (followees.length >= 250) {
+				FolloweeNoteScore = 30;
+				LocalRenoteCount = 20;
+				GlobalRenoteCount = 40;
+			} else if (followees.length >= 500) {
+				FolloweeNoteScore = 40;
+				LocalRenoteCount = 30;
+				GlobalRenoteCount = 60;
+			} else if (followees.length >= 1000) {
+				FolloweeNoteScore = 50;
+				LocalRenoteCount = 40;
+				GlobalRenoteCount = 80;
+			}
+
 
 
 		//#region Construct query
@@ -94,7 +112,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.leftJoinAndSelect('note.reply', 'reply')
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
-			.leftJoinAndSelect('renote.user', 'renoteUser')
+			.leftJoinAndSelect('renote.user', 'renoteUser');
 
 			if (followees.length > 0) {
 				const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
@@ -112,12 +130,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 				query.andWhere('note.userId IN (:...meOrfollowingNetworks)', { meOrfollowingNetworks: meOrfollowingNetworks })
 				.andWhere(new Brackets(qb =>{
-					qb.where(`(note.renoteCount > :GlobalRenoteCount) `,{GlobalRenoteCount:GlobalRenoteCount})
-					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, {LocalRenoteCount:LocalRenoteCount})
-					.orWhere(`(note.score > :FolloweeNoteScore) AND note.userId IN (:...meOrFolloweeIds) `, { meOrFolloweeIds: meOrFolloweeIds ,FolloweeNoteScore:FolloweeNoteScore});
-		  }));
-			}else {
-				query.andWhere(`(note.userHost IS NULL) AND (note.renoteCount > 30)`);
+					qb.where(`(note.renoteCount > :GlobalRenoteCount) `,{ GlobalRenoteCount: GlobalRenoteCount })
+					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
+					.orWhere(`(note.score > :FolloweeNoteScore) AND note.userId IN (:...meOrFolloweeIds) `, { meOrFolloweeIds: meOrFolloweeIds, FolloweeNoteScore: FolloweeNoteScore });
+				 }));
+			} else {
+				query.andWhere(`(note.userHost IS NULL) AND (note.score > 30)`);
 			}
 
 		this.queryService.generateRepliesQuery(query, ps.withReplies, me);
