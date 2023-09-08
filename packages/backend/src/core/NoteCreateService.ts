@@ -328,8 +328,8 @@ export class NoteCreateService implements OnApplicationShutdown {
 
 		if (data.visibility === 'specified') {
 			if (data.visibleUsers == null) throw new Error('invalid param');
-
 			for (const u of data.visibleUsers) {
+				if ( data.channel?.id ) continue;
 				if (!mentionedUsers.some(x => x.id === u.id)) {
 					mentionedUsers.push(u);
 				}
@@ -746,8 +746,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 				continue;
 			}
 
-			if (note.visibility === 'specified' && !(u.id in note.visibleUserIds)) continue;
-			if (note.visibility === 'specified' && note.channelId && !(u.id in note.mentions)) continue;
+			if (!(u.id in note.visibleUserIds)) continue;
 
 			const detailPackedNote = await this.noteEntityService.pack(note, u, {
 				detail: true,
