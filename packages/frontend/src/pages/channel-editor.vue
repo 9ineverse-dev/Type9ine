@@ -15,19 +15,19 @@
 				<template #label>{{ i18n.ts.color }}</template>
 			</MkColorInput>
 
-			<MkSwitch v-model="searchable">
-				{{ i18n.ts.channelSearchable }}
-			</MkSwitch>
-
 			<MkSwitch v-model="isSensitive">
 				<template #label>{{ i18n.ts.compartmentalization }}</template>
+			</MkSwitch>
+
+			<MkSwitch v-model="searchable">
+				{{ i18n.ts.channelSearchable }}
 			</MkSwitch>
 
 			<MkSwitch v-model="isPrivate" :disabled="!$i.policies.canCreatePrivateChannel">
 				{{ i18n.ts._channel.isPrivate }}
 			</MkSwitch>
 
-			<MkFolder v-if="isPrivate || !$i.policies.canCreatePrivateChannel" :defaultOpen="true" >
+			<MkFolder v-if="isPrivate && $i.policies.canCreatePrivateChannel === true" :defaultOpen="true" >
 				<template #label>{{ i18n.ts._channel.privateUserIds }}</template>
 
 				<div class="_gaps">
@@ -44,8 +44,6 @@
 					/>
 				</div>
 			</MkFolder>
-
-
 
 			<div>
 				<MkButton v-if="bannerId == null" @click="setBannerImage"><i class="ti ti-plus"></i> {{ i18n.ts._channel.setBanner }}</MkButton>
