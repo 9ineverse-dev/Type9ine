@@ -15,14 +15,16 @@
 				<template #label>{{ i18n.ts.color }}</template>
 			</MkColorInput>
 
-			<MkSwitch v-model="isSensitive">
-				<template #label>{{ i18n.ts.compartmentalization }}</template>
-			</MkSwitch>
-
 			<MkSwitch v-model="searchable">
 				{{ i18n.ts.channelSearchable }}
 			</MkSwitch>
 			
+			<MkSwitch v-model="isSensitive">
+				<template #label>{{ i18n.ts.compartmentalization }}</template>
+			</MkSwitch>
+
+
+
 			<MkSwitch v-model="isPrivate" :disabled="!$i.policies.canCreatePrivateChannel">
 				{{ i18n.ts._channel.isPrivate }}
 			</MkSwitch>
