@@ -78,24 +78,24 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.where('following.followerId = :followerId', { followerId: me.id })
 			.getMany();
 
-			let FolloweeNoteScore = 10;
-			let LocalRenoteCount = 5;
+			let FolloweeRenoteCount = 5;
+			let LocalRenoteCount = 10;
 			let GlobalRenoteCount = 20;
 
-			if (followees.length >= 50) {
-				FolloweeNoteScore = 20;
+			if (followees.length >= 25) {
+				FolloweeRenoteCount = 7;
 				LocalRenoteCount = 10;
 				GlobalRenoteCount = 30;
-			} else if (followees.length >= 250) {
-				FolloweeNoteScore = 30;
+			} else if (followees.length >= 50) {
+				FolloweeRenoteCount = 10;
 				LocalRenoteCount = 20;
 				GlobalRenoteCount = 40;
-			} else if (followees.length >= 500) {
-				FolloweeNoteScore = 40;
+			} else if (followees.length >= 250) {
+				FolloweeRenoteCount = 15;
 				LocalRenoteCount = 30;
 				GlobalRenoteCount = 60;
-			} else if (followees.length >= 1000) {
-				FolloweeNoteScore = 50;
+			} else if (followees.length >= 500) {
+				FolloweeRenoteCount = 20;
 				LocalRenoteCount = 40;
 				GlobalRenoteCount = 80;
 			}
@@ -120,17 +120,21 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				const followingNetworks = await this.notesRepository.createQueryBuilder('note')
 				.select('note.renoteUserId')
 				.distinct(true)
-				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 3))) })
+				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 2))) })
 				.andWhere('note.renoteId IS NOT NULL')
 				.andWhere('note.text IS NULL')
 				.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+				.andWhere(new Brackets(qb =>{
+					qb.where(`(note.renoteCount > :GlobalRenoteCount) `,{ GlobalRenoteCount: GlobalRenoteCount })
+					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
+				}))
 				.getMany();
 
 				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.renoteUserId), ...followees.map(f => f.followeeId)];
 
 				query.andWhere('note.userId IN (:...meOrfollowingNetworks)', { meOrfollowingNetworks: meOrfollowingNetworks })
 				.andWhere(new Brackets(qb =>{
-					qb.where(`(note.renoteCount > :GlobalRenoteCount) `,{ GlobalRenoteCount: GlobalRenoteCount })
+					qb.where(`(note.renoteCount > :FolloweeRenoteCount) `,{ FolloweeRenoteCount: FolloweeRenoteCount })
 					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
 					.orWhere(`(note.score > :FolloweeNoteScore) AND note.userId IN (:...meOrFolloweeIds) `, { meOrFolloweeIds: meOrFolloweeIds, FolloweeNoteScore: FolloweeNoteScore });
 				 }));
