@@ -747,7 +747,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 			}
 
 			if (note.visibility === 'specified' && !(u.id in note.visibleUserIds)) continue;
-			if (note.visibility === 'specified' && !note.channelId && note.mentions.length === 0 && !(u.id in note.mentions)) continue;
+			if (note.visibility === 'specified' && !note.channelId && !(u.id in note.mentions)) continue;
 
 			const detailPackedNote = await this.noteEntityService.pack(note, u, {
 				detail: true,
