@@ -1431,6 +1431,7 @@ _role:
     descriptionOfRateLimitFactor: "小さいほど制限が緩和され、大きいほど制限が強化されます。"
     canHideAds: "広告の非表示"
     canSearchNotes: "ノート検索の利用可否"
+    canAccountDelete: "アカウントを削除可能"
   _condition:
     isLocal: "ローカルユーザー"
     isRemote: "リモートユーザー"
@@ -1479,6 +1480,7 @@ _accountDelete:
   requestAccountDelete: "アカウント削除をリクエスト"
   started: "削除処理が開始されました。"
   inProgress: "削除が進行中"
+  cannotDelete: "有料プランに加入しているため、アカウントを削除できません。有料プラン解除（解約後の契約更新日以後）にお試しください。"
 
 _ad:
   back: "戻る"

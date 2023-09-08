@@ -39,6 +39,7 @@ export type RolePolicies = {
 	userListLimit: number;
 	userEachUserListsLimit: number;
 	rateLimitFactor: number;
+	canAccountDelete: boolean;
 };
 
 export const DEFAULT_POLICIES: RolePolicies = {
@@ -64,6 +65,7 @@ export const DEFAULT_POLICIES: RolePolicies = {
 	userListLimit: 10,
 	userEachUserListsLimit: 50,
 	rateLimitFactor: 1,
+	canAccountDelete: true,
 };
 
 @Injectable()
@@ -308,6 +310,7 @@ export class RoleService implements OnApplicationShutdown {
 			userListLimit: calc('userListLimit', vs => Math.max(...vs)),
 			userEachUserListsLimit: calc('userEachUserListsLimit', vs => Math.max(...vs)),
 			rateLimitFactor: calc('rateLimitFactor', vs => Math.max(...vs)),
+			canAccountDelete: calc('canAccountDelete', vs => vs.some(v => v === true)),
 		};
 	}
 

@@ -1508,6 +1508,7 @@ export interface Locale {
             "descriptionOfRateLimitFactor": string;
             "canHideAds": string;
             "canSearchNotes": string;
+						"canAccountDelete": string;
         };
         "_condition": {
             "isLocal": string;
