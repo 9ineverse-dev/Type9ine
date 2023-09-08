@@ -79,11 +79,6 @@ class NotificationManager {
 
 		const exist = this.queue.find(x => x.target === notifiee);
 
-/*		if ( this.note.visibility === 'specified' && this.note.channelId ) {
-			if (reason === 'mention' && this.note.mentions.length >= this.note.visibleUserIds.length ) return;
-			if ((reason === 'renote' || reason === 'quote' ) && !( notifiee in this.note.visibleUserIds ) ) return;
-		}*/
-
 		if (exist) {
 			// 「メンションされているかつ返信されている」場合は、メンションとしての通知ではなく返信としての通知にする
 			if (reason !== 'mention') {
@@ -245,7 +240,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 			if (data.channel.isPrivate === true || !data.channel.userId) {
 				data.visibility = 'specified';
 				data.channel.privateUserIds.push( data.channel!.userId );
-				const minChannelvisibleUsers = await this.usersRepository.findBy({	id: In(data.channel.privateUserIds), });
+				const minChannelvisibleUsers = await this.usersRepository.findBy({	id: In(data.channel.privateUserIds),});
 				data.visibleUsers = minChannelvisibleUsers;
 			}
 		}
@@ -328,8 +323,8 @@ export class NoteCreateService implements OnApplicationShutdown {
 
 		if (data.visibility === 'specified') {
 			if (data.visibleUsers == null) throw new Error('invalid param');
+
 			for (const u of data.visibleUsers) {
-				//if ( data.channel ) continue;
 				if (!mentionedUsers.some(x => x.id === u.id)) {
 					mentionedUsers.push(u);
 				}
@@ -537,13 +532,16 @@ export class NoteCreateService implements OnApplicationShutdown {
 			// 未読通知を作成
 			if (data.visibility === 'specified') {
 				if (data.visibleUsers == null) throw new Error('invalid param');
+
 				for (const u of data.visibleUsers) {
 					// ローカルユーザーのみ
 					if (!this.userEntityService.isLocalUser(u)) continue;
+
 					this.noteReadService.insertNoteUnread(u.id, note, {
 						isSpecified: true,
 						isMentioned: false,
-					});}
+					});
+				}
 			} else {
 				for (const u of mentionedUsers) {
 					// ローカルユーザーのみ
