@@ -126,7 +126,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 				.andWhere(new Brackets(qb =>{
 					qb.where(`(note.renoteCount > :GlobalRenoteCount) `,{ GlobalRenoteCount: GlobalRenoteCount })
-					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
+					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount });
 				}))
 				.getMany();
 
@@ -136,7 +136,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere(new Brackets(qb =>{
 					qb.where(`(note.renoteCount > :FolloweeRenoteCount) `,{ FolloweeRenoteCount: FolloweeRenoteCount })
 					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
-					.orWhere(`(note.score > :FolloweeNoteScore) AND note.userId IN (:...meOrFolloweeIds) `, { meOrFolloweeIds: meOrFolloweeIds, FolloweeNoteScore: FolloweeNoteScore });
+					.orWhere(`(note.score > :FolloweeRenoteCount) AND note.userId IN (:...meOrFolloweeIds) `, { meOrFolloweeIds: meOrFolloweeIds, FolloweeRenoteCount: FolloweeRenoteCount });
 				 }));
 			} else {
 				query.andWhere(`(note.userHost IS NULL) AND (note.score > 30)`);
