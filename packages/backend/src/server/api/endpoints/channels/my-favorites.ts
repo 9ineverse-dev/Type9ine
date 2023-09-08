@@ -43,16 +43,17 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 	) {
 		super(meta, paramDef, async (ps, me) => {
 			const query = this.channelFavoritesRepository.createQueryBuilder('favorite')
-			.andWhere(new Brackets(qb => { qb
-				.where('channel.isPrivate = FALSE')
-				.orWhere(new Brackets(qb2 => { qb2
-					.where('channel.isPrivate = TRUE')
-					.andWhere(new Brackets(qb3 => { qb3
-						.where(':id = ANY(channel.privateUserIds)', { id: me?.id })
-						.orWhere('channel.userId = :id', { id: me?.id });
+			.andWhere('favorite.userId = :meId', { meId: me.id })
+				.andWhere(new Brackets(qb => { qb
+					.where('channel.isPrivate = FALSE')
+					.orWhere(new Brackets(qb2 => { qb2
+						.where('channel.isPrivate = TRUE')
+						.andWhere(new Brackets(qb3 => { qb3
+							.where(':id = ANY(channel.privateUserIds)', { id: me?.id })
+							.orWhere('channel.userId = :id', { id: me?.id });
+						}));
 					}));
-				}));
-			}))
+				}))
 				.leftJoinAndSelect('favorite.channel', 'channel');
 
 			const favorites = await query
