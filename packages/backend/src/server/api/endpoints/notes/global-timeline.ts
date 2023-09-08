@@ -131,8 +131,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 
 				this.queryService.generateMutedUserRenotesQueryForNotes(followingNetworksQuery, me);
-				
-				const followingNetworks = await followingNetworksQuery;
+				const followingNetworks = await followingNetworksQuery.getMany();
 
 				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.renoteUserId), ...followees.map(f => f.followeeId)];
 
