@@ -329,7 +329,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 		if (data.visibility === 'specified') {
 			if (data.visibleUsers == null) throw new Error('invalid param');
 			for (const u of data.visibleUsers) {
-				if ( data.channel?.id ) continue;
+				//if ( data.channel ) continue;
 				if (!mentionedUsers.some(x => x.id === u.id)) {
 					mentionedUsers.push(u);
 				}
@@ -537,7 +537,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 			// 未読通知を作成
 			if (data.visibility === 'specified') {
 				if (data.visibleUsers == null) throw new Error('invalid param');
-				if (!data.channel) { for (const u of data.visibleUsers) {
+				if (!data.channel?.id) { for (const u of data.visibleUsers) {
 					// ローカルユーザーのみ
 					if (!this.userEntityService.isLocalUser(u)) continue;
 					this.noteReadService.insertNoteUnread(u.id, note, {
