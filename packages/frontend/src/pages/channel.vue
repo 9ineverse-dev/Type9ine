@@ -107,9 +107,7 @@ watch(() => props.channelId, async () => {
 	channel = await os.api('channels/show', {
 		channelId: props.channelId,
 	});
-	if (channel) {
-		favorited = channel.isFavorited;
-	}
+	favorited = channel.isFavorited;
 	if (favorited || channel.isFollowing) {
 		tab = 'timeline';
 	}
