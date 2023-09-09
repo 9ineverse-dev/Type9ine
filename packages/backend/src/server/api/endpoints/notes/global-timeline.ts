@@ -80,24 +80,24 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			let FolloweeRenoteCount = 5;
 			let LocalRenoteCount = 10;
-			let GlobalRenoteCount = 20;
+			let GlobalRenoteCount = 15;
 
-			if (followees.length >= 25) {
+			if (followees.length >= 50) {
 				FolloweeRenoteCount = 7;
-				LocalRenoteCount = 10;
-				GlobalRenoteCount = 25;
-			} else if (followees.length >= 50) {
+				LocalRenoteCount = 12;
+				GlobalRenoteCount = 15;
+			} else if (followees.length >= 150) {
 				FolloweeRenoteCount = 10;
 				LocalRenoteCount = 15;
-				GlobalRenoteCount = 35;
-			} else if (followees.length >= 250) {
+				GlobalRenoteCount = 20;
+			} else if (followees.length >= 300) {
 				FolloweeRenoteCount = 15;
 				LocalRenoteCount = 20;
-				GlobalRenoteCount = 45;
+				GlobalRenoteCount = 30;
 			} else if (followees.length >= 500) {
 				FolloweeRenoteCount = 20;
-				LocalRenoteCount = 25;
-				GlobalRenoteCount = 55;
+				LocalRenoteCount = 30;
+				GlobalRenoteCount = 40;
 			}
 
 
