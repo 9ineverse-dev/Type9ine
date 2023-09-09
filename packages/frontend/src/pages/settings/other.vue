@@ -36,11 +36,13 @@
 				<div class="_gaps_m">
 					<FormInfo warn>{{ i18n.ts._accountDelete.mayTakeTime }}</FormInfo>
 					<FormInfo>{{ i18n.ts._accountDelete.sendEmail }}</FormInfo>
-					<template v-if="$i.policies.canCreateVoiceChannel === true">
+					<template v-if="AccountDeletable">
 						<MkButton v-if="!$i.isDeleted" danger @click="deleteAccount">{{ i18n.ts._accountDelete.requestAccountDelete }}</MkButton>
 						<MkButton v-else disabled>{{ i18n.ts._accountDelete.inProgress }}</MkButton>
 					</template>
-					<FormInfo v-if="$i.policies.canCreateVoiceChannel === false" warn>{{ i18n.ts._accountDelete.cannotDelete }}</FormInfo>
+					<template v-else>
+						<FormInfo warn>{{ i18n.ts._accountDelete.cannotDelete }}</FormInfo>
+					</template>
 				</div>
 			</MkFolder>
 
@@ -86,6 +88,7 @@ import * as os from '@/os';
 import { defaultStore } from '@/store';
 import { signout, $i } from '@/account';
 import { i18n } from '@/i18n';
+import { instance } from '@/instance';
 import { definePageMetadata } from '@/scripts/page-metadata';
 import { unisonReload } from '@/scripts/unison-reload';
 import FormSection from '@/components/form/section.vue';
@@ -93,6 +96,7 @@ import FormSection from '@/components/form/section.vue';
 const reportError = computed(defaultStore.makeGetterSetter('reportError'));
 const enableCondensedLineForAcct = computed(defaultStore.makeGetterSetter('enableCondensedLineForAcct'));
 const devMode = computed(defaultStore.makeGetterSetter('devMode'));
+const AccountDeletable = (($i == null && instance.policies.canAccountDelete));
 
 function onChangeInjectFeaturedNote(v) {
 	os.api('i/update', {
