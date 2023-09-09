@@ -40,7 +40,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			const query = this.channelsRepository.createQueryBuilder('channel')
 				.where('channel.lastNotedAt IS NOT NULL')
 				.andWhere('channel.isArchived = FALSE')
-				.andWhere('channel.searchable = TRUE')
+				//.andWhere('channel.searchable = TRUE')
 				.andWhere(new Brackets(qb => { qb
 					.where('channel.isPrivate = FALSE')
 					.orWhere(new Brackets(qb2 => { qb2
