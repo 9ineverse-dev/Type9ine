@@ -124,9 +124,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere('note.renoteId IS NOT NULL')
 				.andWhere('note.text IS NULL')
 				.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+				.andWhere(`(note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
 				.andWhere(new Brackets(qb =>{
-					qb.where(`(note.renoteCount > :GlobalRenoteCount) `,{ GlobalRenoteCount: GlobalRenoteCount })
-					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount });
+					qb.where(`(note.userHost = note.renoteUserHost) `)
+					.orWhere(`(note.userHost IS NULL)`);
 				}));
 
 
@@ -137,9 +138,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 				query.andWhere('note.userId IN (:...meOrfollowingNetworks)', { meOrfollowingNetworks: meOrfollowingNetworks })
 				.andWhere(new Brackets(qb =>{
-					qb.where(`(note.renoteCount > :FolloweeRenoteCount) `,{ FolloweeRenoteCount: FolloweeRenoteCount })
+					qb.where(`(note.renoteCount > :GlobalRenoteCount) `,{ GlobalRenoteCount: GlobalRenoteCount })
 					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
-					.orWhere(`(note.renoteCount > :FolloweeRenoteCount) AND note.userId IN (:...meOrFolloweeIds) `, { meOrFolloweeIds: meOrFolloweeIds, FolloweeRenoteCount: FolloweeRenoteCount });
+					.orWhere(`(note.renoteCount > :FolloweeRenoteCount) AND (note.userId IN (:...meOrFolloweeIds))`, { meOrFolloweeIds: meOrFolloweeIds, FolloweeRenoteCount: FolloweeRenoteCount });
 				 }));
 			} else {
 				query.andWhere(`(note.userHost IS NULL) AND (note.score > 30)`);
