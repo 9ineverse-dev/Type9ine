@@ -43,7 +43,6 @@
 					<MkLoading v-if="fetching" class="loading"/>
 				</div>
 			</MkFolder>
-
 		</div>
 		<div v-if="channel && tab === 'timeline'" class="_gaps">
 			<MkInfo v-if="channel.isArchived" warn>{{ i18n.ts.thisChannelArchived }}</MkInfo>
