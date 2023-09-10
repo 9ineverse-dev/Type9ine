@@ -210,7 +210,7 @@ async function addPrivateUserIds() {
 		}, ...privateUserIds.value];
 	};
 
-	const usernamePromise = os.api('users/show', { username: Acct.parse(result) });
+	const usernamePromise = os.api('users/show', Acct.parse(result) );
 	const idPromise = os.api('users/show', { userId: result });
 	let _notFound = false;
 	const notFound = () => {
