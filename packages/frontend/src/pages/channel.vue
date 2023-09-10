@@ -27,17 +27,22 @@
 				</div>
 			</MkFoldableSection>
 
-			<MkFoldableSection>
-				<template #header><i class="ti ti-pin ti-fw" style="margin-right: 0.5em;"></i>{{ i18n.ts._channel.privateUserIds }}</template>
-				<div v-if="channel.privateUserIds.length > 0" class="_gaps">
-					<MkNote v-for="note in channel.privateUserIds" :key="note.id" class="_panel" :note="note"/>
+			<MkFolder defaultOpen>
+				<template #label>{{ i18n.ts.members }}</template>
+				<template #caption>{{ i18n.t('nUsers', { n: `${channel.privateUserIds.length}` }) }}</template>
+
+				<div class="_gaps_s">
 					<div v-for="user in pusers" :key="user.id" :class="$style.userItem">
 						<MkA :class="$style.userItemBody" :to="`${userPage(user)}`">
 							<MkUserCardMini :user="user"/>
 						</MkA>
 					</div>
+					<MkButton v-if="!fetching && queueUserIds.length !== 0" v-appear="enableInfiniteScroll ? fetchMoreUsers : null" :class="$style.more" :style="{ cursor: 'pointer' }" primary rounded @click="fetchMoreUsers">
+						{{ i18n.ts.loadMore }}
+					</MkButton>
+					<MkLoading v-if="fetching" class="loading"/>
 				</div>
-			</MkFoldableSection>
+			</MkFolder>
 
 		</div>
 		<div v-if="channel && tab === 'timeline'" class="_gaps">
@@ -96,6 +101,9 @@ import MkInfo from '@/components/MkInfo.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import { UserLite } from 'misskey-js/built/entities';
 import { userPage } from '@/filters/user';
+const {
+	enableInfiniteScroll,
+} = defaultStore.reactiveState;
 
 const router = useRouter();
 
@@ -103,6 +111,7 @@ const props = defineProps<{
 	channelId: string;
 }>();
 
+const FETCH_USERS_LIMIT = 20;
 let tab = $ref('overview');
 let channel = $ref(null);
 let favorited = $ref(false);
@@ -110,6 +119,8 @@ let searchQuery = $ref('');
 let searchPagination = $ref();
 let searchKey = $ref('');
 let pusers = $ref<UserLite[]>([]);
+let fetching = $ref(true);
+let queueUserIds = $ref<string[]>([]);
 const featuredPagination = $computed(() => ({
 	endpoint: 'notes/featured' as const,
 	limit: 10,
@@ -123,19 +134,26 @@ watch(() => props.channelId, async () => {
 	channel = await os.api('channels/show', {
 		channelId: props.channelId,
 	});
+	queueUserIds = channel.privateUserIds;
 	favorited = channel.isFavorited;
 	if (favorited || channel.isFollowing) {
 		tab = 'timeline';
 	}
-/*	pusers = await os.api('users/show', {
-	userIds: channel.privateUserIds,
-});*/
+	fetchMoreUsers();
+}, { immediate: true });
+
+function fetchMoreUsers() {
+	if ( !channel ) return;
+	if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
 	os.api('users/show', {
-		userIds: channel.privateUserIds,
+		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
 	}).then(_users => {
 		pusers = pusers.concat(_users);
+		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
+	}).finally(() => {
+		fetching = false;
 	});
-}, { immediate: true });
+}
 
 function edit() {
 	router.push(`/channels/${channel.id}/edit`);
