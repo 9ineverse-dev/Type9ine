@@ -127,14 +127,14 @@ watch(() => props.channelId, async () => {
 	if (favorited || channel.isFollowing) {
 		tab = 'timeline';
 	}
-	pusers = await os.api('users/show', {
+/*	pusers = await os.api('users/show', {
 	userIds: channel.privateUserIds,
-});
-/*	os.api('users/show', {
+});*/
+	os.api('users/show', {
 		userIds: channel.privateUserIds,
 	}).then(_users => {
 		pusers = pusers.concat(_users);
-	});*/
+	});
 }, { immediate: true });
 
 function edit() {
