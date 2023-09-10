@@ -137,7 +137,7 @@ watch(() => props.channelId, async () => {
 	}).then(_channel => {
 		channel = _channel;
 		queueUserIds = channel.privateUserIds;
-		queueUserIds..unshift(channel.userId);
+		queueUserIds.unshift(channel.userId);
 		favorited = channel.isFavorited;
 		if (favorited || channel.isFollowing) {
 			tab = 'timeline';
