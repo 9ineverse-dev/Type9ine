@@ -26,6 +26,19 @@
 					<MkNote v-for="note in channel.pinnedNotes" :key="note.id" class="_panel" :note="note"/>
 				</div>
 			</MkFoldableSection>
+
+			<MkFoldableSection>
+				<template #header><i class="ti ti-pin ti-fw" style="margin-right: 0.5em;"></i>{{ i18n.ts._channel.privateUserIds }}</template>
+				<div v-if="channel.privateUserIds.length > 0" class="_gaps">
+					<MkNote v-for="note in channel.privateUserIds" :key="note.id" class="_panel" :note="note"/>
+					<div v-for="user in pusers" :key="user.id" :class="$style.userItem">
+						<MkA :class="$style.userItemBody" :to="`${userPage(user)}`">
+							<MkUserCardMini :user="user"/>
+						</MkA>
+					</div>
+				</div>
+			</MkFoldableSection>
+
 		</div>
 		<div v-if="channel && tab === 'timeline'" class="_gaps">
 			<MkInfo v-if="channel.isArchived" warn>{{ i18n.ts.thisChannelArchived }}</MkInfo>
@@ -112,6 +125,10 @@ watch(() => props.channelId, async () => {
 		tab = 'timeline';
 	}
 }, { immediate: true });
+
+const pusers = await os.api('users/show', {
+	userIds: channel.privateUserIds,
+});
 
 function edit() {
 	router.push(`/channels/${channel.id}/edit`);
