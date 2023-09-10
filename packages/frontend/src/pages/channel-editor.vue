@@ -23,11 +23,34 @@
 				{{ i18n.ts.channelSearchable }}
 			</MkSwitch>
 
+			<MkFolder :defaultOpen="true">
+				<template #label>{{ i18n.ts.pinnedNotes }}</template>
+
+				<div class="_gaps">
+					<MkButton primary rounded @click="addPinnedNote()"><i class="ti ti-plus"></i></MkButton>
+
+					<Sortable
+						v-model="pinnedNotes"
+						itemKey="id"
+						:handle="'.' + $style.pinnedNoteHandle"
+						:animation="150"
+					>
+						<template #item="{element,index}">
+							<div :class="$style.pinnedNote">
+								<button class="_button" :class="$style.pinnedNoteHandle"><i class="ti ti-menu"></i></button>
+								{{ element.id }}
+								<button class="_button" :class="$style.pinnedNoteRemove" @click="removePinnedNote(index)"><i class="ti ti-x"></i></button>
+							</div>
+						</template>
+					</Sortable>
+				</div>
+			</MkFolder>
+
 			<MkSwitch v-model="isPrivate" :disabled="!$i.policies.canCreatePrivateChannel">
 				{{ i18n.ts._channel.isPrivate }}
 			</MkSwitch>
 
-			<MkFolder :defaultOpen="true">
+			<MkFolder v-if="isPrivate && $i.policies.canCreatePrivateChannel === true" :defaultOpen="true">
 				<template #label>{{ i18n.ts._channel.privateUserIds }}</template>
 
 				<div class="_gaps">
@@ -58,28 +81,7 @@
 				</div>
 			</div>
 
-			<MkFolder :defaultOpen="true">
-				<template #label>{{ i18n.ts.pinnedNotes }}</template>
 
-				<div class="_gaps">
-					<MkButton primary rounded @click="addPinnedNote()"><i class="ti ti-plus"></i></MkButton>
-
-					<Sortable
-						v-model="pinnedNotes"
-						itemKey="id"
-						:handle="'.' + $style.pinnedNoteHandle"
-						:animation="150"
-					>
-						<template #item="{element,index}">
-							<div :class="$style.pinnedNote">
-								<button class="_button" :class="$style.pinnedNoteHandle"><i class="ti ti-menu"></i></button>
-								{{ element.id }}
-								<button class="_button" :class="$style.pinnedNoteRemove" @click="removePinnedNote(index)"><i class="ti ti-x"></i></button>
-							</div>
-						</template>
-					</Sortable>
-				</div>
-			</MkFolder>
 
 			<div class="_buttons">
 				<MkButton primary @click="save()"><i class="ti ti-device-floppy"></i> {{ channelId ? i18n.ts.save : i18n.ts.create }}</MkButton>
