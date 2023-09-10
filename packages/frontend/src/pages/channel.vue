@@ -27,7 +27,7 @@
 				</div>
 			</MkFoldableSection>
 
-			<MkFolder defaultOpen>
+			<MkFolder v-if="channel.isPrivate" defaultOpen>
 				<template #label>{{ i18n.ts.members }}</template>
 				<template #caption>{{ i18n.t('nUsers', { n: `${channel.privateUserIds.length}` }) }}</template>
 
