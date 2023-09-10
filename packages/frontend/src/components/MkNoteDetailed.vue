@@ -103,7 +103,7 @@
 				<i class="ti ti-repeat"></i>
 				<p v-if="appearNote.renoteCount > 0" :class="$style.noteFooterButtonCount">{{ appearNote.renoteCount }}</p>
 			</button>
-			<button v-if="canRenote" ref="ChannelrenoteButton" :class="$style.footerButton" class="_button" @mousedown="chooseRnChannel()">
+			<button v-if="canRenote" ref="ChannelrenoteButton" :class="$style.noteFooterButton" class="_button" @mousedown="chooseRnChannel()">
 				<i class="ti ti-device-tv"></i>
 			</button>
 			<button v-else class="_button" :class="$style.noteFooterButton" disabled>
