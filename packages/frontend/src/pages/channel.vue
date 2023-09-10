@@ -132,15 +132,17 @@ const featuredPagination = $computed(() => ({
 }));
 
 watch(() => props.channelId, async () => {
-	channel = await os.api('channels/show', {
+	os.api('channels/show', {
 		channelId: props.channelId,
-	});
-	queueUserIds = channel.privateUserIds;
-	favorited = channel.isFavorited;
-	if (favorited || channel.isFollowing) {
-		tab = 'timeline';
-	}
-	fetchMoreUsers();
+	}).then(_channel => {
+		channel = _channel;
+		queueUserIds = channel.privateUserIds;
+		favorited = channel.isFavorited;
+		if (favorited || channel.isFollowing) {
+			tab = 'timeline';
+		}
+		fetchMoreUsers();
+});
 }, { immediate: true });
 
 function fetchMoreUsers() {
