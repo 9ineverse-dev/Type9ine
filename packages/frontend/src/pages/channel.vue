@@ -100,6 +100,7 @@ import MkNote from '@/components/MkNote.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import MkFolder from '@/components/MkFolder.vue';
+import MkUserCardMini from '@/components/MkUserCardMini.vue';
 import { UserLite } from 'misskey-js/built/entities';
 import { userPage } from '@/filters/user';
 const {
