@@ -94,6 +94,7 @@ import { defaultStore } from '@/store';
 import MkNote from '@/components/MkNote.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
+import { UserLite } from 'misskey-js/built/entities';
 
 const router = useRouter();
 
@@ -107,6 +108,7 @@ let favorited = $ref(false);
 let searchQuery = $ref('');
 let searchPagination = $ref();
 let searchKey = $ref('');
+let pusers = $ref<UserLite[]>([]);
 const featuredPagination = $computed(() => ({
 	endpoint: 'notes/featured' as const,
 	limit: 10,
@@ -124,11 +126,15 @@ watch(() => props.channelId, async () => {
 	if (favorited || channel.isFollowing) {
 		tab = 'timeline';
 	}
-}, { immediate: true });
-
-const pusers = await os.api('users/show', {
+	pusers = await os.api('users/show', {
 	userIds: channel.privateUserIds,
 });
+/*	os.api('users/show', {
+		userIds: channel.privateUserIds,
+	}).then(_users => {
+		pusers = pusers.concat(_users);
+	});*/
+}, { immediate: true });
 
 function edit() {
 	router.push(`/channels/${channel.id}/edit`);
