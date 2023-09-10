@@ -117,7 +117,7 @@ import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkColorInput from '@/components/MkColorInput.vue';
 import { selectFile } from '@/scripts/select-file';
-import { acct } from '@/filters/user';
+import * as Acct from 'misskey-js/built/acct';
 import * as os from '@/os';
 import { useRouter } from '@/router';
 import { definePageMetadata } from '@/scripts/page-metadata';
@@ -210,7 +210,7 @@ async function addPrivateUserIds() {
 		}, ...privateUserIds.value];
 	};
 
-	const usernamePromise = os.api('users/show', acct(result));
+	const usernamePromise = os.api('users/show', { username: Acct.parse(result) });
 	const idPromise = os.api('users/show', { userId: result });
 	let _notFound = false;
 	const notFound = () => {
