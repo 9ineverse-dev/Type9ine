@@ -26,25 +26,6 @@
 			<MkSwitch v-model="isPrivate" :disabled="!$i.policies.canCreatePrivateChannel">
 				{{ i18n.ts._channel.isPrivate }}
 			</MkSwitch>
-<!--
-			<MkFolder v-if="isPrivate && $i.policies.canCreatePrivateChannel === true" :defaultOpen="true" >
-				<template #label>{{ i18n.ts._channel.privateUserIds }}</template>
-
-				<div class="_gaps">
-					<Multiselect
-						v-model="privateUserIds"
-						mode="tags"
-						:options="userAsyncFind"
-						:closeOnSelect="false"
-						:searchable="true"
-						:object="true"
-						:resolveOnLoad="true"
-						:delay="0"
-						:minChars="1"
-					/>
-				</div>
-			</MkFolder>
-		-->
 
 			<MkFolder :defaultOpen="true">
 				<template #label>{{ i18n.ts._channel.privateUserIds }}</template>
@@ -111,7 +92,6 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch, defineAsyncComponent } from 'vue';
-import Multiselect from '@vueform/multiselect';
 import MkTextarea from '@/components/MkTextarea.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
@@ -318,14 +298,7 @@ definePageMetadata(computed(() => props.channelId ? {
 	title: i18n.ts._channel.create,
 	icon: 'ti ti-device-tv',
 }));
-async function userAsyncFind(query) {
-	let chs = await os.api('users/search', {
-		query: query === null ? '' : query.trim(),
-		origin: 'local',
-		detail: false,
-	});
-	return chs?.map(c => { return { value: c.id, label: c.username };});
-}
+
 </script>
 
 <style lang="scss" module>
