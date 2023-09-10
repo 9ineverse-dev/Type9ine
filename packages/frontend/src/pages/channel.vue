@@ -95,6 +95,7 @@ import MkNote from '@/components/MkNote.vue';
 import MkInfo from '@/components/MkInfo.vue';
 import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import { UserLite } from 'misskey-js/built/entities';
+import { userPage } from '@/filters/user';
 
 const router = useRouter();
 
