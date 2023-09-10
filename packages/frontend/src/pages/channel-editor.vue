@@ -26,7 +26,7 @@
 			<MkSwitch v-model="isPrivate" :disabled="!$i.policies.canCreatePrivateChannel">
 				{{ i18n.ts._channel.isPrivate }}
 			</MkSwitch>
-
+<!--
 			<MkFolder v-if="isPrivate && $i.policies.canCreatePrivateChannel === true" :defaultOpen="true" >
 				<template #label>{{ i18n.ts._channel.privateUserIds }}</template>
 
@@ -42,6 +42,30 @@
 						:delay="0"
 						:minChars="1"
 					/>
+				</div>
+			</MkFolder>
+		-->
+
+			<MkFolder :defaultOpen="true">
+				<template #label>{{ i18n.ts._channel.privateUserIds }}</template>
+
+				<div class="_gaps">
+					<MkButton primary rounded @click="addPrivateUserIds()"><i class="ti ti-plus"></i></MkButton>
+
+					<Sortable
+						v-model="privateUserIds"
+						itemKey="value"
+						:handle="'.' + $style.pinnedNoteHandle"
+						:animation="150"
+					>
+						<template #item="{element,index}">
+							<div :class="$style.pinnedNote">
+								<button class="_button" :class="$style.pinnedNoteHandle"><i class="ti ti-menu"></i></button>
+								{{ element.label }}
+								<button class="_button" :class="$style.pinnedNoteRemove" @click="removePrivateUserIds(index)"><i class="ti ti-x"></i></button>
+							</div>
+						</template>
+					</Sortable>
 				</div>
 			</MkFolder>
 
@@ -93,6 +117,7 @@ import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkColorInput from '@/components/MkColorInput.vue';
 import { selectFile } from '@/scripts/select-file';
+import { acct } from '@/filters/user';
 import * as os from '@/os';
 import { useRouter } from '@/router';
 import { definePageMetadata } from '@/scripts/page-metadata';
@@ -100,6 +125,7 @@ import { i18n } from '@/i18n';
 import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from "@/components/MkSwitch.vue";
 import { $i } from '@/account';
+
 
 const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
 
@@ -134,7 +160,6 @@ watch(() => bannerId, async () => {
 watch(isPrivate, () => {
 	if (isPrivate.value) {
 		searchable.value = false;
-
 	}
 });
 
@@ -171,6 +196,46 @@ async function fetchChannel() {
 }
 
 fetchChannel();
+
+async function addPrivateUserIds() {
+	const { canceled, result } = await os.inputText({
+		title: i18n.ts.usernameOrUserId,
+	});
+	if (canceled) return;
+
+	const show = (user) => {
+		privateUserIds.value = [{
+			value: user.id,
+			label: user.username,
+		}, ...privateUserIds.value];
+	};
+
+	const usernamePromise = os.api('users/show', acct(result));
+	const idPromise = os.api('users/show', { userId: result });
+	let _notFound = false;
+	const notFound = () => {
+		if (_notFound) {
+			os.alert({
+				type: 'error',
+				text: i18n.ts.noSuchUser,
+			});
+		} else {
+			_notFound = true;
+		}
+	};
+	usernamePromise.then(show).catch(err => {
+		if (err.code === 'NO_SUCH_USER') {
+			notFound();
+		}
+	});
+	idPromise.then(show).catch(err => {
+		notFound();
+	});
+}
+
+function removePrivateUserIds(index: number) {
+	privateUserIds.value.splice(index, 1);
+}
 
 async function addPinnedNote() {
 	const { canceled, result: value } = await os.inputText({
