@@ -617,7 +617,7 @@ export class ClientServerService {
 				id: request.params.channel,
 			});
 
-			if (channel) {
+			if (channel && !channel.isPrivate) {
 				const _channel = await this.channelEntityService.pack(channel);
 				const meta = await this.metaService.fetch();
 				reply.header('Cache-Control', 'public, max-age=15');
