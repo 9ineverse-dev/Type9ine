@@ -96,7 +96,7 @@ import FormSection from '@/components/form/section.vue';
 const reportError = computed(defaultStore.makeGetterSetter('reportError'));
 const enableCondensedLineForAcct = computed(defaultStore.makeGetterSetter('enableCondensedLineForAcct'));
 const devMode = computed(defaultStore.makeGetterSetter('devMode'));
-const AccountDeletable = (($i == null && instance.policies.canAccountDelete));
+const AccountDeletable = (($i == null && instance.policies.canAccountDelete) || ($i != null && $i.policies.ltlAvailable.canAccountDelete));
 
 function onChangeInjectFeaturedNote(v) {
 	os.api('i/update', {

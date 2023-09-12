@@ -9,16 +9,21 @@
 			<FormInfo>
 				{{ i18n.ts._accountMigration.moveFromDescription }}
 			</FormInfo>
-			<div>
-				<MkButton :disabled="accountAliases.length >= 10" inline style="margin-right: 8px;" @click="add"><i class="ti ti-plus"></i> {{ i18n.ts.add }}</MkButton>
-				<MkButton inline primary @click="save"><i class="ti ti-check"></i> {{ i18n.ts.save }}</MkButton>
-			</div>
-			<div class="_gaps">
-				<MkInput v-for="(_, i) in accountAliases" v-model="accountAliases[i]">
-					<template #prefix><i class="ti ti-plane-arrival"></i></template>
-					<template #label>{{ i18n.t('_accountMigration.moveFromLabel', { n: i + 1 }) }}</template>
-				</MkInput>
-			</div>
+			<template v-if="AccountDeletable">
+				<div>
+					<MkButton :disabled="accountAliases.length >= 10" inline style="margin-right: 8px;" @click="add"><i class="ti ti-plus"></i> {{ i18n.ts.add }}</MkButton>
+					<MkButton inline primary @click="save"><i class="ti ti-check"></i> {{ i18n.ts.save }}</MkButton>
+				</div>
+				<div class="_gaps">
+					<MkInput v-for="(_, i) in accountAliases" v-model="accountAliases[i]">
+						<template #prefix><i class="ti ti-plane-arrival"></i></template>
+						<template #label>{{ i18n.t('_accountMigration.moveFromLabel', { n: i + 1 }) }}</template>
+					</MkInput>
+				</div>
+			</template>
+			<template v-else>
+				<FormInfo warn>{{ i18n.ts._accountDelete.cannotDelete }}</FormInfo>
+			</template>
 		</div>
 	</MkFolder>
 
@@ -70,6 +75,7 @@ import { unisonReload } from '@/scripts/unison-reload';
 const moveToAccount = ref('');
 const movedTo = ref<UserDetailed>();
 const accountAliases = ref(['']);
+const AccountDeletable = (($i == null && instance.policies.canAccountDelete) || ($i != null && $i.policies.ltlAvailable.canAccountDelete));
 
 async function init() {
 	if ($i?.movedTo) {
