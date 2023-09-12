@@ -1,7 +1,7 @@
 {
 	"name": "misskey",
 	"version": "13.14.2-9ine-3.2.2",
-	"codename": "Pseed",
+	"codename": "SPSAO",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/9ineverse-dev/Type-9ine.git"
