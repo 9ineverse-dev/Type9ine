@@ -36,7 +36,7 @@
 				<div class="_gaps_m">
 					<FormInfo warn>{{ i18n.ts._accountDelete.mayTakeTime }}</FormInfo>
 					<FormInfo>{{ i18n.ts._accountDelete.sendEmail }}</FormInfo>
-					<template v-if="AccountDeletable">
+					<template v-if="$i.policies.canAccountDelete === true">
 						<MkButton v-if="!$i.isDeleted" danger @click="deleteAccount">{{ i18n.ts._accountDelete.requestAccountDelete }}</MkButton>
 						<MkButton v-else disabled>{{ i18n.ts._accountDelete.inProgress }}</MkButton>
 					</template>
@@ -95,7 +95,7 @@ import FormSection from '@/components/form/section.vue';
 const reportError = computed(defaultStore.makeGetterSetter('reportError'));
 const enableCondensedLineForAcct = computed(defaultStore.makeGetterSetter('enableCondensedLineForAcct'));
 const devMode = computed(defaultStore.makeGetterSetter('devMode'));
-const AccountDeletable = (($i != null && $i.policies.ltlAvailable.canAccountDelete));
+const AccountDeletable = (($i != null && $i.policies.canAccountDelete));
 
 function onChangeInjectFeaturedNote(v) {
 	os.api('i/update', {

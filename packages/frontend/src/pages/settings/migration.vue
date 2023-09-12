@@ -9,7 +9,6 @@
 			<FormInfo>
 				{{ i18n.ts._accountMigration.moveFromDescription }}
 			</FormInfo>
-			<template v-if="AccountDeletable">
 				<div>
 					<MkButton :disabled="accountAliases.length >= 10" inline style="margin-right: 8px;" @click="add"><i class="ti ti-plus"></i> {{ i18n.ts.add }}</MkButton>
 					<MkButton inline primary @click="save"><i class="ti ti-check"></i> {{ i18n.ts.save }}</MkButton>
@@ -20,10 +19,6 @@
 						<template #label>{{ i18n.t('_accountMigration.moveFromLabel', { n: i + 1 }) }}</template>
 					</MkInput>
 				</div>
-			</template>
-			<template v-else>
-				<FormInfo warn>{{ i18n.ts._accountDelete.cannotDelete }}</FormInfo>
-			</template>
 		</div>
 	</MkFolder>
 
@@ -37,14 +32,18 @@
 			<template v-if="$i && !$i.movedTo">
 				<FormInfo>{{ i18n.ts._accountMigration.moveAccountHowTo }}</FormInfo>
 				<FormInfo warn>{{ i18n.ts._accountMigration.moveCannotBeUndone }}</FormInfo>
-
-				<MkInput v-model="moveToAccount">
-					<template #prefix><i class="ti ti-plane-departure"></i></template>
-					<template #label>{{ i18n.ts._accountMigration.moveToLabel }}</template>
-				</MkInput>
-				<MkButton inline danger :disabled="!moveToAccount" @click="move">
-					<i class="ti ti-check"></i> {{ i18n.ts._accountMigration.startMigration }}
-				</MkButton>
+				<template v-if="$i.policies.canAccountDelete === true">
+					<MkInput v-model="moveToAccount">
+						<template #prefix><i class="ti ti-plane-departure"></i></template>
+						<template #label>{{ i18n.ts._accountMigration.moveToLabel }}</template>
+					</MkInput>
+					<MkButton inline danger :disabled="!moveToAccount" @click="move">
+						<i class="ti ti-check"></i> {{ i18n.ts._accountMigration.startMigration }}
+					</MkButton>
+				</template>
+				<template v-else>
+					<FormInfo warn>{{ i18n.ts._accountDelete.cannotDelete }}</FormInfo>
+				</template>
 			</template>
 			<template v-else-if="$i">
 				<FormInfo>{{ i18n.ts._accountMigration.postMigrationNote }}</FormInfo>
@@ -75,7 +74,7 @@ import { unisonReload } from '@/scripts/unison-reload';
 const moveToAccount = ref('');
 const movedTo = ref<UserDetailed>();
 const accountAliases = ref(['']);
-const AccountDeletable = (($i != null && $i.policies.ltlAvailable.canAccountDelete));
+const AccountDeletable = (($i != null && $i.policies.canAccountDelete));
 
 async function init() {
 	if ($i?.movedTo) {
