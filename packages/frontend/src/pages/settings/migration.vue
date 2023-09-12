@@ -75,7 +75,7 @@ import { unisonReload } from '@/scripts/unison-reload';
 const moveToAccount = ref('');
 const movedTo = ref<UserDetailed>();
 const accountAliases = ref(['']);
-const AccountDeletable = (($i == null && instance.policies.canAccountDelete) || ($i != null && $i.policies.ltlAvailable.canAccountDelete));
+const AccountDeletable = (($i != null && $i.policies.ltlAvailable.canAccountDelete));
 
 async function init() {
 	if ($i?.movedTo) {
