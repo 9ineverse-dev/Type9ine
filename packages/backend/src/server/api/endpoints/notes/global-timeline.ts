@@ -126,7 +126,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 				.andWhere(`(note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
 				.andWhere(new Brackets(qb =>{
-					qb.where(`(note.userHost = note.renoteUserHost) `)
+					qb.where(`(note.userHost = note.renoteUserHost)`)
 					.orWhere(`(note.userHost IS NULL)`);
 				}));
 
