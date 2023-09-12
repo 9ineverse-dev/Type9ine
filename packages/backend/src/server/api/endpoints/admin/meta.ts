@@ -300,6 +300,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		super(meta, paramDef, async (ps, me) => {
 			const instance = await this.metaService.fetch(true);
 
+			let SubscriptionSelleble = false;
+			if ( instance.sellSubscription && instance.stripeAPIKey && instance.stripeWebhookKey ) {
+				SubscriptionSelleble = instance.sellSubscription;
+			}
+
 			return {
 				maintainerName: instance.maintainerName,
 				maintainerEmail: instance.maintainerEmail,
@@ -370,6 +375,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				objectStorageUseProxy: instance.objectStorageUseProxy,
 				objectStorageSetPublicRead: instance.objectStorageSetPublicRead,
 				objectStorageS3ForcePathStyle: instance.objectStorageS3ForcePathStyle,
+				sellSubscription: SubscriptionSelleble,
+				stripeAPIKey: instance.stripeAPIKey,
+				stripeWebhookKey: instance.stripeWebhookKey,
 				deeplAuthKey: instance.deeplAuthKey,
 				deeplIsPro: instance.deeplIsPro,
 				enableIpLogging: instance.enableIpLogging,

@@ -282,6 +282,23 @@ export class Meta {
 	})
 	public swPrivateKey: string | null;
 
+	@Column('boolean', {
+		default: false,
+	})
+	public sellSubscription: boolean;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public stripeAPIKey: string | null;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public stripeWebhookKey: string | null;
+
 	@Column('varchar', {
 		length: 1024,
 		nullable: true,

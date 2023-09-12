@@ -189,6 +189,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			sellSubscription: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			proxyAccountName: {
 				type: 'string',
 				optional: false, nullable: true,
@@ -277,6 +281,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				}))
 				.getMany();
 
+			let SubscriptionSelleble = false;
+
+			if ( instance.sellSubscription && instance.stripeAPIKey && instance.stripeWebhookKey ) {
+				SubscriptionSelleble = true;
+			}
+
 			const response: any = {
 				maintainerName: instance.maintainerName,
 				maintainerEmail: instance.maintainerEmail,
@@ -324,6 +334,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				enableServiceWorker: instance.enableServiceWorker,
 
 				translatorAvailable: instance.deeplAuthKey != null,
+				sellSubscription: SubscriptionSelleble,
 
 				serverRules: instance.serverRules,
 

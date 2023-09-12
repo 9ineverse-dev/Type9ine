@@ -65,6 +65,9 @@ export const paramDef = {
 			type: 'string',
 		} },
 		summalyProxy: { type: 'string', nullable: true },
+		sellSubscription: { type: 'boolean' },
+		stripeAPIKey: { type: 'string', nullable: true },
+		stripeWebhookKey: { type: 'string', nullable: true },
 		deeplAuthKey: { type: 'string', nullable: true },
 		deeplIsPro: { type: 'boolean' },
 		enableEmail: { type: 'boolean' },
@@ -376,6 +379,26 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			if (ps.objectStorageS3ForcePathStyle !== undefined) {
 				set.objectStorageS3ForcePathStyle = ps.objectStorageS3ForcePathStyle;
+			}
+
+			if (ps.stripeAPIKey !== undefined) {
+				if (ps.stripeAPIKey === '') {
+					set.stripeAPIKey = null;
+				} else {
+					set.stripeAPIKey = ps.stripeAPIKey;
+				}
+			}
+
+			if (ps.stripeWebhookKey !== undefined) {
+				if (ps.stripeWebhookKey === '') {
+					set.stripeWebhookKey = null;
+				} else {
+					set.stripeWebhookKey = ps.stripeWebhookKey;
+				}
+			}
+
+			if (ps.sellSubscription !== undefined) {
+				set.sellSubscription = ps.sellSubscription;
 			}
 
 			if (ps.deeplAuthKey !== undefined) {
