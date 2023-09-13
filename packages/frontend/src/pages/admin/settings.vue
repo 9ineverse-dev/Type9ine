@@ -71,6 +71,23 @@
 					</FormSection>
 
 					<FormSection>
+						<template #label>Stripe API</template>
+						<div class="_gaps_m">
+							<MkSwitch v-model="sellSubscription">
+								<template #label>Sell Subscription</template>
+							</MkSwitch>
+							<MkInput v-model="stripeAPIKey">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Stripe API Key</template>
+							</MkInput>
+							<MkInput v-model="stripeWebhookKey">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Stripe webhook Key</template>
+							</MkInput>
+						</div>
+					</FormSection>
+
+					<FormSection>
 						<template #label>DeepL Translation</template>
 
 						<div class="_gaps_m">
@@ -122,6 +139,9 @@ let cacheRemoteSensitiveFiles: boolean = $ref(false);
 let enableServiceWorker: boolean = $ref(false);
 let swPublicKey: any = $ref(null);
 let swPrivateKey: any = $ref(null);
+let sellSubscription: boolean = $ref(false);
+let stripeAPIKey: string = $ref('');
+let stripeWebhookKey: string = $ref('');
 let deeplAuthKey: string = $ref('');
 let deeplIsPro: boolean = $ref(false);
 
@@ -137,6 +157,9 @@ async function init(): Promise<void> {
 	enableServiceWorker = meta.enableServiceWorker;
 	swPublicKey = meta.swPublickey;
 	swPrivateKey = meta.swPrivateKey;
+	sellSubscription = meta.sellSubscription,
+	stripeAPIKey = meta.stripeAPIKey,
+	stripeWebhookKey = meta.stripeWebhookKey,
 	deeplAuthKey = meta.deeplAuthKey;
 	deeplIsPro = meta.deeplIsPro;
 }
@@ -153,6 +176,9 @@ function save(): void {
 		enableServiceWorker,
 		swPublicKey,
 		swPrivateKey,
+		sellSubscription,
+		stripeAPIKey,
+		stripeWebhookKey,
 		deeplAuthKey,
 		deeplIsPro,
 	}).then(() => {
