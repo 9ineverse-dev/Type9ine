@@ -1,0 +1,21 @@
+const { MigrationInterface, QueryRunner } = require("typeorm");
+
+module.exports = class StripeAdmin1694587426596 {
+    name = 'StripeAdmin1694587426596'
+
+    async up(queryRunner) {
+        await queryRunner.query(`ALTER TABLE "meta" ADD "sellSubscription" boolean NOT NULL DEFAULT false`);
+        await queryRunner.query(`ALTER TABLE "meta" ADD "stripeAPIKey" character varying(1024)`);
+        await queryRunner.query(`ALTER TABLE "meta" ADD "stripeWebhookKey" character varying(1024)`);
+        await queryRunner.query(`ALTER TABLE "meta" ALTER COLUMN "cacheRemoteFiles" SET DEFAULT true`);
+        await queryRunner.query(`ALTER TABLE "meta" ALTER COLUMN "preservedUsernames" SET DEFAULT '{ "admin", "administrator", "root", "system", "maintainer", "host", "mod", "moderator", "owner", "superuser", "staff", "auth", "i", "me", "everyone", "all", "mention", "mentions", "example", "user", "users", "account", "accounts", "official", "help", "helps", "support", "supports", "info", "information", "informations", "announce", "announces", "announcement", "announcements", "notice", "notification", "notifications", "dev", "developer", "developers", "tech", "misskey" }'`);
+    }
+
+    async down(queryRunner) {
+        await queryRunner.query(`ALTER TABLE "meta" ALTER COLUMN "preservedUsernames" SET DEFAULT '{admin,administrator,root,system,maintainer,host,mod,moderator,owner,superuser,staff,auth,i,me,everyone,all,mention,mentions,example,user,users,account,accounts,official,help,helps,support,supports,info,information,informations,announce,announces,announcement,announcements,notice,notification,notifications,dev,developer,developers,tech,misskey}'`);
+        await queryRunner.query(`ALTER TABLE "meta" ALTER COLUMN "cacheRemoteFiles" SET DEFAULT false`);
+        await queryRunner.query(`ALTER TABLE "meta" DROP COLUMN "stripeWebhookKey"`);
+        await queryRunner.query(`ALTER TABLE "meta" DROP COLUMN "stripeAPIKey"`);
+        await queryRunner.query(`ALTER TABLE "meta" DROP COLUMN "sellSubscription"`);
+    }
+}
