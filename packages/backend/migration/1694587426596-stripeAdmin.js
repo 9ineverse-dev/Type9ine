@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-module.exports = class StripeAdmin1694587426596 {
+export class StripeAdmin1694587426596 {
     name = 'StripeAdmin1694587426596'
 
     async up(queryRunner) {
