@@ -1,4 +1,7 @@
-const { MigrationInterface, QueryRunner } = require("typeorm");
+/*
+ * SPDX-FileCopyrightText: syuilo and other misskey contributors
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
 
 module.exports = class StripeAdmin1694587426596 {
     name = 'StripeAdmin1694587426596'
