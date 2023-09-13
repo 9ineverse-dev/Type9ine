@@ -80,7 +80,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				.leftJoinAndSelect('note.reply', 'reply')
 				.leftJoinAndSelect('note.renote', 'renote')
 				.leftJoinAndSelect('reply.user', 'replyUser')
-				.leftJoinAndSelect('renote.user', 'renoteUser')
+				.leftJoinAndSelect('renote.user', 'renoteUser');
 
 			this.queryService.generateComunityQuery(query, me);
 			this.queryService.generateRepliesQuery(query, ps.withReplies, me);
