@@ -65,6 +65,10 @@ export const paramDef = {
 			type: 'string',
 		} },
 		summalyProxy: { type: 'string', nullable: true },
+		basicPlanRoleId: { type: 'string', format: 'misskey:id', nullable: true },
+		basicPlanPriceId: { type: 'string', nullable: true },
+		basicPlanPrice: { type: 'integer', nullable: true },
+		transactionsActNotationUrl: { type: 'string', nullable: true },
 		sellSubscription: { type: 'boolean' },
 		stripeAPIKey: { type: 'string', nullable: true },
 		stripeWebhookKey: { type: 'string', nullable: true },
@@ -379,6 +383,34 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			if (ps.objectStorageS3ForcePathStyle !== undefined) {
 				set.objectStorageS3ForcePathStyle = ps.objectStorageS3ForcePathStyle;
+			}
+
+			if (ps.basicPlanRoleId !== undefined) {
+				if (ps.basicPlanRoleId === '') {
+					set.basicPlanRoleId = null;
+				} else {
+					set.basicPlanRoleId = ps.basicPlanRoleId;
+				}
+			}
+
+			if (ps.basicPlanPriceId !== undefined) {
+				if (ps.basicPlanPriceId === '') {
+					set.basicPlanPriceId = null;
+				} else {
+					set.basicPlanPriceId = ps.basicPlanPriceId;
+				}
+			}
+
+			if (ps.basicPlanPrice !== undefined) {
+				set.basicPlanPrice = ps.basicPlanPrice;
+			}
+
+			if (ps.transactionsActNotationUrl !== undefined) {
+				if (ps.transactionsActNotationUrl === '') {
+					set.transactionsActNotationUrl = null;
+				} else {
+					set.transactionsActNotationUrl = ps.transactionsActNotationUrl;
+				}
 			}
 
 			if (ps.stripeAPIKey !== undefined) {

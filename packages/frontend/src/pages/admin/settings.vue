@@ -84,6 +84,28 @@
 								<template #prefix><i class="ti ti-key"></i></template>
 								<template #label>Stripe webhook Key</template>
 							</MkInput>
+							<MkInput v-model="basicPlanPriceId">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Basic Plan PriceID</template>
+							</MkInput>
+						</div>
+					</FormSection>
+
+					<FormSection>
+						<template #label>Subscription Plans</template>
+						<div class="_gaps_m">
+							<MkInput v-model="transactionsActNotationUrl">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>特商法に戻づく表記URL</template>
+							</MkInput>
+							<MkInput v-model="basicPlanRoleId">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Basic Plan RoleId</template>
+							</MkInput>
+							<MkInput v-model="basicPlanPrice">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Basic Plan Price</template>
+							</MkInput>
 						</div>
 					</FormSection>
 
@@ -142,6 +164,10 @@ let swPrivateKey: any = $ref(null);
 let sellSubscription: boolean = $ref(false);
 let stripeAPIKey: string = $ref('');
 let stripeWebhookKey: string = $ref('');
+let basicPlanPriceId: string = $ref('');
+let transactionsActNotationUrl: string = $ref('');
+let basicPlanRoleId: string = $ref('');
+let basicPlanPrice: number | null = $ref(null);
 let deeplAuthKey: string = $ref('');
 let deeplIsPro: boolean = $ref(false);
 
@@ -160,6 +186,10 @@ async function init(): Promise<void> {
 	sellSubscription = meta.sellSubscription,
 	stripeAPIKey = meta.stripeAPIKey,
 	stripeWebhookKey = meta.stripeWebhookKey,
+	transactionsActNotationUrl = meta.transactionsActNotationUrl,
+	basicPlanPriceId = meta.basicPlanPriceId,
+	basicPlanRoleId = meta.basicPlanRoleId,
+	basicPlanPrice = meta.basicPlanPrice,
 	deeplAuthKey = meta.deeplAuthKey;
 	deeplIsPro = meta.deeplIsPro;
 }
@@ -179,6 +209,10 @@ function save(): void {
 		sellSubscription,
 		stripeAPIKey,
 		stripeWebhookKey,
+		basicPlanPriceId,
+		transactionsActNotationUrl,
+		basicPlanRoleId,
+		basicPlanPrice,
 		deeplAuthKey,
 		deeplIsPro,
 	}).then(() => {

@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { id } from '../id.js';
 import { User } from './User.js';
+import { Role } from './Role.js';
 
 @Entity()
 export class Meta {
@@ -286,6 +287,30 @@ export class Meta {
 		default: false,
 	})
 	public sellSubscription: boolean;
+
+	@Column({
+		...id(),
+		nullable: true,
+		comment: 'The ID of source Role.',
+	})
+	public basicPlanRoleId: Role['id'] | null;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public basicPlanPriceId: string | null;
+
+	@Column('integer', {
+		nullable: true,
+	})
+	public basicPlanPrice: number | null;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public transactionsActNotationUrl: string | null;
 
 	@Column('varchar', {
 		length: 1024,

@@ -301,7 +301,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			const instance = await this.metaService.fetch(true);
 
 			let SubscriptionSelleble = false;
-			if ( instance.sellSubscription && instance.stripeAPIKey && instance.stripeWebhookKey ) {
+			if ( instance.sellSubscription && instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanPrice && instance.basicPlanRoleId && instance.transactionsActNotationUrl) {
 				SubscriptionSelleble = instance.sellSubscription;
 			}
 
@@ -375,6 +375,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				objectStorageUseProxy: instance.objectStorageUseProxy,
 				objectStorageSetPublicRead: instance.objectStorageSetPublicRead,
 				objectStorageS3ForcePathStyle: instance.objectStorageS3ForcePathStyle,
+				basicPlanRoleId: instance.basicPlanRoleId,
+				basicPlanPriceId: instance.basicPlanPriceId,
+				basicPlanPrice: instance.basicPlanPrice,
+				transactionsActNotationUrl: instance.transactionsActNotationUrl,
 				sellSubscription: SubscriptionSelleble,
 				stripeAPIKey: instance.stripeAPIKey,
 				stripeWebhookKey: instance.stripeWebhookKey,
