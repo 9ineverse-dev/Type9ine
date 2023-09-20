@@ -144,6 +144,10 @@ export const meta = {
 				type: 'string',
 				optional: false, nullable: true,
 			},
+			transactionsActNotationUrl: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
 			maxNoteTextLength: {
 				type: 'number',
 				optional: false, nullable: false,
