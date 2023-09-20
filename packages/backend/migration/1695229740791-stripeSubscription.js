@@ -4,7 +4,7 @@
  */
 
 export class StripeSubscription1695229740791 {
-    name = 'StripeSubscription169529740791'
+    name = 'StripeSubscription1695229740791'
 
     async up(queryRunner) {
         await queryRunner.query(`ALTER TABLE "meta" ADD "basicPlanRoleId" character varying(32)`);
