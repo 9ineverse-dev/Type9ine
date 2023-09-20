@@ -95,11 +95,9 @@
 						<template #label>Subscription Plans</template>
 						<div class="_gaps_m">
 							<MkInput v-model="transactionsActNotationUrl">
-								<template #prefix><i class="ti ti-key"></i></template>
 								<template #label>特商法に戻づく表記URL</template>
 							</MkInput>
 							<MkInput v-model="basicPlanRoleId">
-								<template #prefix><i class="ti ti-key"></i></template>
 								<template #label>Basic Plan RoleId</template>
 							</MkInput>
 							<MkInput v-model="basicPlanPrice" type="number">
