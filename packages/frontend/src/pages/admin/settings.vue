@@ -102,8 +102,7 @@
 								<template #prefix><i class="ti ti-key"></i></template>
 								<template #label>Basic Plan RoleId</template>
 							</MkInput>
-							<MkInput v-model="basicPlanPrice">
-								<template #prefix><i class="ti ti-key"></i></template>
+							<MkInput v-model="basicPlanPrice" type="number">
 								<template #label>Basic Plan Price</template>
 							</MkInput>
 						</div>
@@ -167,7 +166,7 @@ let stripeWebhookKey: string | null = $ref('');
 let basicPlanPriceId: string | null = $ref('');
 let transactionsActNotationUrl: string | null = $ref('');
 let basicPlanRoleId: any | null = $ref('');
-let basicPlanPrice: number | null = $ref(null);
+let basicPlanPrice: number = $ref(0);
 let deeplAuthKey: string = $ref('');
 let deeplIsPro: boolean = $ref(false);
 
