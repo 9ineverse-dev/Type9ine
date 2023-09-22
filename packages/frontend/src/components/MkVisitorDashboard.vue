@@ -20,8 +20,9 @@
 				<MkButton :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: 12px;" @click="signup()">{{ i18n.ts.joinThisServer }}</MkButton>
 				<MkButton :class="$style.mainAction" full rounded @click="exploreOtherServers()">{{ i18n.ts.exploreOtherServers }}</MkButton>
 				<MkButton :class="$style.mainAction" full rounded data-cy-signin @click="signin()">{{ i18n.ts.login }}</MkButton>
+				<a :href="instance.transactionsActNotationUrl" class="_link" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a>
 			</div>
-			<a :href="instance.transactionsActNotationUrl" class="_link" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a><br>
+
 		</div>
 	</div>
 	<div v-if="stats" :class="$style.stats">
