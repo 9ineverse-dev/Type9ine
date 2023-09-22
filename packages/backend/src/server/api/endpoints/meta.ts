@@ -320,6 +320,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				serverErrorImageUrl: instance.serverErrorImageUrl,
 				notFoundImageUrl: instance.notFoundImageUrl,
 				iconUrl: instance.iconUrl,
+				transactionsActNotationUrl: instance.transactionsActNotationUrl,
 				backgroundImageUrl: instance.backgroundImageUrl,
 				logoImageUrl: instance.logoImageUrl,
 				maxNoteTextLength: MAX_NOTE_TEXT_LENGTH,

@@ -2399,6 +2399,7 @@ type LiteInstanceMetadata = {
     infoImageUrl: string | null;
     notFoundImageUrl: string | null;
     iconUrl: string | null;
+		transactionsActNotationUrl: string | null;
     backgroundImageUrl: string | null;
     logoImageUrl: string | null;
     maxNoteTextLength: number;
