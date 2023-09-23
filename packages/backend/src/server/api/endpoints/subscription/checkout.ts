@@ -71,16 +71,16 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			let subscribeUser = await this.userProfilesRepository.findOneByOrFail({ userId: me.id });
 
-			if (!subscribeUser.email) {return {
+		/*	if (!subscribeUser.email) {return {
 				redirect: {
 					permanent: false,
 					destination: `${this.config.url}`,
 				} };
-			}
+			}*/
 
 			if (!subscribeUser.stripeCustomerId) {
 				const makeCustomer = await stripe.customers.create({
-					email: subscribeUser.email,
+				//	email: subscribeUser.email,
 				});
 				await this.userProfilesRepository.update({ userId: me.id }, {
 					stripeCustomerId: makeCustomer.id,
