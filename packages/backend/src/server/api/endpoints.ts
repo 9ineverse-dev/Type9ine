@@ -344,7 +344,7 @@ import * as ep___fetchRss from './endpoints/fetch-rss.js';
 import * as ep___retention from './endpoints/retention.js';
 import * as ep___subscription_checkout from './endpoints/subscription/checkout.js';
 import * as ep___subscription_portal from './endpoints/subscription/portal.js';
-//import * as ep___subscription_webhook from './endpoints/subscription/webhook.js';
+import * as ep___subscription_webhook from './endpoints/subscription/webhook.js';
 
 const eps = [
 	['admin/meta', ep___admin_meta],
@@ -690,7 +690,7 @@ const eps = [
 	['retention', ep___retention],
 	['subscription/checkout', ep___subscription_checkout],
 	['subscription/portal', ep___subscription_portal],
-//	['subscription/webhook', ep___subscription_webhook],
+	['subscription/webhook', ep___subscription_webhook],
 ];
 
 export interface IEndpointMeta {
