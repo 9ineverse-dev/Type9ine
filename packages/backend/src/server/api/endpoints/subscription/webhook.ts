@@ -51,7 +51,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		private rolesRepository: RolesRepository,
 		private roleService: RoleService,
 		private metaService: MetaService,
-		private reply: FastifyReply
+		private reply: FastifyReply,
 
 	) {
 		super(meta, paramDef, async ( ps ) => {
