@@ -52,7 +52,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 //		private reply: FastifyReply,
 
 	) {
-		super(meta, paramDef, async ( ps, me, token, file, ip, head ) => {
+		super(meta, paramDef, async ( ps, me, token, file, aa, ip, headers ) => {
 			const instance = await this.metaService.fetch(true);
 			if (!(instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanRoleId) || instance.sellSubscription === false) {
 				return;
@@ -65,7 +65,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (webhookSecret) {
 				// Retrieve the event by verifying the signature using the raw body and secret.
 				let event;
-				const signature = head[0];
+				const signature = headers['stripe-signature'];
 				const buf = ps.rawBody;
 				try {
 					event = stripe.webhooks.constructEvent(
@@ -76,7 +76,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					return {
 						redirect: {
 							construct: 'failed',
-							sigunature: head,
+							sigunature: headers,
 						}
 					};
 				}
