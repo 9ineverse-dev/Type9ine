@@ -1043,7 +1043,7 @@ const $subscription_webhook: Provider = { provide: 'ep:subscription/webhook', us
 		$fetchRss,
 		$retention,
 		$subscription_checkout,
-		$subscription_webhook,
+		$subscription_portal,
 		$subscription_webhook,
 	],
 	exports: [
@@ -1387,7 +1387,7 @@ const $subscription_webhook: Provider = { provide: 'ep:subscription/webhook', us
 		$fetchRss,
 		$retention,
 		$subscription_checkout,
-		$subscription_webhook,
+		$subscription_portal,
 		$subscription_webhook,
 	],
 })
