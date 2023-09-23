@@ -55,7 +55,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (!(instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanRoleId) || instance.sellSubscription === false) {return {
 				redirect: {
 					permanent: false,
-					destination: '${this.config.url}',
+					destination: `${this.config.url}`,
 				} };
 			}
 			const stripe = new Stripe('instance.stripeAPIKey', { apiVersion: '2023-08-16' });
@@ -65,7 +65,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (!me) {return {
 				redirect: {
 					permanent: false,
-					destination: '{this.config.url}',
+					destination: `${this.config.url}`,
 				} };
 			}
 
@@ -74,7 +74,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (!subscribeUser.email) {return {
 				redirect: {
 					permanent: false,
-					destination: '{this.config.url}',
+					destination: `${this.config.url}`,
 				} };
 			}
 
