@@ -52,7 +52,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 //		private reply: FastifyReply,
 
 	) {
-		super(meta, paramDef, async ( ps, me, token, file, aa, ip, headers ) => {
+		super(meta, paramDef, async ( ps, me, token, file, aa, ip, headers, bodys ) => {
 			const instance = await this.metaService.fetch(true);
 			if (!(instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanRoleId) || instance.sellSubscription === false) {
 				return;
@@ -66,7 +66,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				// Retrieve the event by verifying the signature using the raw body and secret.
 				let event;
 				const signature = headers!['stripe-signature'];
-				const buf = ps.rawBody;
+				const buf = bodys!.rawBody;
 				try {
 					event = stripe.webhooks.constructEvent(
 						buf,
@@ -97,7 +97,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					//if (role == null) { break; }
 					const user = await this.userProfilesRepository.findOneBy({ stripeCustomerId: ps.customers });
 					//if (user == null) { break; }
-					await this.roleService.assign(user.userId, role.id, null);
+					await this.roleService.assign(user!.userId, role!.id, null);
 					break;
 				}
 				case 'customer.subscription.deleted':{
