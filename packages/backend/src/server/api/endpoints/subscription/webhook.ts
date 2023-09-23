@@ -76,7 +76,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					return {
 						redirect: {
 							construct: 'failed',
-							sigunature: signature,
+							sigunature: head,
 						}
 					};
 				}
