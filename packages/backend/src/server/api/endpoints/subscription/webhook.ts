@@ -66,11 +66,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				// Retrieve the event by verifying the signature using the raw body and secret.
 				let event;
 				const signature = headers!['stripe-signature'];
-				const req = JSON.stringify(ps);
-				const buf = bodys!.rawBody;
+				const buf = ps.rawBody;
 				try {
 					event = stripe.webhooks.constructEvent(
-						(req as any).rawBody,
+						ps,
 						signature,
 						webhookSecret);
 				} catch (err) {
@@ -78,7 +77,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 						redirect: {
 							construct: 'failed',
 							err: err,
-							req: (req as any).rawBody,
+							req: ps,
+							reqbuf: buf,
 						}
 					};
 				}
