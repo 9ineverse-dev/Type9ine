@@ -65,7 +65,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (!me) {return {
 				redirect: {
 					permanent: false,
-					destination: '/',
+					destination: '{this.config.url}',
 				} };
 			}
 
@@ -74,7 +74,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (!subscribeUser.email) {return {
 				redirect: {
 					permanent: false,
-					destination: '/',
+					destination: '{this.config.url}',
 				} };
 			}
 
