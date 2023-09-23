@@ -12,7 +12,7 @@ import * as os from '@/os';
 
 async function checkout() {
 	const redirect = await os.api('subscription/checkout');
-	window.location.href = redirect.destination;
+	window.location.href = redirect.redirect.destination;
 }
 
 async function portal() {
