@@ -55,7 +55,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (!(instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanRoleId) || instance.sellSubscription === false) {return {
 				redirect: {
 					permanent: false,
-					destination: '/',
+					destination: '${this.config.url}',
 				} };
 			}
 			const stripe = new Stripe('instance.stripeAPIKey', { apiVersion: '2023-08-16' });
