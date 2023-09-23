@@ -342,9 +342,9 @@ import * as ep___users_achievements from './endpoints/users/achievements.js';
 import * as ep___users_updateMemo from './endpoints/users/update-memo.js';
 import * as ep___fetchRss from './endpoints/fetch-rss.js';
 import * as ep___retention from './endpoints/retention.js';
-import * as ep___subscription_checkout from './subscription/checkout.js';
-import * as ep___subscription_portal from './subscription/portal.js';
-import * as ep___subscription_webhook from './subscription/webhook.js';
+import * as ep___subscription_checkout from './endpoints/subscription/checkout.js';
+import * as ep___subscription_portal from './endpoints/subscription/portal.js';
+import * as ep___subscription_webhook from './endpoints/subscription/webhook.js';
 
 const eps = [
 	['admin/meta', ep___admin_meta],
