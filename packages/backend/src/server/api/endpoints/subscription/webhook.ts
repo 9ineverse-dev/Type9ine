@@ -7,7 +7,7 @@ import { DI } from '@/di-symbols.js';
 import { RoleService } from '@/core/RoleService.js';
 import { MetaService } from '@/core/MetaService.js';
 import type { Config } from '@/config.js';
-import type { FastifyReply } from 'fastify';
+//import type { FastifyReply } from 'fastify';
 import { ApiError } from '../../error.js';
 
 export const meta = {
@@ -51,7 +51,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		private rolesRepository: RolesRepository,
 		private roleService: RoleService,
 		private metaService: MetaService,
-		private reply: FastifyReply,
+//		private reply: FastifyReply,
 
 	) {
 		super(meta, paramDef, async ( ps ) => {
@@ -71,7 +71,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 						signature,
 						webhookSecret);
 				} catch (err) {
-					return reply.code(400);
+					return;
 				}
 				// Extract the object from the event.
 				data = event.data;
@@ -101,7 +101,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					await this.roleService.unassign(user.userId, role.id);
 					break;
 				}
-					break;
 				case 'invoice.payment_failed':{
 					if ( !instance.basicPlanRoleId ) { break; }
 					const role = await this.rolesRepository.findOneBy({ id: instance.basicPlanRoleId });
@@ -114,8 +113,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				default:
       // Unhandled event type
 			}
-
-			reply.code(400);
+			return;
 		});
 	}
 }
