@@ -77,6 +77,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 						redirect: {
 							construct: 'failed',
 							err: err,
+							buf: buf,
 						}
 					};
 				}
