@@ -87,11 +87,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			}
 			switch (eventType) {
 				case 'checkout.session.completed':{
-					if ( !instance.basicPlanRoleId ) { break; }
+					//if ( !instance.basicPlanRoleId ) { break; }
 					const role = await this.rolesRepository.findOneBy({ id: instance.basicPlanRoleId });
-					if (role == null) { break; }
+					//if (role == null) { break; }
 					const user = await this.userProfilesRepository.findOneBy({ stripeCustomerId: ps.customers });
-					if (user == null) { break; }
+					//if (user == null) { break; }
 					await this.roleService.assign(user.userId, role.id, null);
 					break;
 				}
