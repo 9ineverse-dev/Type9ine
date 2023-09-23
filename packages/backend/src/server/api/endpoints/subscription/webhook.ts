@@ -70,7 +70,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				const buf = bodys!.rawBody;
 				try {
 					event = stripe.webhooks.constructEvent(
-						req,
+						(req as any).rawBody,
 						signature,
 						webhookSecret);
 				} catch (err) {
@@ -78,7 +78,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 						redirect: {
 							construct: 'failed',
 							err: err,
-							req: req,
+							req: (req as any).rawBody,
 						}
 					};
 				}
