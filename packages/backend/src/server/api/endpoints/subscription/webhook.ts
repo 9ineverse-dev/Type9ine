@@ -9,6 +9,7 @@ import { MetaService } from '@/core/MetaService.js';
 import type { Config } from '@/config.js';
 //import type { FastifyReply } from 'fastify';
 import { ApiError } from '../../error.js';
+import { pseudoRandomBytes } from 'crypto';
 
 export const meta = {
 	tags: ['subscription'],
@@ -66,10 +67,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				// Retrieve the event by verifying the signature using the raw body and secret.
 				let event;
 				const signature = headers!['stripe-signature'];
+				const req = JSON.stringify(pseudoRandomBytes);
 				const buf = bodys!.rawBody;
 				try {
 					event = stripe.webhooks.constructEvent(
-						buf,
+						req,
 						signature,
 						webhookSecret);
 				} catch (err) {
@@ -77,7 +79,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 						redirect: {
 							construct: 'failed',
 							err: err,
-							buf: buf,
+							req: req,
 						}
 					};
 				}
