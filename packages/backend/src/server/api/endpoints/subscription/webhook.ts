@@ -13,8 +13,6 @@ import { ApiError } from '../../error.js';
 export const meta = {
 	tags: ['subscription'],
 
-	requireCredential: true,
-
 	limit: {
 		duration: ms('1hour'),
 		max: 10,
