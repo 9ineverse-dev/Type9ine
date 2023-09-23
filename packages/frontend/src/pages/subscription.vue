@@ -10,16 +10,14 @@ import { } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import * as os from '@/os';
 
-function checkout() {
-	os.api('subscription/checkout').then(() => {
-		os.success();
-	});
+async function checkout() {
+	const redirect = await os.api('subscription/checkout');
+	window.location.href = redirect.destination;
 }
 
-function portal() {
-	os.api('subscription/portal').then(() => {
-		os.success();
-	});
+async function portal() {
+	const redirect = await os.api('subscription/portal');
+	window.location.href = redirect.redirect.destination;
 }
 </script>
 
