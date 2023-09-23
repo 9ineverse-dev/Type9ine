@@ -342,6 +342,9 @@ import * as ep___users_achievements from './endpoints/users/achievements.js';
 import * as ep___users_updateMemo from './endpoints/users/update-memo.js';
 import * as ep___fetchRss from './endpoints/fetch-rss.js';
 import * as ep___retention from './endpoints/retention.js';
+import * as ep___subscription_checkout from './endpoints/subscription/checkout.js';
+import * as ep___subscription_portal from './endpoints/subscription/portal.js';
+import * as ep___subscription_webhook from './endpoints/subscription/webhook.js';
 import { GetterService } from './GetterService.js';
 import { ApiLoggerService } from './ApiLoggerService.js';
 import type { Provider } from '@nestjs/common';
@@ -687,6 +690,9 @@ const $users_achievements: Provider = { provide: 'ep:users/achievements', useCla
 const $users_updateMemo: Provider = { provide: 'ep:users/update-memo', useClass: ep___users_updateMemo.default };
 const $fetchRss: Provider = { provide: 'ep:fetch-rss', useClass: ep___fetchRss.default };
 const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention.default };
+const $subscription_checkout: Provider = { provide: 'ep:subscription/checkout', useClass: ep___subscription_checkout.default };
+const $subscription_portal: Provider = { provide: 'ep:subscription/portal', useClass: ep___subscription_portal.default };
+const $subscription_webhook: Provider = { provide: 'ep:subscription/webhook', useClass: ep___subscription_webhook.default };
 
 @Module({
 	imports: [
@@ -1036,6 +1042,9 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$users_updateMemo,
 		$fetchRss,
 		$retention,
+		$subscription_checkout,
+		$subscription_webhook,
+		$subscription_webhook,
 	],
 	exports: [
 		$admin_meta,
@@ -1377,6 +1386,9 @@ const $retention: Provider = { provide: 'ep:retention', useClass: ep___retention
 		$users_updateMemo,
 		$fetchRss,
 		$retention,
+		$subscription_checkout,
+		$subscription_webhook,
+		$subscription_webhook,
 	],
 })
 export class EndpointsModule {}
