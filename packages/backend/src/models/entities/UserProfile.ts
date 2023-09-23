@@ -65,6 +65,12 @@ export class UserProfile {
 	})
 	public emailVerifyCode: string | null;
 
+	@Column('varchar', {
+		length: 128, nullable: true,
+		comment: 'The user ID to be used with Stripe Subscription',
+	})
+	public stripeCustomerId: string | null;
+
 	@Column('boolean', {
 		default: false,
 	})

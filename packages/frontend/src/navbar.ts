@@ -9,6 +9,11 @@ import { ui } from '@/config';
 import { unisonReload } from '@/scripts/unison-reload';
 
 export const navbarItemDef = reactive({
+	events: {
+		title: 'サブスクリプション',
+		icon: 'ti ti-money',
+		to: '/subscription',
+	},
 	notifications: {
 		title: i18n.ts.notifications,
 		icon: 'ti ti-bell',

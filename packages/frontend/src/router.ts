@@ -501,6 +501,9 @@ export const routes = [{
 	component: page(() => import('./pages/clicker.vue')),
 	loginRequired: true,
 }, {
+	path: '/subscription',
+	component: page(() => import('./pages/subscription.vue')),
+}, {
 	path: '/timeline',
 	component: page(() => import('./pages/timeline.vue')),
 }, {

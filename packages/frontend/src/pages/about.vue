@@ -49,6 +49,7 @@
 						</ol>
 					</MkFolder>
 					<FormLink v-if="instance.tosUrl" :to="instance.tosUrl" external>{{ i18n.ts.termsOfService }}</FormLink>
+					<FormLink v-if="instance.transactionsActNotationUrl" :to="instance.transactionsActNotationUrl" external>特別商取引法に基づく表記</FormLink>
 				</div>
 			</FormSection>
 
