@@ -69,7 +69,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				const buf = ps.rawBody;
 				try {
 					event = stripe.webhooks.constructEvent(
-						ps,
+						buf,
 						signature,
 						webhookSecret);
 				} catch (err) {
