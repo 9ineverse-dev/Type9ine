@@ -73,7 +73,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 						signature,
 						webhookSecret);
 				} catch (err) {
-					return;
+					return {
+						redirect: {
+							construct: 'failed',
+						}
+					};
 				}
 				// Extract the object from the event.
 				data = event.data;
