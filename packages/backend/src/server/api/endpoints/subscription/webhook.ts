@@ -65,7 +65,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (webhookSecret) {
 				// Retrieve the event by verifying the signature using the raw body and secret.
 				let event;
-				const signature = head["stripe-signature"];
+				const signature = head[1];
 				const buf = ps.rawBody;
 				try {
 					event = stripe.webhooks.constructEvent(
