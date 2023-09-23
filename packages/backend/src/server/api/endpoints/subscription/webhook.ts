@@ -55,10 +55,13 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 	) {
 		super(meta, paramDef, async ( ps ) => {
-			const stripe = new Stripe('instance.stripeAPIKey', { apiVersion: '2023-08-16' });
+			const instance = await this.metaService.fetch(true);
+			if (!(instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanRoleId) || instance.sellSubscription === false) {
+				return;
+			}
+			const stripe = new Stripe(instance.stripeAPIKey, { apiVersion: '2023-08-16' });
 			let data;
 			let eventType;
-			const instance = await this.metaService.fetch(true);
 			// Check if webhook signing is configured.
 			const webhookSecret = instance.stripeWebhookKey;
 			if (webhookSecret) {

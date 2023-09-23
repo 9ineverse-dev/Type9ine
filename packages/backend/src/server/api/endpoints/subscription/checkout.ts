@@ -58,7 +58,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					destination: `${this.config.url}`,
 				} };
 			}
-			const stripe = new Stripe('instance.stripeAPIKey', { apiVersion: '2023-08-16' });
+			const stripe = new Stripe(instance.stripeAPIKey, { apiVersion: '2023-08-16' });
 
 //			const stripe_old = require('stripe')(instance.stripeAPIKey);
 
