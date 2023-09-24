@@ -78,7 +78,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 						redirect: {
 							construct: 'failed',
 							err: err,
-							req: (req as any).rawBody,
+//							req: (req as any).rawBody,
 						}
 					};
 				}
