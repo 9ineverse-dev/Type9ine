@@ -1,5 +1,6 @@
 import ms from 'ms';
 import { Stripe } from 'stripe';
+import { buffer } from 'micro';
 import { Inject, Injectable } from '@nestjs/common';
 import type { UserProfilesRepository, RolesRepository } from '@/models/index.js';
 import { Endpoint } from '@/server/api/endpoint-base.js';
@@ -66,10 +67,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				// Retrieve the event by verifying the signature using the raw body and secret.
 				let event;
 				const signature = headers!['stripe-signature'];
-//			const buf = bodys!.rawBody;
+				const buf = await buffer(req);
 				try {
 					event = stripe.webhooks.constructEvent(
-						req!.rawBody,
+						buf,
 						signature,
 						webhookSecret);
 				} catch (err) {
