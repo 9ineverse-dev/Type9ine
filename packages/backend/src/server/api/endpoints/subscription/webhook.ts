@@ -67,7 +67,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				let event;
 				const signature = headers!['stripe-signature'];
 				const req = JSON.stringify(bodys);
-				const buf = bodys!.rawBody;
+//				const buf = bodys!.rawBody;
 				try {
 					event = stripe.webhooks.constructEvent(
 						(req as any).rawBody,
