@@ -78,9 +78,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.where('following.followerId = :followerId', { followerId: me.id })
 			.getMany();
 
-			let FolloweeRenoteCount = 1;
-			let LocalRenoteCount = 1;
-			let GlobalRenoteCount = 1;
+			let FolloweeRenoteCount = 2;
+			let LocalRenoteCount = 2;
+			let GlobalRenoteCount = 2;
 
 /*			if (followees.length >= 50) {
 				FolloweeRenoteCount = 7;
@@ -128,7 +128,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 							.orWhere('(note.userHost IS NULL)');
 					}));
 
-				this.queryService.generateMutedUserRenotesQueryForNotes(followingNetworksQuery, me);
+				//this.queryService.generateMutedUserRenotesQueryForNotes(followingNetworksQuery, me);
 				const followingNetworks = await followingNetworksQuery.getMany();
 
 				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.renoteUserId), ...followees.map(f => f.followeeId)];
