@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 <template>
 <MkA :to="`/channels/${channel.id}`" class="eftoefju _panel" tabindex="-1">
 	<div class="banner" :style="bannerStyle">
@@ -36,7 +41,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { i18n } from '@/i18n';
+import { i18n } from '@/i18n.js';
 
 const props = defineProps<{
 	channel: Record<string, any>;

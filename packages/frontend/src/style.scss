@@ -1,4 +1,9 @@
-@charset "utf-8";
+/*
+ * SPDX-FileCopyrightText: syuilo and other misskey contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+ @charset "utf-8";
 
 //追記文
 body:has(.xpACr.xCGq6) .x7c6u.xyfXN._button {
@@ -8,6 +13,7 @@ body:has(.xpACr.xCGq6) .x7c6u.xyfXN._button {
 body:has(.xpACr.xCGq6) ._button.xplJN {
 	display: none;
 }
+
 
 :root {
 	--radius: 12px;
@@ -43,6 +49,7 @@ html {
 	line-height: 1.35;
 	text-size-adjust: 100%;
 	tab-size: 2;
+	-webkit-text-size-adjust: 100%;
 
 	&, * {
 		scrollbar-color: var(--scrollbarHandle) transparent;
@@ -402,15 +409,6 @@ hr {
 	font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace !important;
 }
 
-._code {
-	@extend ._monospace;
-	background: #2d2d2d;
-	color: #ccc;
-	font-size: 14px;
-	line-height: 1.5;
-	padding: 5px;
-}
-
 .prism-editor__textarea:focus {
 	outline: none;
 }
@@ -527,6 +525,13 @@ hr {
 			font-size: 100%;
 		}
 	}
+}
+
+._mfm_rainbow_fallback_ {
+	background-image: linear-gradient(to right, rgb(255, 0, 0) 0%, rgb(255, 165, 0) 17%, rgb(255, 255, 0) 33%, rgb(0, 255, 0) 50%, rgb(0, 255, 255) 67%, rgb(0, 0, 255) 83%, rgb(255, 0, 255) 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
 }
 
 @keyframes mfm-spin {

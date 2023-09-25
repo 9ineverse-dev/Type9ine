@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 <template>
 <MkStickyContainer>
 	<template #header><MkPageHeader :actions="headerActions" :tabs="headerTabs"/></template>
@@ -22,6 +27,14 @@
 			<MkSwitch v-model="searchable">
 				{{ i18n.ts.channelSearchable }}
 			</MkSwitch>
+
+			<div>
+				<MkButton v-if="bannerId == null" @click="setBannerImage"><i class="ti ti-plus"></i> {{ i18n.ts._channel.setBanner }}</MkButton>
+				<div v-else-if="bannerUrl">
+					<img :src="bannerUrl" style="width: 100%;"/>
+					<MkButton @click="removeBannerImage()"><i class="ti ti-trash"></i> {{ i18n.ts._channel.removeBanner }}</MkButton>
+				</div>
+			</div>
 
 			<MkFolder :defaultOpen="true">
 				<template #label>{{ i18n.ts.pinnedNotes }}</template>
@@ -96,15 +109,15 @@ import MkTextarea from '@/components/MkTextarea.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkColorInput from '@/components/MkColorInput.vue';
-import { selectFile } from '@/scripts/select-file';
-import * as Acct from 'misskey-js/built/acct';
-import * as os from '@/os';
-import { useRouter } from '@/router';
-import { definePageMetadata } from '@/scripts/page-metadata';
-import { i18n } from '@/i18n';
+import { selectFile } from '@/scripts/select-file.js';
+import * as Misskey from 'misskey-js';
+import * as os from '@/os.js';
+import { useRouter } from '@/router.js';
+import { definePageMetadata } from '@/scripts/page-metadata.js';
+import { i18n } from '@/i18n.js';
 import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from "@/components/MkSwitch.vue";
-import { $i } from '@/account';
+import { $i } from '@/account.js';
 
 
 const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
@@ -190,7 +203,7 @@ async function addPrivateUserIds() {
 		}, ...privateUserIds.value];
 	};
 
-	const usernamePromise = os.api('users/show', Acct.parse(result) );
+	const usernamePromise = os.api('users/show', Misskey.acct.parse(result) );
 	const idPromise = os.api('users/show', { userId: result });
 	let _notFound = false;
 	const notFound = () => {
