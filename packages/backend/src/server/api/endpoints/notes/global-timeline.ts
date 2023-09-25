@@ -78,11 +78,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.where('following.followerId = :followerId', { followerId: me.id })
 			.getMany();
 
-			let FolloweeRenoteCount = 5;
+			let FolloweeRenoteCount = 1;
 			let LocalRenoteCount = 1;
-			let GlobalRenoteCount = 15;
+			let GlobalRenoteCount = 1;
 
-			if (followees.length >= 50) {
+/*			if (followees.length >= 50) {
 				FolloweeRenoteCount = 7;
 				LocalRenoteCount = 12;
 				GlobalRenoteCount = 15;
@@ -98,7 +98,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				FolloweeRenoteCount = 20;
 				LocalRenoteCount = 30;
 				GlobalRenoteCount = 40;
-			}
+			} */
 
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
@@ -117,9 +117,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 				const followingNetworksQuery = this.notesRepository.createQueryBuilder('note')
 					.select('note.renoteUserId')
-					.distinct(true)
+					//.distinct(true)
 					.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 3))) })
-					.andWhere('note.renoteId IS NOT NULL')
+					.andWhere('note.renoteUserId IS NOT NULL')
 					.andWhere('note.text IS NULL')
 					.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 					.andWhere(`(note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
