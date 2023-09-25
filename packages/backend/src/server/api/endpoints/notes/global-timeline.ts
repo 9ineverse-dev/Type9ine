@@ -78,11 +78,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.where('following.followerId = :followerId', { followerId: me.id })
 			.getMany();
 
-			let FolloweeRenoteCount = 2;
-			let LocalRenoteCount = 2;
-			let GlobalRenoteCount = 2;
+			let FolloweeRenoteCount = 5;
+			let LocalRenoteCount = 10;
+			let GlobalRenoteCount = 15;
 
-/*			if (followees.length >= 50) {
+			if (followees.length >= 50) {
 				FolloweeRenoteCount = 7;
 				LocalRenoteCount = 12;
 				GlobalRenoteCount = 15;
@@ -98,7 +98,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				FolloweeRenoteCount = 20;
 				LocalRenoteCount = 30;
 				GlobalRenoteCount = 40;
-			} */
+			}
 
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
