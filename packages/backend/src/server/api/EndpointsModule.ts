@@ -70,6 +70,13 @@ import * as ep___admin_roles_assign from './endpoints/admin/roles/assign.js';
 import * as ep___admin_roles_unassign from './endpoints/admin/roles/unassign.js';
 import * as ep___admin_roles_updateDefaultPolicies from './endpoints/admin/roles/update-default-policies.js';
 import * as ep___admin_roles_users from './endpoints/admin/roles/users.js';
+//import * as ep___admin_stripe_checkoutSessionCompleted from './endpoints/admin/stripe/checkout-session-completed.js';
+import * as ep___admin_stripe_customerSubscriptionCreated from './endpoints/admin/stripe/customer-subscription-created.js';
+import * as ep___admin_stripe_customerSubscriptionDeleted from './endpoints/admin/stripe/customer-subscription-deleted.js';
+import * as ep___admin_stripe_customerSubscriptionPaused from './endpoints/admin/stripe/customer-subscription-paused.js';
+import * as ep___admin_stripe_customerSubscriptionResumed from './endpoints/admin/stripe/customer-subscription-resumed.js';
+import * as ep___admin_stripe_invoicePaid from './endpoints/admin/stripe/invoice-paid.js';
+import * as ep___admin_stripe_invoicePaymentFailed from './endpoints/admin/stripe/invoice-payment-failed.js';
 import * as ep___announcements from './endpoints/announcements.js';
 import * as ep___antennas_create from './endpoints/antennas/create.js';
 import * as ep___antennas_delete from './endpoints/antennas/delete.js';
@@ -418,6 +425,12 @@ const $admin_roles_assign: Provider = { provide: 'ep:admin/roles/assign', useCla
 const $admin_roles_unassign: Provider = { provide: 'ep:admin/roles/unassign', useClass: ep___admin_roles_unassign.default };
 const $admin_roles_updateDefaultPolicies: Provider = { provide: 'ep:admin/roles/update-default-policies', useClass: ep___admin_roles_updateDefaultPolicies.default };
 const $admin_roles_users: Provider = { provide: 'ep:admin/roles/users', useClass: ep___admin_roles_users.default };
+const $admin_stripe_customerSubscriptionCreated: Provider = { provide: 'ep:admin/stripe/customer-subscription-created', useClass: ep___admin_stripe_customerSubscriptionCreated.default };
+const $admin_stripe_customerSubscriptionDeleted: Provider = { provide: 'ep:admin/stripe/customer-subscription-deleted', useClass: ep___admin_stripe_customerSubscriptionDeleted.default };
+const $admin_stripe_customerSubscriptionPaused: Provider = { provide: 'ep:admin/stripe/customer-subscription-paused', useClass: ep___admin_stripe_customerSubscriptionPaused.default };
+const $admin_stripe_customerSubscriptionResumed: Provider = { provide: 'ep:admin/stripe/customer-subscription-resumed', useClass: ep___admin_stripe_customerSubscriptionResumed.default };
+const $admin_stripe_invoicePaid: Provider = { provide: 'ep:admin/stripe/invoice-paid', useClass: ep___admin_stripe_invoicePaid.default };
+const $admin_stripe_invoicePaymentFailed: Provider = { provide: 'ep:admin/stripe/invoice-payment-failed', useClass: ep___admin_stripe_invoicePaymentFailed.default };
 const $announcements: Provider = { provide: 'ep:announcements', useClass: ep___announcements.default };
 const $antennas_create: Provider = { provide: 'ep:antennas/create', useClass: ep___antennas_create.default };
 const $antennas_delete: Provider = { provide: 'ep:antennas/delete', useClass: ep___antennas_delete.default };
@@ -1116,6 +1129,12 @@ const $subscription_webhook: Provider = { provide: 'ep:subscription/webhook', us
 		$admin_roles_unassign,
 		$admin_roles_updateDefaultPolicies,
 		$admin_roles_users,
+		$admin_stripe_customerSubscriptionCreated,
+		$admin_stripe_customerSubscriptionDeleted,
+		$admin_stripe_customerSubscriptionPaused,
+		$admin_stripe_customerSubscriptionResumed,
+		$admin_stripe_invoicePaid,
+		$admin_stripe_invoicePaymentFailed,
 		$announcements,
 		$antennas_create,
 		$antennas_delete,

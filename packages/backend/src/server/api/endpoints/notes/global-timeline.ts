@@ -117,19 +117,18 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (followees.length > 0) {
 				const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
-				const followingNetworksQuery = await this.notesRepository.createQueryBuilder('note')
-				.select('note.renoteUserId')
-				.distinct(true)
-				.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 2))) })
-				.andWhere('note.renoteId IS NOT NULL')
-				.andWhere('note.text IS NULL')
-				.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
-				.andWhere(`(note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
-				.andWhere(new Brackets(qb =>{
-					qb.where(`(note.userHost = note.renoteUserHost)`)
-					.orWhere(`(note.userHost IS NULL)`);
-				}));
-
+				const followingNetworksQuery = this.notesRepository.createQueryBuilder('note')
+					.select('note.renoteUserId')
+					.distinct(true)
+					.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 3))) })
+					.andWhere('note.renoteId IS NOT NULL')
+					.andWhere('note.text IS NULL')
+					.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+					.andWhere(`(note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
+					.andWhere(new Brackets(qb => {
+						qb.where('(note.userHost = note.renoteUserHost)')
+							.orWhere('(note.userHost IS NULL)');
+					}));
 
 				this.queryService.generateMutedUserRenotesQueryForNotes(followingNetworksQuery, me);
 				const followingNetworks = await followingNetworksQuery.getMany();
@@ -137,16 +136,16 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.renoteUserId), ...followees.map(f => f.followeeId)];
 
 				query.andWhere('note.userId IN (:...meOrfollowingNetworks)', { meOrfollowingNetworks: meOrfollowingNetworks })
-				.andWhere(new Brackets(qb =>{
-					qb.where(`(note.renoteCount > :GlobalRenoteCount) `,{ GlobalRenoteCount: GlobalRenoteCount })
-					.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
-					.orWhere(`(note.renoteCount > :FolloweeRenoteCount) AND (note.userId IN (:...meOrFolloweeIds))`, { meOrFolloweeIds: meOrFolloweeIds, FolloweeRenoteCount: FolloweeRenoteCount });
-				 }));
+					.andWhere(new Brackets(qb => {
+						qb.where(`(note.renoteCount > :GlobalRenoteCount) `, { GlobalRenoteCount: GlobalRenoteCount })
+							.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
+							.orWhere(`(note.renoteCount > :FolloweeRenoteCount) AND (note.userId IN (:...meOrFolloweeIds))`, { meOrFolloweeIds: meOrFolloweeIds, FolloweeRenoteCount: FolloweeRenoteCount });
+					}));
 			} else {
 				query.andWhere(`(note.userHost IS NULL) AND (note.score > 30)`);
 			}
 
-		this.queryService.generateRepliesQuery(query, ps.withReplies, me);
+			this.queryService.generateRepliesQuery(query, ps.withReplies, me);
 			if (me) {
 				this.queryService.generateMutedUserQuery(query, me);
 				this.queryService.generateMutedNoteQuery(query, me);

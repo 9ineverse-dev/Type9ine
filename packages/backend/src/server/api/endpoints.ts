@@ -70,6 +70,13 @@ import * as ep___admin_roles_assign from './endpoints/admin/roles/assign.js';
 import * as ep___admin_roles_unassign from './endpoints/admin/roles/unassign.js';
 import * as ep___admin_roles_updateDefaultPolicies from './endpoints/admin/roles/update-default-policies.js';
 import * as ep___admin_roles_users from './endpoints/admin/roles/users.js';
+//import * as ep___admin_stripe_checkoutSessionCompleted from './endpoints/admin/stripe/checkout-session-completed.js';
+import * as ep___admin_stripe_customerSubscriptionCreated from './endpoints/admin/stripe/customer-subscription-created.js';
+import * as ep___admin_stripe_customerSubscriptionDeleted from './endpoints/admin/stripe/customer-subscription-deleted.js';
+import * as ep___admin_stripe_customerSubscriptionPaused from './endpoints/admin/stripe/customer-subscription-paused.js';
+import * as ep___admin_stripe_customerSubscriptionResumed from './endpoints/admin/stripe/customer-subscription-resumed.js';
+import * as ep___admin_stripe_invoicePaid from './endpoints/admin/stripe/invoice-paid.js';
+import * as ep___admin_stripe_invoicePaymentFailed from './endpoints/admin/stripe/invoice-payment-failed.js';
 import * as ep___announcements from './endpoints/announcements.js';
 import * as ep___antennas_create from './endpoints/antennas/create.js';
 import * as ep___antennas_delete from './endpoints/antennas/delete.js';
@@ -416,6 +423,13 @@ const eps = [
 	['admin/roles/unassign', ep___admin_roles_unassign],
 	['admin/roles/update-default-policies', ep___admin_roles_updateDefaultPolicies],
 	['admin/roles/users', ep___admin_roles_users],
+//	['admin/stripe/checkout-session-completed', ep___admin_stripe_checkoutSessionCompleted],
+	['admin/stripe/customer-subscription-created', ep___admin_stripe_customerSubscriptionCreated],
+	['admin/stripe/customer-subscription-deleted', ep___admin_stripe_customerSubscriptionDeleted],
+	['admin/stripe/customer-subscription-paused', ep___admin_stripe_customerSubscriptionPaused],
+	['admin/stripe/customer-subscription-resumed', ep___admin_stripe_customerSubscriptionResumed],
+	['admin/stripe/invoice-paid', ep___admin_stripe_invoicePaid],
+	['admin/stripe/invoice-payment-failed', ep___admin_stripe_invoicePaymentFailed],
 	['announcements', ep___announcements],
 	['antennas/create', ep___antennas_create],
 	['antennas/delete', ep___antennas_delete],
