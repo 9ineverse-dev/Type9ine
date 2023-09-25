@@ -117,18 +117,19 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 				const followingNetworksQuery = this.notesRepository.createQueryBuilder('note')
 					.select('note.renoteUserId')
-					//.distinct(true)
+					.distinct(true)
 					.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 3))) })
 					.andWhere('note.renoteUserId IS NOT NULL')
 					.andWhere('note.text IS NULL')
 					.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
-					.andWhere(`(note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
+					.andWhere(`(renote.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
 					.andWhere(new Brackets(qb => {
 						qb.where('(note.userHost = note.renoteUserHost)')
 							.orWhere('(note.userHost IS NULL)');
-					}));
+					}))
+					.leftJoin('note.renote', 'renote');
 
-				//this.queryService.generateMutedUserRenotesQueryForNotes(followingNetworksQuery, me);
+				this.queryService.generateMutedUserRenotesQueryForNotes(followingNetworksQuery, me);
 				const followingNetworks = await followingNetworksQuery.getMany();
 
 				const meOrfollowingNetworks = [me.id, ...followingNetworks.map(f => f.renoteUserId), ...followees.map(f => f.followeeId)];
