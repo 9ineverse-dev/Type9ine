@@ -79,7 +79,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			.getMany();
 
 			let FolloweeRenoteCount = 5;
-			let LocalRenoteCount = 10;
+			let LocalRenoteCount = 1;
 			let GlobalRenoteCount = 15;
 
 			if (followees.length >= 50) {
@@ -99,8 +99,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				LocalRenoteCount = 30;
 				GlobalRenoteCount = 40;
 			}
-
-
 
 		//#region Construct query
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'),
