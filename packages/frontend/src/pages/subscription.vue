@@ -37,6 +37,7 @@ async function portal() {
 <style lang="scss" module>
 .mainActions {
 	padding: 32px;
+	max-width: 300;
 }
 
 .mainAction {
