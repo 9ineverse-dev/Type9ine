@@ -4,7 +4,7 @@
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
-<div :class="$style.container" :style="{ '--color': roleColor }">
+<div :class="$style.container" :style="{ 'border-color': roleColor }">
 	<div class="_buttons">
 		<MkButton primary @click="checkout()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
 		<MkButton primary @click="portal()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
@@ -14,21 +14,39 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
+import { watch } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
 import * as os from '@/os';
 import { i18n } from '@/i18n.js';
 
-const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
-const roleColor = $i.roles.splice($i.roles.indexOf(r => r.id === instance.basicPlanRoleId)).color;
-
-onMounted(() => {
-	if ($i && $i.roles.some(r => r.id === instance.basicPlanRoleId)) {
-		isSubscriptionMember = true;
-	}
+const props = withDefaults(defineProps<{
+	role: string;
+}>(), {
+	role: instance.basicPlanRoleId,
 });
+
+let subscriptionRole = $ref();
+let error = $ref();
+let roleColor = '';
+
+watch(() => props.role, () => {
+	os.api('roles/show', {
+		roleId: props.role,
+	}).then(res => {
+		subscriptionRole = res;
+		roleColor = res.color;
+	}).catch((err) => {
+		if (err.code === 'NO_SUCH_ROLE') {
+			error = i18n.ts.noRole;
+		} else {
+			error = i18n.ts.somethingHappened;
+		}
+	});
+}, { immediate: true });
+
+const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
 
 async function checkout() {
 	const redirect = await os.api('subscription/checkout');
@@ -55,7 +73,7 @@ async function portal() {
 }
 
 .container {
-	border: solid 2px var(roleColor);
+	border: solid 2px var(--accent);
 	margin-right: auto;
 	margin-left: auto;
 	max-width: 350px;
