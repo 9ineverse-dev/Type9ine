@@ -4,24 +4,28 @@
 	<MkButton primary @click="portal()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
 </div>
 <div class="_gaps_s" :class="$style.mainActions">
-	<MkButton :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: 12px;" @click="signup()">{{ i18n.ts.joinThisServer }}</MkButton>
+	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: 12px;" @click="checkout()">{{ i18n.ts.joinThisServer }}</MkButton>
+	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: 12px;" @click="portal()">{{ i18n.ts.joinThisServer }}</MkButton>
 </div>
 
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
+import { onMounted } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
 import * as os from '@/os';
 import { i18n } from '@/i18n.js';
 
-if ($i.roles.includes(instance.basicPlanRoleId))
+let isSubscriptionMember = false;
+
+onMounted(() => {
+	if ($i.roles.includes(instance.basicPlanRoleId))
 {
-	const redirect = await os.api('subscription/portal');
-	window.location.href = redirect.redirect.destination;
+		isSubscriptionMember = true;
 }
+});
 
 async function checkout() {
 	const redirect = await os.api('subscription/checkout');
@@ -37,6 +41,8 @@ async function portal() {
 <style lang="scss" module>
 .mainActions {
 	padding: 32px;
+	display: flex;
+  justify-content: center;
 }
 
 .mainAction {
