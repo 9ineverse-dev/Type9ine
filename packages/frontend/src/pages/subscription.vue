@@ -42,10 +42,13 @@ async function portal() {
 .mainActions {
 	padding: 32px;
 	margin: auto;
+	/* 子要素を水平方向の中央に配置する */
+	display: flex;
+	justify-content: center;
 }
 
 .mainAction {
-	//line-height: 28px;
+	line-height: 28px;
 	max-width: 300px;
 	margin: auto;
 }
