@@ -55,7 +55,7 @@ async function portal() {
 }
 
 .container {
-	border: solid 2px var(--accent);
+	border: solid 2px var(roleColor);
 	margin-right: auto;
 	margin-left: auto;
 	max-width: 350px;
