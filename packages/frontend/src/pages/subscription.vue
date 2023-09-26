@@ -33,6 +33,7 @@ let roleColor = '';
 
 onMounted(() => {
 	os.api('roles/show', {	roleId: props.role, }).then(res => {	subscriptionRole = res; });
+	roleColor = subscriptionRole.color;
 });
 
 const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
@@ -62,7 +63,7 @@ async function portal() {
 }
 
 .container {
-	border: solid 2px var(--accent);
+	border: solid 2px v-bind(roleColor);
 	margin-right: auto;
 	margin-left: auto;
 	max-width: 350px;
