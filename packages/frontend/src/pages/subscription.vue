@@ -4,7 +4,7 @@
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
-<div :class="$style.container" :style="{ 'border-color': roleColor }">
+<div :class="$style.container">
 	<div class="_buttons">
 		{{ subscriptionRole.name }}
 	</div>
@@ -28,11 +28,9 @@ const props = withDefaults(defineProps<{
 
 let subscriptionRole = $ref();
 let error = $ref();
-let roleColor = '';
 
 onMounted(() => {
 	os.api('roles/show', {	roleId: props.role, }).then(res => {	subscriptionRole = res; });
-	roleColor = subscriptionRole.color;
 });
 
 const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
