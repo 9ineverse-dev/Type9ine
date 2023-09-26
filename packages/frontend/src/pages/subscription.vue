@@ -6,7 +6,7 @@
 </div>
 <div :class="$style.container" :style="{ 'border-color': roleColor }">
 	<div class="_buttons">
-		<MkButton primary @click="checkout()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
+		<MkButton primary @click="checkout()"><i class="ti ti-device-floppy"></i> {{ subscriptionRole.name }}</MkButton>
 		<MkButton primary @click="portal()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
 	</div>
 </div>
@@ -18,7 +18,7 @@ import { onMounted } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
-import * as os from '@/os';
+import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 
 const props = withDefaults(defineProps<{
