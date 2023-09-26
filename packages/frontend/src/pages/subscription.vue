@@ -21,10 +21,12 @@ import { i18n } from '@/i18n.js';
 let isSubscriptionMember = false;
 
 onMounted(() => {
-	if ($i.roles.id.includes(instance.basicPlanRoleId))
-{
+	let roleIds = [];
+	for (let role in $i.roles ) {
+	}
+	if ($i && $i.roles.some(r => $i.roles.id.includes(r.id))) {
 		isSubscriptionMember = true;
-}
+	}
 });
 
 async function checkout() {
