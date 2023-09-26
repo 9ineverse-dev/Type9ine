@@ -22,7 +22,7 @@ import * as os from '@/os';
 import { i18n } from '@/i18n.js';
 
 const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
-const roleColor = $i.roles.indexOf(r => r.id === instance.basicPlanRoleId).color;
+const roleColor = $i.roles.splice($i.roles.indexOf(r => r.id === instance.basicPlanRoleId)).color;
 
 onMounted(() => {
 	if ($i && $i.roles.some(r => r.id === instance.basicPlanRoleId)) {
