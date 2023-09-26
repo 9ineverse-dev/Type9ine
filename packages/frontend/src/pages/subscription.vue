@@ -4,7 +4,7 @@
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
-<div :class="$style.container">
+<div :class="$style.container" :style="{ '--color': roleColor }">
 	<div class="_buttons">
 		<MkButton primary @click="checkout()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
 		<MkButton primary @click="portal()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
@@ -21,7 +21,8 @@ import { $i } from '@/account.js';
 import * as os from '@/os';
 import { i18n } from '@/i18n.js';
 
-let isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
+const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
+const roleColor = $i.roles.indexOf(r => r.id === instance.basicPlanRoleId).color;
 
 onMounted(() => {
 	if ($i && $i.roles.some(r => r.id === instance.basicPlanRoleId)) {
@@ -50,14 +51,14 @@ async function portal() {
 
 .mainAction {
 	line-height: 28px;
-	max-width: 300px;
+	max-width: 250px;
 }
 
 .container {
 	border: solid 2px var(--accent);
 	margin-right: auto;
 	margin-left: auto;
-	max-width: 400px;
+	max-width: 350px;
 	border-radius: 20px 20px 20px 20px / 20px 20px 20px 20px;
 }
 </style>
