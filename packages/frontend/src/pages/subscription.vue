@@ -14,6 +14,7 @@ import MkButton from '@/components/MkButton.vue';
 import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
 import * as os from '@/os';
+import { i18n } from '@/i18n.js';
 
 if ($i.roles.includes(instance.basicPlanRoleId))
 {
