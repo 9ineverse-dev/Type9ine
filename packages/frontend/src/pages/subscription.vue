@@ -63,7 +63,7 @@ async function portal() {
 }
 
 .container {
-	border: solid 2px v-bind(roleColor);
+	border: solid 2px var(--accent);
 	margin-right: auto;
 	margin-left: auto;
 	max-width: 350px;
