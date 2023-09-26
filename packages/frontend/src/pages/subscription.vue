@@ -35,14 +35,8 @@ async function portal() {
 </script>
 
 <style lang="scss" module>
-@media screen and (min-width: 960px){
-	.mainActions {
-	padding: 32px 30%;
-}
-
-}
 .mainActions {
-	padding: 32px;
+	padding: 150px;
 }
 
 .mainAction {
