@@ -90,7 +90,7 @@ async function portal() {
 
 .badge {
 	//height: 1.3em;
-	//vertical-align: -20%;
+	vertical-align: -20%;
 }
 
 </style>
