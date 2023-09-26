@@ -24,7 +24,7 @@ onMounted(() => {
 	let roleIds = [];
 	for (let role in $i.roles ) {
 	}
-	if ($i && $i.roles.some(r => $i.roles.id.includes(r.id))) {
+	if ($i && $i.roles.some(r => $i.roles.includes(r.id))) {
 		isSubscriptionMember = true;
 	}
 });
