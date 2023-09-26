@@ -6,7 +6,17 @@
 </div>
 <div :class="$style.container">
 	<div :class="$style.roleName">
-		{{ subscriptionRole.name }}
+		<span :class="$style.icon">
+			<template v-if="subscriptionRole.iconUrl">
+				<img :class="$style.badge" :src="subscriptionRole.iconUrl"/>
+			</template>
+			<template v-else>
+				<i v-if="subscriptionRole.isAdministrator" class="ti ti-crown" style="color: var(--accent);"></i>
+				<i v-else-if="subscriptionRole.isModerator" class="ti ti-shield" style="color: var(--accent);"></i>
+				<i v-else class="ti ti-user" style="opacity: 0.7;"></i>
+			</template>
+		</span>
+		{{ subscriptionRole.name }}の特典
 	</div>
 </div>
 
@@ -70,5 +80,17 @@ async function portal() {
 .roleName {
 	padding: 32px;
 	font-size: 32px;
+	margin-right: auto;
+	margin-left: auto;
 }
+
+.icon {
+	margin-right: 8px;
+}
+
+.badge {
+	height: 1.3em;
+	vertical-align: -20%;
+}
+
 </style>
