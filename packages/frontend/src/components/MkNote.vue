@@ -104,16 +104,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<i class="ti ti-repeat"></i>
 					<p v-if="appearNote.renoteCount > 0" :class="$style.footerButtonCount">{{ appearNote.renoteCount }}</p>
 				</button>
-				<button
-					v-if="canRenote"
-					ref="renoteButton"
-					:class="$style.footerButton"
-					class="_button"
-					@mousedown="renote()"
-				>
-					<i class="ti ti-repeat"></i>
-					<p v-if="appearNote.renoteCount > 0" :class="$style.footerButtonCount">{{ appearNote.renoteCount }}</p>
-				</button>
 				<button v-if="canRenote" ref="ChannelrenoteButton" :class="$style.footerButton" class="_button" @mousedown="chooseRnChannel()">
 					<i class="ti ti-device-tv"></i>
 				</button>
