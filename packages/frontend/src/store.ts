@@ -164,13 +164,8 @@ export const defaultStore = markRaw(new Storage('base', {
 	tl: {
 		where: 'deviceAccount',
 		default: {
-<<<<<<< HEAD
-			src: 'home' as 'home' | 'social' | 'global' | 'local',
-			arg: null,
-=======
 			src: 'home' as 'home' | 'local' | 'social' | 'global' | `list:${string}`,
 			userList: null as Misskey.entities.UserList | null,
->>>>>>> upstream/master
 		},
 	},
 	pinnedUserLists: {
