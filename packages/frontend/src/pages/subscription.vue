@@ -58,5 +58,6 @@ async function portal() {
 	margin-right: auto;
 	margin-left: auto;
 	max-width: 400px;
+	border-radius: 20px 20px 20px 20px / 20px 20px 20px 20px;
 }
 </style>
