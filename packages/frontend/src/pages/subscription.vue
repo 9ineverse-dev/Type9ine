@@ -85,12 +85,12 @@ async function portal() {
 }
 
 .icon {
-	margin-right: 8px;
+	//margin-right: 8px;
 }
 
 .badge {
-	height: 1.3em;
-	vertical-align: -20%;
+	//height: 1.3em;
+	//vertical-align: -20%;
 }
 
 </style>
