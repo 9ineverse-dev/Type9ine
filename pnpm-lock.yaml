@@ -673,6 +673,9 @@ importers:
       '@vue/compiler-sfc':
         specifier: 3.3.4
         version: 3.3.4
+      '@vueform/multiselect':
+        specifier: ^2.6.2
+        version: 2.6.2
       astring:
         specifier: 1.8.6
         version: 1.8.6
