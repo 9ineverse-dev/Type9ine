@@ -295,8 +295,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			let SubscriptionSelleble = false;
 
-			if ( instance.sellSubscription && instance.stripeAPIKey && instance.stripeWebhookKey ) {
-				SubscriptionSelleble = true;
+			if ( instance.sellSubscription && instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanPrice && instance.basicPlanRoleId && instance.transactionsActNotationUrl) {
+				SubscriptionSelleble = instance.sellSubscription;
 			}
 
 			const response: any = {

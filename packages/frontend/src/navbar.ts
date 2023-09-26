@@ -4,8 +4,8 @@
  */
 
 import { computed, reactive } from 'vue';
-import { $i } from '@/account.js';
 import { instance } from './instance.js';
+import { $i } from '@/account.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { openInstanceMenu } from '@/ui/_common_/common.js';
 import { lookup } from '@/scripts/lookup.js';
@@ -19,8 +19,7 @@ export const navbarItemDef = reactive({
 		title: 'サブスクリプション',
 		icon: 'ti ti-coin-yen',
 		to: '/subscription',
-		show: computed(() => $i != null),
-		indicated: computed(() => $i != null && instance.sellSubscription),
+		indicated: computed(() => instance.sellSubscription),
 	},
 	notifications: {
 		title: i18n.ts.notifications,
