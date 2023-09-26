@@ -4,8 +4,8 @@
 	<MkButton primary @click="portal()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
 </div>
 <div class="_gaps_s" :class="$style.mainActions">
-	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: 12px;" @click="checkout()">{{ i18n.ts.joinThisServer }}</MkButton>
-	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: 12px;" @click="portal()">{{ i18n.ts.joinThisServer }}</MkButton>
+	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">{{ i18n.ts.joinThisServer }}</MkButton>
+	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">{{ i18n.ts.joinThisServer }}</MkButton>
 </div>
 
 </template>
