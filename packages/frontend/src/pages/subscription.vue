@@ -1,14 +1,14 @@
 <template>
-<div class="_buttons">
-	<MkButton primary @click="checkout()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
-	<MkButton primary @click="portal()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
-</div>
+
 <div class="_gaps_s" :class="$style.mainActions">
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
 <div :class="$style.container">
-
+	<div class="_buttons">
+		<MkButton primary @click="checkout()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
+		<MkButton primary @click="portal()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
+	</div>
 </div>
 
 </template>
@@ -55,5 +55,8 @@ async function portal() {
 
 .container {
 	border: solid 2px var(--accent);
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 400px;
 }
 </style>
