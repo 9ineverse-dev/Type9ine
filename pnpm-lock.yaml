@@ -335,6 +335,12 @@ importers:
       sanitize-html:
         specifier: 2.11.0
         version: 2.11.0
+      save-dev:
+        specifier: 0.0.1-security
+        version: 0.0.1-security
+      semver:
+        specifier: 7.5.4
+        version: 7.5.4
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -350,6 +356,9 @@ importers:
       stringz:
         specifier: 2.1.0
         version: 2.1.0
+      stripe:
+        specifier: ^13.7.0
+        version: 13.7.0
       summaly:
         specifier: github:misskey-dev/summaly
         version: github.com/misskey-dev/summaly/d2d8db49943ccb201c1b1b283e9d0a630519fac7
@@ -6842,7 +6851,7 @@ packages:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.3.4
-      vue-component-type-helpers: 1.8.13
+      vue-component-type-helpers: 1.8.14
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -8334,6 +8343,10 @@ packages:
     transitivePeerDependencies:
       - typescript
     dev: true
+
+  /@vueform/multiselect@2.6.2:
+    resolution: {integrity: sha512-4BFvXyzyi0Pqi/lsYdGwONsQy+ypiVzuQbmoDUlttTxuoujFtf9AdeHi1ZhfIorXG9BiysK1HcQSfYB6USgwfQ==}
+    dev: false
 
   /@webgpu/types@0.1.30:
     resolution: {integrity: sha512-9AXJSmL3MzY8ZL//JjudA//q+2kBRGhLBFpkdGksWIuxrMy81nFrCzj2Am+mbh8WoU6rXmv7cY5E3rdlyru2Qg==}
@@ -16432,7 +16445,6 @@ packages:
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
-    dev: true
 
   /qs@6.5.3:
     resolution: {integrity: sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==}
@@ -17186,6 +17198,10 @@ packages:
       chokidar: 3.5.3
       immutable: 4.2.2
       source-map-js: 1.0.2
+
+  /save-dev@0.0.1-security:
+    resolution: {integrity: sha512-k6knZTDNK8PKKbIqnvxiOveJinuw2LcQjqDoaorZWP9M5AR2EPsnpDeSbeoZZ0pHr5ze1uoaKdK8NBGQrJ34Uw==}
+    dev: false
 
   /sax@1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
@@ -17985,6 +18001,14 @@ packages:
   /strip-outer@2.0.0:
     resolution: {integrity: sha512-A21Xsm1XzUkK0qK1ZrytDUvqsQWict2Cykhvi0fBQntGG5JSprESasEyV1EZ/4CiR5WB5KjzLTrP/bO37B0wPg==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
+
+  /stripe@13.7.0:
+    resolution: {integrity: sha512-0cbUNl5aDwt5rIZeE/WgyTxZN/PtwyeA5KcVJrHj260tjN4IOo2BZikN+dxhKoeBfI4aSRAd3E5vHRKmjjaSbA==}
+    engines: {node: '>=12.*'}
+    dependencies:
+      '@types/node': 20.6.4
+      qs: 6.11.1
     dev: false
 
   /strnum@1.0.5:
@@ -19104,8 +19128,8 @@ packages:
     resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
     engines: {node: '>=0.10.0'}
 
-  /vue-component-type-helpers@1.8.13:
-    resolution: {integrity: sha512-zbCQviVRexZ7NF2kizQq5LicG5QGXPHPALKE3t59f5q2FwaG9GKtdhhIV4rw4LDUm9RkvGAP8TSXlXcBWY8rFQ==}
+  /vue-component-type-helpers@1.8.14:
+    resolution: {integrity: sha512-veuaNIJas+dkRflRumpnY0e0HWqrUrqg5CdWxK/CbQvJ96V4uVOM5eJbj6cJX3rFNmc7+LO3ySHwvKVS8DjG5w==}
     dev: true
 
   /vue-demi@0.13.11(vue@3.3.4):
