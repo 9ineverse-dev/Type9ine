@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
+import { onBeforeMount } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<{
 let subscriptionRole = $ref();
 let error = $ref();
 
-onMounted(() => {
+onBeforeMount(() => {
 	os.api('roles/show', {	roleId: props.role, }).then(res => {	subscriptionRole = res; });
 });
 
@@ -63,7 +63,7 @@ async function portal() {
 	border: solid 2px var(--accent);
 	margin-right: auto;
 	margin-left: auto;
-	max-width: 350px;
+	max-width: 600px;
 	border-radius: 20px 20px 20px 20px / 20px 20px 20px 20px;
 }
 
