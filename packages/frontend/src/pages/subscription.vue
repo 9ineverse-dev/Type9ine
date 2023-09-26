@@ -18,12 +18,9 @@ import { $i } from '@/account.js';
 import * as os from '@/os';
 import { i18n } from '@/i18n.js';
 
-let isSubscriptionMember = false;
+let isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
 
 onMounted(() => {
-	let roleIds = [];
-	for (let role in $i.roles.id ) {
-	}
 	if ($i && $i.roles.some(r => r.id === instance.basicPlanRoleId)) {
 		isSubscriptionMember = true;
 	}
