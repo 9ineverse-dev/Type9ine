@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { watch } from 'vue';
+import { onMounted } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
@@ -31,20 +31,9 @@ let subscriptionRole = $ref();
 let error = $ref();
 let roleColor = '';
 
-watch(() => props.role, () => {
-	os.api('roles/show', {
-		roleId: props.role,
-	}).then(res => {
-		subscriptionRole = res;
-		roleColor = res.color;
-	}).catch((err) => {
-		if (err.code === 'NO_SUCH_ROLE') {
-			error = i18n.ts.noRole;
-		} else {
-			error = i18n.ts.somethingHappened;
-		}
-	});
-}, { immediate: true });
+onMounted(() => {
+	os.api('roles/show', {	roleId: props.role, }).then(res => {	subscriptionRole = res; });
+});
 
 const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
 
@@ -73,7 +62,7 @@ async function portal() {
 }
 
 .container {
-	border: solid 2px var(roleColor);
+	border: solid 2px var(--accent);
 	margin-right: auto;
 	margin-left: auto;
 	max-width: 350px;
