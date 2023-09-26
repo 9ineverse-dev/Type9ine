@@ -6,8 +6,7 @@
 </div>
 <div :class="$style.container" :style="{ 'border-color': roleColor }">
 	<div class="_buttons">
-		<MkButton primary @click="checkout()"><i class="ti ti-device-floppy"></i> {{ subscriptionRole.name }}</MkButton>
-		<MkButton primary @click="portal()"><i class="ti ti-device-floppy"></i> 決済する</MkButton>
+		{{ subscriptionRole.name }}
 	</div>
 </div>
 
