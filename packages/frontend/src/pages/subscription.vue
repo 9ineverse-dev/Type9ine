@@ -5,7 +5,7 @@
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
 <div :class="$style.container">
-	<div :class="$style.aboutRole">
+	<div :class="$style.roleName">
 		{{ subscriptionRole.name }}
 	</div>
 </div>
@@ -67,7 +67,8 @@ async function portal() {
 	border-radius: 20px 20px 20px 20px / 20px 20px 20px 20px;
 }
 
-.aboutRole {
+.roleName {
 	padding: 32px;
+	font-size: 32px;
 }
 </style>
