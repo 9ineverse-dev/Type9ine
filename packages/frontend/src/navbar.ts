@@ -4,7 +4,7 @@
  */
 
 import { computed, reactive } from 'vue';
-import { instance } from './instance.js';
+import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { openInstanceMenu } from '@/ui/_common_/common.js';
