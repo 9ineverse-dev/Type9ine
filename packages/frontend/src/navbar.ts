@@ -19,7 +19,7 @@ export const navbarItemDef = reactive({
 		title: 'サブスクリプション',
 		icon: 'ti ti-coin-yen',
 		to: '/subscription',
-		indicated: computed(() => instance.sellSubscription),
+		show: computed(() => $i != null && instance.sellSubscription),
 	},
 	notifications: {
 		title: i18n.ts.notifications,
