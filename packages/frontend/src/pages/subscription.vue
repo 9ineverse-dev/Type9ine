@@ -405,6 +405,3 @@ async function portal() {
 	}
 }
 </style>
-
-
-</style>
