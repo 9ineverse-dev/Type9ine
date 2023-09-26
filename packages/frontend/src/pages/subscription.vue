@@ -21,7 +21,7 @@ import { i18n } from '@/i18n.js';
 let isSubscriptionMember = false;
 
 onMounted(() => {
-	if ($i.roles.includes(instance.basicPlanRoleId))
+	if ($i.roles.id.includes(instance.basicPlanRoleId))
 {
 		isSubscriptionMember = true;
 }
