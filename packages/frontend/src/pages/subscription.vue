@@ -4,8 +4,8 @@
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
-<div :class="$style.aboutRole">
-	<div class="_buttons">
+<div :class="$style.container">
+	<div :class="$style.aboutRole">
 		{{ subscriptionRole.name }}
 	</div>
 </div>
