@@ -80,8 +80,7 @@ async function portal() {
 .roleName {
 	padding: 32px;
 	font-size: 32px;
-	margin-right: auto;
-	margin-left: auto;
+	margin:0 auto;
 }
 
 .icon {
