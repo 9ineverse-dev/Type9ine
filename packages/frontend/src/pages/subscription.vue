@@ -41,12 +41,12 @@ async function portal() {
 <style lang="scss" module>
 .mainActions {
 	padding: 32px;
+	margin: auto;
 }
 
 .mainAction {
-	line-height: 28px;
+	//line-height: 28px;
 	max-width: 300px;
-	margin-left: auto;
-	margin-right: auto;
+	margin: auto;
 }
 </style>
