@@ -7,6 +7,9 @@
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
+<div :class="$style.container">
+
+</div>
 
 </template>
 
@@ -48,5 +51,9 @@ async function portal() {
 .mainAction {
 	line-height: 28px;
 	max-width: 300px;
+}
+
+.container {
+	border: solid 2px var(--accent);
 }
 </style>
