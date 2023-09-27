@@ -143,7 +143,8 @@ async function portal() {
 }
 
 .roleOptionNumber{
-	width: 20%;
+	width: 10%;
+	text-align: center;
 }
 
 .icon {
