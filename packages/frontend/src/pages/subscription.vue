@@ -4,7 +4,7 @@
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
 <div :class="$style.container">
-	<div :class="$style.roleName" style="display: flex;justify-content: center;>
+	<div :class="$style.roleName" style="display: flex;justify-content: center;">
 		<div>
 			<span :class="$style.icon">
 				<template v-if="subscriptionRole.iconUrl">
