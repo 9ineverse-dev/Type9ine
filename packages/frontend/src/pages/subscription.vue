@@ -1,4 +1,8 @@
 <template>
+<template>
+	<div :class="$style.title">{{ host }}のサブスク</div>
+	<div style="text-align: center;">ココにサブスクの説明をいれる。<br></div>
+</template>
 <div class="_gaps_s" :class="$style.mainActions">
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
@@ -60,6 +64,10 @@
 		</div>
 	</div>
 </div>
+<div class="_gaps_s" :class="$style.mainActions">
+	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
+	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
+</div>
 </template>
 
 <script lang="ts" setup>
@@ -69,7 +77,7 @@ import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
-import { ROLE_POLICIES } from '@/const.js';
+import { host } from '@/config.js';
 
 const props = withDefaults(defineProps<{
 	role: string;
@@ -98,6 +106,11 @@ async function portal() {
 </script>
 
 <style lang="scss" module>
+
+.title {
+	text-align: center;
+}
+
 .mainActions {
 	padding: 32px;
 	/* 子要素を水平方向の中央に配置する */
@@ -139,7 +152,7 @@ async function portal() {
 }
 
 .roleOptionAbout{
-	width: 50%;
+	width: 55%;
 }
 
 .roleOptionNumber{
