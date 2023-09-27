@@ -1,25 +1,27 @@
 <template>
-
 <div class="_gaps_s" :class="$style.mainActions">
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
 <div :class="$style.container">
 	<div :class="$style.roleName">
-		<span :class="$style.icon">
-			<template v-if="subscriptionRole.iconUrl">
-				<img :class="$style.badge" :src="subscriptionRole.iconUrl"/>
-			</template>
-			<template v-else>
-				<i v-if="subscriptionRole.isAdministrator" class="ti ti-crown" style="color: var(--accent);"></i>
-				<i v-else-if="subscriptionRole.isModerator" class="ti ti-shield" style="color: var(--accent);"></i>
-				<i v-else class="ti ti-user" style="opacity: 0.7;"></i>
-			</template>
-		</span>
-		{{ subscriptionRole.name }}の特典
+		<div>
+			<span :class="$style.icon">
+				<template v-if="subscriptionRole.iconUrl">
+					<img :class="$style.badge" :src="subscriptionRole.iconUrl"/>
+				</template>
+				<template v-else>
+					<i v-if="subscriptionRole.isAdministrator" class="ti ti-crown" style="color: var(--accent);"></i>
+					<i v-else-if="subscriptionRole.isModerator" class="ti ti-shield" style="color: var(--accent);"></i>
+					<i v-else class="ti ti-user" style="opacity: 0.7;"></i>
+				</template>
+			</span>
+		</div>
+		<div>
+			{{ subscriptionRole.name }}の特典
+		</div>
 	</div>
 </div>
-
 </template>
 
 <script lang="ts" setup>
