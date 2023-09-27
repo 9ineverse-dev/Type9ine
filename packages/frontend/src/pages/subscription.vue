@@ -108,6 +108,7 @@ async function portal() {
 .title {
 	text-align: center;
 	padding: 64px;
+	font-size: 64px;
 }
 
 .mainActions {
