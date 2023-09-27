@@ -88,7 +88,7 @@ let subscriptionRole = await os.api('roles/show', {	roleId: props.role, });
 const driveCapacityGb = subscriptionRole.policies.driveCapacityMb.value / 1024;
 const yourdriveCapacityGb = $i.policies.driveCapacityMb / 1024;
 if (!instance.sellSubscription) {
-	await window.location.href = "https://" + host + "/";
+	window.location.href = "https://" + host + "/";
 }
 
 onBeforeMount(() => {
