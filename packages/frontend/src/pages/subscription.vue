@@ -1,6 +1,6 @@
 <template>
-<div :class="$style.title">{{ host }}のサブスク</div>
-<div style="text-align: center;">ココにサブスクの説明をいれる。<br></div>
+<div :class="$style.title">{{ host }}のサブスク<br></div>
+<div style="text-align: center;">ユーザー体験を次のレベルへ。{{ subscriptionRole.name }}を今すぐ獲得しよう。<br></div>
 <div class="_gaps_s" :class="$style.mainActions">
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, reactive, } from 'vue';
+import { onBeforeMount } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
@@ -87,10 +87,13 @@ const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleI
 let subscriptionRole = await os.api('roles/show', {	roleId: props.role, });
 const driveCapacityGb = subscriptionRole.policies.driveCapacityMb.value / 1024;
 const yourdriveCapacityGb = $i.policies.driveCapacityMb / 1024;
+if (!instance.sellSubscription) {
+	window.location.href = "https://" + host + "/";
+}
 
 onBeforeMount(() => {
 	if (!instance.sellSubscription) {
-		window.location.href = "https://" + host + "/";
+//		window.location.href = "https://" + host + "/";
 	}
 });
 
@@ -109,8 +112,8 @@ async function portal() {
 
 .title {
 	text-align: center;
-	padding: 64px;
-	font-size: 64px;
+	padding: 48px;
+	font-size: 48px;
 }
 
 .mainActions {
