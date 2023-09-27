@@ -4,7 +4,7 @@
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
 <div :class="$style.container">
-	<div :class="$style.roleName" style="display: flex;justify-content: center;">
+	<div :class="$style.roleName">
 		<div>
 			<span :class="$style.icon">
 				<template v-if="subscriptionRole.iconUrl">
@@ -19,6 +19,17 @@
 		</div>
 		<div>
 			{{ subscriptionRole.name }}の特典
+		</div>
+	</div>
+	<div :class="$style.roleOptions">
+		<div :class="$style.roleOption">
+			<i class="ti ti-check"></i> {{ i18n.ts._role._options.driveCapacity }}
+		</div>
+		<div :class="$style.roleOption">
+			<i class="ti ti-check"></i> {{ i18n.ts._role._options.driveCapacity }}
+		</div>
+		<div :class="$style.roleOption">
+			<i class="ti ti-check"></i> {{ i18n.ts._role._options.driveCapacity }}
 		</div>
 	</div>
 </div>
@@ -82,6 +93,21 @@ async function portal() {
 .roleName {
 	padding: 32px;
 	font-size: 32px;
+	display: flex;
+	justify-content: center;
+}
+
+.roleOptions{
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.roleOption{
+	padding: 32px;
+	font-size: 16px;
+	display: flex;
+	justify-content: space-between;
 }
 
 .icon {
