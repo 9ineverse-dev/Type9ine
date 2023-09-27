@@ -89,7 +89,9 @@ const driveCapacityGb = subscriptionRole.policies.driveCapacityMb.value / 1024;
 const yourdriveCapacityGb = $i.policies.driveCapacityMb / 1024;
 
 onBeforeMount(() => {
-//	os.api('roles/show', {	roleId: props.role, }).then(res => {	subscriptionRole = res; });
+	if (!instance.sellSubscription) {
+		window.location.href = "https://" + host + "/";
+	}
 });
 
 async function checkout() {
