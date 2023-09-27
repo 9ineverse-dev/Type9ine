@@ -23,13 +23,16 @@
 	</div>
 	<div :class="$style.roleOptions">
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div>{{ driveCapacityGb }}GB</div>
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div></div><div>{{ driveCapacityGb }}GB</div>
 		</div>
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> {{ i18n.ts._role._options.driveCapacity }}
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.pinMax }}</div> <div></div><div>{{ subscriptionRole.policies.pinLimit.value }}</div>
 		</div>
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> {{ i18n.ts._role._options.driveCapacity }}
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.clipMax }}</div> <div></div><div>{{ subscriptionRole.policies.clipLimit.value }}</div>
+		</div>
+		<div :class="$style.roleOption">
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.webhookMax }}</div> <div></div><div>{{ subscriptionRole.policies.webhookLimit.value }}</div>
 		</div>
 	</div>
 </div>
@@ -106,8 +109,8 @@ async function portal() {
 }
 
 .roleOption{
-	padding: 32px;
-	font-size: 16px;
+	padding: 21px;
+	font-size: 21px;
 	display: flex;
 	justify-content: space-between;
 }
