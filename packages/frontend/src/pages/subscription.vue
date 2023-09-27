@@ -23,7 +23,7 @@
 	</div>
 	<div :class="$style.roleOptions">
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div>{{ driveCapacityGb }}GB</div>
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div>{{ subscriptionRole.policies.driveCapacityMb }}GB</div>
 		</div>
 		<div :class="$style.roleOption">
 			<i class="ti ti-check"></i> {{ i18n.ts._role._options.driveCapacity }}
