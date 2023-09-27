@@ -139,7 +139,6 @@ async function portal() {
 }
 
 .roleOptionAbout{
-	padding: 18px;
 	width: 40%;
 }
 
