@@ -23,7 +23,16 @@
 	</div>
 	<div :class="$style.roleOptions">
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div></div><div v-if="yourdriveCapacityGb > 1024">{{ $i.policies.driveCapacityMb }}MB</div><div v-else>{{ yourdriveCapacityGb }}GB</div><i class="ti ti-arrow-right"></i><div>{{ driveCapacityGb }}GB</div>
+			<i class="ti ti-plus"></i> <div>{{ i18n.ts._role._options.canHideAds }}</div> <div></div>
+		</div>
+		<div :class="$style.roleOption">
+			<i class="ti ti-plus"></i> <div>{{ i18n.ts._role._options.canSearchNotes }}</div> <div></div>
+		</div>
+		<div :class="$style.roleOption">
+			<i class="ti ti-plus"></i> <div>{{ i18n.ts._role._options.canCreatePrivateChannel }}</div> <div></div>
+		</div>
+		<div :class="$style.roleOption">
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div></div><div v-if="$i.policies.driveCapacityMb >= 1024">{{ $i.policies.driveCapacityMb }}MB</div><div v-else>{{ yourdriveCapacityGb }}GB</div><i class="ti ti-arrow-right"></i><div>{{ driveCapacityGb }}GB</div>
 		</div>
 		<div :class="$style.roleOption">
 			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.antennaMax }}</div><div></div><div>{{ $i.policies.antennaLimit }}</div><i class="ti ti-arrow-right"></i><div>{{ subscriptionRole.policies.antennaLimit.value }}</div>
@@ -32,14 +41,15 @@
 			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.pinMax }}</div><div></div><div>{{ $i.policies.pinLimit }}</div><i class="ti ti-arrow-right"></i><div>{{ subscriptionRole.policies.pinLimit.value }}</div>
 		</div>
 		<div :class="$style.roleOption">
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.webhookMax }}</div> <div></div><div>{{ $i.policies.webhookLimit }}</div><i class="ti ti-arrow-right"></i><div>{{ subscriptionRole.policies.webhookLimit.value }}</div>
+		</div>
+		<div :class="$style.roleOption">
 			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.clipMax }}</div> <div></div><div>{{ $i.policies.clipLimit }}</div><i class="ti ti-arrow-right"></i><div>{{ subscriptionRole.policies.clipLimit.value }}</div>
 		</div>
 		<div :class="$style.roleOption">
 			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.noteEachClipsMax }}</div> <div></div><div>{{ $i.policies.noteEachClipsLimit }}</div><i class="ti ti-arrow-right"></i><div>{{ subscriptionRole.policies.noteEachClipsLimit.value }}</div>
 		</div>
-		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.webhookMax }}</div> <div></div><div>{{ $i.policies.webhookLimit }}</div><i class="ti ti-arrow-right"></i><div>{{ subscriptionRole.policies.webhookLimit.value }}</div>
-		</div>
+
 		<div :class="$style.roleOption">
 			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.userListMax }}</div> <div></div><div>{{ $i.policies.userListLimit }}</div><i class="ti ti-arrow-right"></i><div>{{ subscriptionRole.policies.userListLimit.value }}</div>
 		</div>
