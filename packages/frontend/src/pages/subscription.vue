@@ -1,8 +1,6 @@
 <template>
-<template>
-	<div :class="$style.title">{{ host }}のサブスク</div>
-	<div style="text-align: center;">ココにサブスクの説明をいれる。<br></div>
-</template>
+<div :class="$style.title">{{ host }}のサブスク</div>
+<div style="text-align: center;">ココにサブスクの説明をいれる。<br></div>
 <div class="_gaps_s" :class="$style.mainActions">
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
