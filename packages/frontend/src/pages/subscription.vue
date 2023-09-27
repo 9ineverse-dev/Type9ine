@@ -140,7 +140,7 @@ async function portal() {
 
 .roleOptionAbout{
 	padding: 18px;
-	width: 150px;
+	width: 40%;
 }
 
 .icon {
