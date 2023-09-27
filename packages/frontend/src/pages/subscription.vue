@@ -4,8 +4,7 @@
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
 </div>
 <div :class="$style.container">
-	<div :class="$style.roleName">
-		<div>
+	<div>
 			<span :class="$style.icon">
 				<template v-if="subscriptionRole.iconUrl">
 					<img :class="$style.badge" :src="subscriptionRole.iconUrl"/>
@@ -17,6 +16,7 @@
 				</template>
 			</span>
 		</div>
+	<div :class="$style.roleName">
 		<div>
 			{{ subscriptionRole.name }}の特典
 		</div>
