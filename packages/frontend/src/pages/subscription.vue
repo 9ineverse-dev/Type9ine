@@ -1,6 +1,6 @@
 <template>
-<div :class="$style.title">{{ host }}のサブスク<br></div>
-<div style="text-align: center;">ユーザー体験を次のレベルへ。{{ subscriptionRole.name }}を今すぐ獲得しよう。<br></div>
+<div :class="$style.title">{{ i18n.ts._subscription.title }}<br></div>
+<div style="text-align: center;">{{ i18n.ts._subscription.catchcopy }}<br></div>
 <div class="_gaps_s" :class="$style.mainActions">
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
@@ -20,7 +20,7 @@
 			</span>
 		</div>
 		<div>
-			{{ subscriptionRole.name }}の特典
+			{{ i18n.ts._subscription.benefits }}
 		</div>
 	</div>
 	<div :class="$style.roleOptions">
@@ -88,7 +88,7 @@ let subscriptionRole = await os.api('roles/show', {	roleId: props.role, });
 const driveCapacityGb = subscriptionRole.policies.driveCapacityMb.value / 1024;
 const yourdriveCapacityGb = $i.policies.driveCapacityMb / 1024;
 if (!instance.sellSubscription) {
-	window.location.href = "https://" + host + "/";
+	await window.location.href = "https://" + host + "/";
 }
 
 onBeforeMount(() => {
