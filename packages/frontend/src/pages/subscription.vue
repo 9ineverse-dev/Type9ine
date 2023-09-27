@@ -23,7 +23,7 @@
 	</div>
 	<div :class="$style.roleOptions">
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div>{{ subscriptionRole.policies.driveCapacityMb }}GB</div>
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div>{{ driveCapacityGb }}GB</div>
 		</div>
 		<div :class="$style.roleOption">
 			<i class="ti ti-check"></i> {{ i18n.ts._role._options.driveCapacity }}
@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<{
 
 const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
 let subscriptionRole = await os.api('roles/show', {	roleId: props.role, });
-const driveCapacityGb = subscriptionRole.policies.driveCapacityMb / 1024;
+const driveCapacityGb = subscriptionRole.policies.driveCapacityMb.value / 1024;
 
 onBeforeMount(() => {
 //	os.api('roles/show', {	roleId: props.role, }).then(res => {	subscriptionRole = res; });
