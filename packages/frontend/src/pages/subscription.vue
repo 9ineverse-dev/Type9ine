@@ -23,7 +23,7 @@
 	</div>
 	<div :class="$style.roleOptions">
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> {{ i18n.ts._role._options.driveCapacity }}
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div>{{ driveCapacityGb }}GB</div>
 		</div>
 		<div :class="$style.roleOption">
 			<i class="ti ti-check"></i> {{ i18n.ts._role._options.driveCapacity }}
@@ -36,12 +36,13 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, reactive, } from 'vue';
 import MkButton from '@/components/MkButton.vue';
 import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
+import { ROLE_POLICIES } from '@/const.js';
 
 const props = withDefaults(defineProps<{
 	role: string;
@@ -49,14 +50,15 @@ const props = withDefaults(defineProps<{
 	role: instance.basicPlanRoleId,
 });
 
-let subscriptionRole = $ref();
-let error = $ref();
+const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
+let subscriptionRole = await os.api('roles/show', {	roleId: props.role, });
+const driveCapacityGb = subscriptionRole.policies.driveCapacityMb / 1024;
 
 onBeforeMount(() => {
-	os.api('roles/show', {	roleId: props.role, }).then(res => {	subscriptionRole = res; });
+//	os.api('roles/show', {	roleId: props.role, }).then(res => {	subscriptionRole = res; });
 });
 
-const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
+
 
 async function checkout() {
 	const redirect = await os.api('subscription/checkout');
