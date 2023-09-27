@@ -23,16 +23,19 @@
 	</div>
 	<div :class="$style.roleOptions">
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div></div><div>{{ driveCapacityGb }}GB</div>
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.driveCapacity }}</div> <div>:</div><div>{{ yourdriveCapacityGb }}GB</div><i class="ti-arrow-right"></i><div>{{ driveCapacityGb }}GB</div>
 		</div>
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.pinMax }}</div> <div></div><div>{{ subscriptionRole.policies.pinLimit.value }}</div>
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.pinMax }}</div><div>:</div><div>{{ $i.policies.pinLimit }}</div><i class="ti-arrow-right"></i><div>{{ subscriptionRole.policies.pinLimit.value }}</div>
 		</div>
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.clipMax }}</div> <div></div><div>{{ subscriptionRole.policies.clipLimit.value }}</div>
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.clipMax }}</div> <div>:</div><div>{{ $i.policies.clipLimit }}</div><i class="ti-arrow-right"></i><div>{{ subscriptionRole.policies.clipLimit.value }}</div>
 		</div>
 		<div :class="$style.roleOption">
-			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.webhookMax }}</div> <div></div><div>{{ subscriptionRole.policies.webhookLimit.value }}</div>
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.noteEachClipsMax }}</div> <div>:</div><div>{{ $i.policies.noteEachClipsLimit }}</div><i class="ti-arrow-right"></i><div>{{ subscriptionRole.policies.noteEachClipsLimit.value }}</div>
+		</div>
+		<div :class="$style.roleOption">
+			<i class="ti ti-check"></i> <div>{{ i18n.ts._role._options.webhookMax }}</div> <div>:</div><div>{{ $i.policies.webhookLimit }}</div><i class="ti-arrow-right"></i><div>{{ subscriptionRole.policies.webhookLimit.value }}</div>
 		</div>
 	</div>
 </div>
@@ -56,12 +59,11 @@ const props = withDefaults(defineProps<{
 const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
 let subscriptionRole = await os.api('roles/show', {	roleId: props.role, });
 const driveCapacityGb = subscriptionRole.policies.driveCapacityMb.value / 1024;
+const yourdriveCapacityGb = $i.policies.driveCapacityMb / 1024;
 
 onBeforeMount(() => {
 //	os.api('roles/show', {	roleId: props.role, }).then(res => {	subscriptionRole = res; });
 });
-
-
 
 async function checkout() {
 	const redirect = await os.api('subscription/checkout');
@@ -109,8 +111,8 @@ async function portal() {
 }
 
 .roleOption{
-	padding: 21px;
-	font-size: 21px;
+	padding: 18px;
+	font-size: 18px;
 	display: flex;
 	justify-content: space-between;
 }
