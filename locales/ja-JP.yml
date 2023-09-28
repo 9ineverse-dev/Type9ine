@@ -2198,12 +2198,3 @@ _moderationLogTypes:
   markSensitiveDriveFile: "ファイルをセンシティブ付与"
   unmarkSensitiveDriveFile: "ファイルをセンシティブ解除"
   resolveAbuseReport: "通報を解決"
-
-_subscription:
-  subscription: "サブスク"
-  title: "のサブスク"
-  catchcopy: "ユーザー体験を次のレベルへ。"
-  catchcopy2: "を今すぐ獲得しよう。"
-  benefits: "の特典"
-  create: "サブスクに登録する"
-  manage: "サブスクを管理する"
