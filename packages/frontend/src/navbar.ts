@@ -16,7 +16,7 @@ import { unisonReload } from '@/scripts/unison-reload.js';
 
 export const navbarItemDef = reactive({
 	subscription: {
-		title: i18n.ts._subscription.subscription,
+		title: i18n.ts._subsc.subscription,
 		icon: 'ti ti-coin-yen',
 		to: '/subscription',
 		show: computed(() => $i != null && instance.sellSubscription),
