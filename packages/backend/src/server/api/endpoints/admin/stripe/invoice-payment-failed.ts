@@ -8,9 +8,8 @@ import { ApiError } from '@/server/api/error.js';
 
 export const meta = {
 	tags: ['admin', 'subscription'],
-
 	requireCredential: true,
-	requireAdmin: true,
+	requireModerator: true,
 
 } as const;
 
