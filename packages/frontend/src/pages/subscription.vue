@@ -1,9 +1,9 @@
 <template>
-<div :class="$style.title">{{ host }}{{ i18n.ts._subscription.title }}<br></div>
-<div style="text-align: center;">{{ i18n.ts._subscription.catchcopy }}{{ subscriptionRole.name }}{{ i18n.ts._subscription.catchcopy2 }}<br></div>
+<div :class="$style.title">{{ host }}{{ i18n.ts._subsc.title }}<br></div>
+<div style="text-align: center;">{{ i18n.ts._subsc.catchcopy }}{{ subscriptionRole.name }}{{ i18n.ts._subsc.catchcopy2 }}<br></div>
 <div class="_gaps_s" :class="$style.mainActions">
-	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">{{ i18n.ts._subscription.create }}</MkButton>
-	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">{{ i18n.ts._subscription.manage }}</MkButton>
+	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">{{ i18n.ts._subsc.create }}</MkButton>
+	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">{{ i18n.ts._subsc.manage }}</MkButton>
 </div>
 <div :class="$style.container">
 	<div :class="$style.roleName">
@@ -20,7 +20,7 @@
 			</span>
 		</div>
 		<div>
-			{{ subscriptionRole.name }}{{ i18n.ts._subscription.benefits }}
+			{{ subscriptionRole.name }}{{ i18n.ts._subsc.benefits }}
 		</div>
 	</div>
 	<div :class="$style.roleOptions">
@@ -63,8 +63,8 @@
 	</div>
 </div>
 <div class="_gaps_s" :class="$style.mainActions">
-	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">{{ i18n.ts._subscription.create }}</MkButton>
-	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">{{ i18n.ts._subscription.manage }}</MkButton>
+	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">{{ i18n.ts._subsc.create }}</MkButton>
+	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">{{ i18n.ts._subsc.manage }}</MkButton>
 </div>
 </template>
 
