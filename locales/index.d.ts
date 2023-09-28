@@ -2286,15 +2286,6 @@ export interface Locale {
         "unmarkSensitiveDriveFile": string;
         "resolveAbuseReport": string;
     };
-    "_subscription": {
-        "subscription": string;
-        "title": string;
-        "catchcopy": string;
-        "catchcopy2": string;
-        "benefits": string;
-        "create": string;
-        "manage": string;
-    };
 }
 declare const locales: {
     [lang: string]: Locale;
