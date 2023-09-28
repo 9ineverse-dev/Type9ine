@@ -1,9 +1,9 @@
 <template>
 <div :class="$style.title">{{ i18n.ts._subscription.title }}<br></div>
-<div style="text-align: center;">{{ i18n.ts._subscription.catchcopy }}<br></div>
+<div style="text-align: center;">{{ i18n.ts._subscription.catchcopy }}{{ subscriptionRole.name }}{{ i18n.ts._subscription.catchcopy2 }}<br></div>
 <div class="_gaps_s" :class="$style.mainActions">
-	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">サブスクに登録する</MkButton>
-	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">サブスクを管理する</MkButton>
+	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">{{ i18n.ts._subscription.create }}</MkButton>
+	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">{{ i18n.ts._subscription.manage }}</MkButton>
 </div>
 <div :class="$style.container">
 	<div :class="$style.roleName">
@@ -20,7 +20,7 @@
 			</span>
 		</div>
 		<div>
-			{{ i18n.ts._subscription.benefits }}
+			{{ subscriptionRole.name }}{{ i18n.ts._subscription.benefits }}
 		</div>
 	</div>
 	<div :class="$style.roleOptions">
