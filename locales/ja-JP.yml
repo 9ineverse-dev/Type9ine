@@ -2201,6 +2201,6 @@ _moderationLogTypes:
 
 _subscription:
  subscription: "サブスク"
- title: "{ host }のサブスク"
- catchcopy: "ユーザー体験を次のレベルへ。{ subscriptionRole.name }を今すぐ獲得しよう。"
- benefits: "{ subscriptionRole.name }の特典"
+ title: "{host}のサブスク"
+ catchcopy: "ユーザー体験を次のレベルへ。{subscriptionRole.name}を今すぐ獲得しよう。"
+ benefits: "{subscriptionRole.name}の特典"
