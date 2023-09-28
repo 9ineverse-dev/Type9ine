@@ -2290,7 +2290,10 @@ export interface Locale {
         "subscription": string;
         "title": string;
         "catchcopy": string;
+        "catchcopy2": string;
         "benefits": string;
+        "create": string;
+        "manage": string;
     };
 }
 declare const locales: {
