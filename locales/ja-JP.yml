@@ -2202,7 +2202,7 @@ _moderationLogTypes:
 _subscription:
  subscription: "サブスク"
  title: "のサブスク"
- catchcopy: "ユーザー体験を次のレベルへ。。"
+ catchcopy: "ユーザー体験を次のレベルへ。"
  catchcopy2: "を今すぐ獲得しよう。"
  benefits: "の特典"
  create: "サブスクに登録する"
