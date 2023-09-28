@@ -121,6 +121,7 @@ export interface Locale {
     "you": string;
     "clickToShow": string;
     "sensitive": string;
+    "compartmentalization": string;
     "add": string;
     "reaction": string;
     "reactions": string;
@@ -188,8 +189,8 @@ export interface Locale {
     "recipient": string;
     "annotation": string;
     "federation": string;
-		"channelSearchable": string;
-		"noteNotSearchable": string;
+    "channelSearchable": string;
+    "noteNotSearchable": string;
     "instances": string;
     "registeredAt": string;
     "latestRequestReceivedAt": string;
@@ -1554,12 +1555,12 @@ export interface Locale {
             "noteEachClipsMax": string;
             "userListMax": string;
             "userEachUserListsMax": string;
-						"canCreatePrivateChannel": string;
+            "canCreatePrivateChannel": string;
             "rateLimitFactor": string;
             "descriptionOfRateLimitFactor": string;
             "canHideAds": string;
             "canSearchNotes": string;
-						"canAccountDelete": string;
+            "canAccountDelete": string;
         };
         "_condition": {
             "isLocal": string;
@@ -1610,7 +1611,7 @@ export interface Locale {
         "requestAccountDelete": string;
         "started": string;
         "inProgress": string;
-				"canAccountDelete": string;
+        "cannotDelete": string;
     };
     "_ad": {
         "back": string;
@@ -1706,8 +1707,8 @@ export interface Locale {
         "notesCount": string;
         "nameAndDescription": string;
         "nameOnly": string;
-				"isPrivate": string;
-				"privateUserIds": string;
+        "isPrivate": string;
+        "privateUserIds": string;
     };
     "_menuDisplay": {
         "sideFull": string;
@@ -2284,6 +2285,12 @@ export interface Locale {
         "markSensitiveDriveFile": string;
         "unmarkSensitiveDriveFile": string;
         "resolveAbuseReport": string;
+    };
+    "_subscription": {
+        "subscription": string;
+        "title": string;
+        "catchcopy": string;
+        "benefits": string;
     };
 }
 declare const locales: {
