@@ -1106,13 +1106,10 @@ youHaveUnreadAnnouncements: "あんたまだこのお知らせ読んどらんや
 useSecurityKey: "ブラウザまたはデバイスの言う通りに、セキュリティキーまたはパスキーを使ってや。"
 replies: "返事"
 renotes: "Renote"
-<<<<<<< HEAD
-=======
 loadReplies: "返信を見るで"
 loadConversation: "会話を見るで"
 verifiedLink: "このリンク先の所有者であることが確認されたで。"
 authenticationRequiredToContinue: "続けるには認証をやってや。"
->>>>>>> upstream/master
 _announcement:
   forExistingUsers: "もうおるユーザーのみ"
   forExistingUsersDescription: "有効にすると、このお知らせ作成時点でおるユーザーにのみお知らせが表示されます。無効にすると、このお知らせ作成後にアカウントを作成したユーザーにもお知らせが表示されます。"
@@ -1141,14 +1138,11 @@ _serverRules:
   description: "新規登録前に見せる、サーバーの簡潔なルールを設定すんで。内容は使うための決め事の要約とすることを推奨するわ。"
 _serverSettings:
   iconUrl: "アイコン画像のURL"
-<<<<<<< HEAD
-=======
   appIconDescription: "{host}がアプリとして表示してるんやつをアイコンを指定すんで。"
   appIconUsageExample: "PWAや、スマートフォンのホーム画面にブックマークとして追加された時など"
   appIconStyleRecommendation: "円形もしくは角丸にクロップされる場合があるさかいに、塗り潰された余白のある背景があるものが推奨されるで。"
   appIconResolutionMustBe: "解像度は必ず{resolution}である必要があるで。"
   shortNameDescription: "サーバーの名前が長い時に、代わりに表示することのできるあだ名。"
->>>>>>> upstream/master
 _accountMigration:
   moveFrom: "別のアカウントからこのアカウントに引っ越す"
   moveFromSub: "別のアカウントへエイリアスを作る"
