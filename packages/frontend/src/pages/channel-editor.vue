@@ -117,10 +117,10 @@ import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { i18n } from '@/i18n.js';
 import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from "@/components/MkSwitch.vue";
+<<<<<<< HEAD
 import { $i } from '@/account.js';
 
-
-const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
+>>>>>>> upstream/master
 
 const router = useRouter();
 

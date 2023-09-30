@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { Role } from './Role.js';
+import { MiRole } from './Role.js';
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { id } from './util/id.js';
 import { MiUser } from './User.js';
@@ -316,7 +316,7 @@ export class MiMeta {
 		nullable: true,
 		comment: 'The ID of source Role.',
 	})
-	public basicPlanRoleId: Role['id'] | null;
+	public basicPlanRoleId: MiRole['id'] | null;
 
 	@Column('varchar', {
 		length: 1024,

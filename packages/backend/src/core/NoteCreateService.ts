@@ -114,9 +114,8 @@ class NotificationManager {
 			// 通知される側のユーザーが通知する側のユーザーをミュートしていない限りは通知する
 			if (!mentioneesMutedUserIds.includes(this.notifier.id)) {
 				this.notificationService.createNotification(x.target, x.reason, {
-					notifierId: this.notifier.id,
 					noteId: this.note.id,
-				});
+				}, this.notifier.id);
 			}
 		}
 	}
@@ -531,6 +530,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 						notifierId: user.id,
 						noteId: note.id,
 					});
+						
 				}
 			});
 		}

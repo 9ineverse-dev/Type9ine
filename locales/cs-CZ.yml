@@ -2040,3 +2040,4 @@ _webhookSettings:
 _moderationLogTypes:
   suspend: "Zmrazit"
   resetPassword: "Resetovat heslo"
+  createInvitation: "Vygenerovat pozvánku"

@@ -1,4 +1,3 @@
-
 /*
  * SPDX-FileCopyrightText: syuilo and other misskey contributors
  * SPDX-License-Identifier: AGPL-3.0-only
@@ -42,6 +41,7 @@ export const meta = {
 export const paramDef = {
 	type: 'object',
 	properties: {
+		withRenotes: { type: 'boolean', default: true },
 		limit: { type: 'integer', minimum: 1, maximum: 100, default: 10 },
 		sinceId: { type: 'string', format: 'misskey:id' },
 		untilId: { type: 'string', format: 'misskey:id' },
@@ -157,6 +157,16 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (ps.withFiles) {
 				query.andWhere('note.fileIds != \'{}\'');
+			}
+
+			if (ps.withRenotes === false) {
+				query.andWhere(new Brackets(qb => {
+					qb.orWhere('note.renoteId IS NULL');
+					qb.orWhere(new Brackets(qb => {
+						qb.orWhere('note.text IS NOT NULL');
+						qb.orWhere('note.fileIds != \'{}\'');
+					}));
+				}));
 			}
 			//#endregion
 
