@@ -35,11 +35,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-<<<<<<< HEAD
-import { useWidgetPropsManager, Widget, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget';
-=======
 import { useWidgetPropsManager, Widget, WidgetComponentEmits, WidgetComponentExpose, WidgetComponentProps } from './widget.js';
->>>>>>> upstream/master
 import { GetFormResultType } from '@/scripts/form.js';
 import * as os from '@/os.js';
 import MkContainer from '@/components/MkContainer.vue';
@@ -128,11 +124,7 @@ const choose = async (ev) => {
 		action: () => { setSrc('local'); },
 	}, {
 		text: i18n.ts._timelines.social,
-<<<<<<< HEAD
 		icon: 'ti ti-users',
-=======
-		icon: 'ti ti-universe',
->>>>>>> upstream/master
 		action: () => { setSrc('social'); },
 	}, {
 		text: i18n.ts._timelines.global,
