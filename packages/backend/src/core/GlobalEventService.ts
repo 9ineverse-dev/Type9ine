@@ -317,6 +317,10 @@ export class GlobalEventService {
 
 	@bindThis
 	public publishRoleTimelineStream<K extends keyof RoleTimelineEventTypes>(roleId: MiRole['id'], type: K, value?: RoleTimelineEventTypes[K]): void {
+		this.publish(`roleTimelineStream:${roleId}`, type, typeof value === 'undefined' ? null : value);
+	}
+
+	@bindThis
 	public publishNotesStream(note: Packed<'Note'>): void {
 		this.publish('notesStream', null, note);
 	}
