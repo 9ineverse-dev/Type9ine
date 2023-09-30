@@ -94,12 +94,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				name: ps.name,
 				description: ps.description ?? null,
 				bannerId: banner ? banner.id : null,
-<<<<<<< HEAD
 				searchable: true,
 				isPrivate: ps.isPrivate ?? false,
 				privateUserIds: ps.privateUserIds ?? [],
-=======
->>>>>>> upstream/master
 				isSensitive: ps.isSensitive ?? false,
 				...(ps.color !== undefined ? { color: ps.color } : {}),
 			} as MiChannel).then(x => this.channelsRepository.findOneByOrFail(x.identifiers[0]));

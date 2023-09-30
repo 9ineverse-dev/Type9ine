@@ -2108,11 +2108,8 @@ _webhookSettings:
     reaction: "被回应时"
     mention: "被提及时"
 _moderationLogTypes:
-<<<<<<< HEAD
-=======
   createRole: "创建角色"
   deleteRole: "删除角色"
->>>>>>> upstream/master
   updateRole: "更新角色"
   assignRole: "分配角色"
   unassignRole: "取消分配角色"
