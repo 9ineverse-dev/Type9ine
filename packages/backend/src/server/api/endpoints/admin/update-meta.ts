@@ -71,6 +71,7 @@ export const paramDef = {
 			type: 'string',
 		} },
 		summalyProxy: { type: 'string', nullable: true },
+		planAssignControlKey: { type: 'string', nullable: true },
 		basicPlanRoleId: { type: 'string', format: 'misskey:id', nullable: true },
 		basicPlanPriceId: { type: 'string', nullable: true },
 		basicPlanPrice: { type: 'integer', nullable: true },
@@ -398,6 +399,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (ps.objectStorageS3ForcePathStyle !== undefined) {
 				set.objectStorageS3ForcePathStyle = ps.objectStorageS3ForcePathStyle;
+			}
+
+			if (ps.planAssignControlKey !== undefined) {
+				if (ps.planAssignControlKey === '') {
+					set.planAssignControlKey = null;
+				} else {
+					set.planAssignControlKey = ps.planAssignControlKey;
+				}
 			}
 
 			if (ps.basicPlanRoleId !== undefined) {

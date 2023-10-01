@@ -311,6 +311,12 @@ export class MiMeta {
 	})
 	public sellSubscription: boolean;
 
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public planAssignControlKey: string | null;
+
 	@Column({
 		...id(),
 		nullable: true,

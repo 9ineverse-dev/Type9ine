@@ -107,6 +107,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<MkInput v-model="transactionsActNotationUrl">
 								<template #label>特商法に戻づく表記URL</template>
 							</MkInput>
+							<MkInput v-model="planAssignControlKey">
+								<template #label>有料ロール付与APIキー</template>
+							</MkInput>
+							<template #label>注意：セキュリティのため、一度登録すると二度と表示されません。</template>
 							<MkInput v-model="basicPlanRoleId">
 								<template #label>Basic Plan RoleId</template>
 							</MkInput>
@@ -174,6 +178,7 @@ let stripeAPIKey: string | null = $ref('');
 let stripeWebhookKey: string | null = $ref('');
 let basicPlanPriceId: string | null = $ref('');
 let transactionsActNotationUrl: string | null = $ref('');
+let planAssignControlKey: string | null = $ref('');
 let basicPlanRoleId: any | null = $ref('');
 let basicPlanPrice: number = $ref(0);
 let deeplAuthKey: string = $ref('');
@@ -196,6 +201,7 @@ async function init(): Promise<void> {
 	stripeAPIKey = meta.stripeAPIKey,
 	stripeWebhookKey = meta.stripeWebhookKey,
 	transactionsActNotationUrl = meta.transactionsActNotationUrl,
+	planAssignControlKey = meta.planAssignControlKey,
 	basicPlanPriceId = meta.basicPlanPriceId,
 	basicPlanRoleId = meta.basicPlanRoleId,
 	basicPlanPrice = meta.basicPlanPrice,
@@ -221,6 +227,7 @@ function save(): void {
 		stripeWebhookKey,
 		basicPlanPriceId,
 		transactionsActNotationUrl,
+		planAssignControlKey,
 		basicPlanRoleId,
 		basicPlanPrice,
 		deeplAuthKey,
