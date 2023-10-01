@@ -8,8 +8,7 @@ import { ApiError } from '@/server/api/error.js';
 
 export const meta = {
 	tags: ['admin', 'subscription'],
-	requireCredential: true,
-	requireModerator: true,
+
 
 } as const;
 
@@ -18,8 +17,9 @@ export const paramDef = {
 	properties: {
 		customer: { type: 'string' },
 		planPriceId: { type: 'string' },
+		pass: { type: 'string' },
 	},
-	required: ['customer'],
+	required: ['customer','pass'],
 } as const;
 
 // eslint-disable-next-line import/no-default-export
@@ -36,6 +36,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 	) {
 		super(meta, paramDef, async (ps) => {
 			const instance = await this.metaService.fetch(true);
+			if (ps.pass !== instance.planAssignControlKey) {
+				throw new Error('Pass is not correct.');
+			}
 			if ( !instance.basicPlanRoleId ) { return; }
 			const role = await this.rolesRepository.findOneBy({ id: instance.basicPlanRoleId });
 			if (role == null) { return; }
