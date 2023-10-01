@@ -26,7 +26,7 @@
 		<br>
 	</div>
 	<div :class="$style.roleName">
-			￥{{ instance.basicPlanPlice }}
+			￥{{ price }}/month
 	</div>
 	<div :class="$style.roleOptions">
 		<div :class="$style.roleOption">
@@ -93,6 +93,7 @@ const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleI
 let subscriptionRole = await os.api('roles/show', {	roleId: props.role, });
 const driveCapacityGb = subscriptionRole.policies.driveCapacityMb.value / 1024;
 const yourdriveCapacityGb = $i.policies.driveCapacityMb / 1024;
+const price = instance.basicPlanPrice;
 if (!instance.sellSubscription) {
 	window.location.href = "https://" + host + "/";
 }
