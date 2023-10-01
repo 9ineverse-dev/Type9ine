@@ -117,7 +117,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (followees.length > 0) {
 				const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
-				query.orWhere(`(note.renoteCount > :FolloweeRenoteCount) AND (note.userId IN (:...meOrFolloweeIds))`, { meOrFolloweeIds: meOrFolloweeIds, FolloweeRenoteCount: FolloweeRenoteCount });
+				query.andWhere(`(note.renoteCount > :FolloweeRenoteCount) AND (note.userId IN (:...meOrFolloweeIds))`, { meOrFolloweeIds: meOrFolloweeIds, FolloweeRenoteCount: FolloweeRenoteCount });
 /*				const followingNetworksQuery = this.notesRepository.createQueryBuilder('note')
 					.select('note.renoteUserId')
 					.distinct(true)
