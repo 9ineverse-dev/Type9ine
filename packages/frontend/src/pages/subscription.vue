@@ -26,7 +26,7 @@
 		<br>
 	</div>
 	<div :class="$style.roleName">
-			￥{{ price }}/month
+			￥ {{ price }} / month
 	</div>
 	<div :class="$style.roleOptions">
 		<div :class="$style.roleOption">
