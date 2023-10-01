@@ -1565,8 +1565,8 @@ export interface Locale {
             "rateLimitFactor": string;
             "descriptionOfRateLimitFactor": string;
             "canHideAds": string;
-            "canSearchNotes": string;
             "canAccountDelete": string;
+            "canSearchNotes": string;
             "canUseTranslator": string;
         };
         "_condition": {
@@ -2292,7 +2292,7 @@ export interface Locale {
         "markSensitiveDriveFile": string;
         "unmarkSensitiveDriveFile": string;
         "resolveAbuseReport": string;
-				"createInvitation": string;
+        "createInvitation": string;
         "createAd": string;
         "deleteAd": string;
         "updateAd": string;
@@ -2305,7 +2305,6 @@ export interface Locale {
         "benefits": string;
         "create": string;
         "manage": string;
-
     };
 }
 declare const locales: {
