@@ -1,6 +1,6 @@
 {
 	"name": "misskey",
-	"version": "2023.9.1-9ine-4.0.0",
+	"version": "2023.9.3-9ine-4.1.0",
 	"codename": "KAGUYA",
 	"repository": {
 		"type": "git",
