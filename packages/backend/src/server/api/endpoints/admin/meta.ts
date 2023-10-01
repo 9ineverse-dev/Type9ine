@@ -398,7 +398,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				basicPlanPriceId: instance.basicPlanPriceId,
 				basicPlanPrice: instance.basicPlanPrice,
 				transactionsActNotationUrl: instance.transactionsActNotationUrl,
-				planAssignControlKey: null,
+				planAssignControlKey: instance.planAssignControlKey,
 				sellSubscription: SubscriptionSelleble,
 				stripeAPIKey: instance.stripeAPIKey,
 				stripeWebhookKey: instance.stripeWebhookKey,

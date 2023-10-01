@@ -110,7 +110,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<MkInput v-model="planAssignControlKey">
 								<template #label>有料ロール付与APIキー</template>
 							</MkInput>
-							<template #label>注意：セキュリティのため、一度登録すると二度と表示されません。</template>
 							<MkInput v-model="basicPlanRoleId">
 								<template #label>Basic Plan RoleId</template>
 							</MkInput>
