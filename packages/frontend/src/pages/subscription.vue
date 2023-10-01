@@ -4,8 +4,8 @@
 <div class="_gaps_s" :class="$style.mainActions">
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">{{ i18n.ts._subsc.create }}</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">{{ i18n.ts._subsc.manage }}</MkButton>
+	<a :href="instance.transactionsActNotationUrl" class="_link" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a>
 </div>
-<a :href="instance.transactionsActNotationUrl" class="_link" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a>
 <div :class="$style.container">
 	<div :class="$style.roleName">
 		<div>
@@ -66,8 +66,8 @@
 <div class="_gaps_s" :class="$style.mainActions">
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">{{ i18n.ts._subsc.create }}</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">{{ i18n.ts._subsc.manage }}</MkButton>
+	<a :href="instance.transactionsActNotationUrl" class="_link" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a>
 </div>
-<a :href="instance.transactionsActNotationUrl" class="_link" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a>
 </template>
 
 <script lang="ts" setup>
