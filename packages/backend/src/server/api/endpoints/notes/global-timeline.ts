@@ -117,8 +117,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (followees.length > 0) {
 				const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
-
-				const followingNetworksQuery = this.notesRepository.createQueryBuilder('note')
+				query.orWhere(`(note.renoteCount > :FolloweeRenoteCount) AND (note.userId IN (:...meOrFolloweeIds))`, { meOrFolloweeIds: meOrFolloweeIds, FolloweeRenoteCount: FolloweeRenoteCount });
+/*				const followingNetworksQuery = this.notesRepository.createQueryBuilder('note')
 					.select('note.renoteUserId')
 					.distinct(true)
 					.andWhere('note.id > :minId', { minId: this.idService.genId(new Date(Date.now() - (1000 * 60 * 60 * 24 * 3))) })
@@ -142,7 +142,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 						qb.where(`(note.renoteCount > :GlobalRenoteCount) `, { GlobalRenoteCount: GlobalRenoteCount })
 							.orWhere(`(note.userHost IS NULL) AND (note.renoteCount > :LocalRenoteCount)`, { LocalRenoteCount: LocalRenoteCount })
 							.orWhere(`(note.renoteCount > :FolloweeRenoteCount) AND (note.userId IN (:...meOrFolloweeIds))`, { meOrFolloweeIds: meOrFolloweeIds, FolloweeRenoteCount: FolloweeRenoteCount });
-					}));
+					}));*/
 			} else {
 				query.andWhere(`(note.userHost IS NULL) AND (note.score > 30)`);
 			}
