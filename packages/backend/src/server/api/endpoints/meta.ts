@@ -350,6 +350,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				translatorAvailable: instance.deeplAuthKey != null,
 				sellSubscription: SubscriptionSelleble,
 				basicPlanRoleId: instance.basicPlanRoleId,
+				basicPlanPrice: instance.basicPlanPrice,
 				serverRules: instance.serverRules,
 
 				policies: { ...DEFAULT_POLICIES, ...instance.policies },

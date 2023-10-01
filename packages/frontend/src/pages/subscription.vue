@@ -23,6 +23,10 @@
 		<div>
 			{{ subscriptionRole.name }}{{ i18n.ts._subsc.benefits }}
 		</div>
+		<br>
+		<div>
+			￥{{ instance.basicPranPlice }}
+		</div>
 	</div>
 	<div :class="$style.roleOptions">
 		<div :class="$style.roleOption">
