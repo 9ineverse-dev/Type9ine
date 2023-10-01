@@ -4,7 +4,7 @@
 <div class="_gaps_s" :class="$style.mainActions">
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">{{ i18n.ts._subsc.create }}</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">{{ i18n.ts._subsc.manage }}</MkButton>
-	<a :href="instance.transactionsActNotationUrl" class="_link" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a>
+	<a :href="instance.transactionsActNotationUrl" class="_link" style="margin-right: auto;margin-left: auto;" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a>
 </div>
 <div :class="$style.container">
 	<div :class="$style.roleName">
@@ -24,9 +24,9 @@
 			{{ subscriptionRole.name }}{{ i18n.ts._subsc.benefits }}
 		</div>
 		<br>
-		<div>
-			￥{{ instance.basicPranPlice }}
-		</div>
+	</div>
+	<div :class="$style.roleName">
+			￥{{ instance.basicPlanPlice }}
 	</div>
 	<div :class="$style.roleOptions">
 		<div :class="$style.roleOption">
@@ -70,7 +70,7 @@
 <div class="_gaps_s" :class="$style.mainActions">
 	<MkButton v-if="isSubscriptionMember === false" :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="checkout()">{{ i18n.ts._subsc.create }}</MkButton>
 	<MkButton v-else :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: auto;margin-left: auto;" @click="portal()">{{ i18n.ts._subsc.manage }}</MkButton>
-	<a :href="instance.transactionsActNotationUrl" class="_link" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a>
+	<a :href="instance.transactionsActNotationUrl" class="_link" style="margin-right: auto;margin-left: auto;" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a>
 </div>
 </template>
 
