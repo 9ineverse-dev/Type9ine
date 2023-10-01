@@ -83,14 +83,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<CodeDiff :context="5" :hideHeader="true" :oldString="JSON5.stringify(log.info.before, null, '\t')" :newString="JSON5.stringify(log.info.after, null, '\t')" language="javascript" maxHeight="300px"/>
 			</div>
 		</template>
-<<<<<<< HEAD
-=======
 		<template v-else-if="log.type === 'updateAd'">
 			<div :class="$style.diff">
 				<CodeDiff :context="5" :hideHeader="true" :oldString="JSON5.stringify(log.info.before, null, '\t')" :newString="JSON5.stringify(log.info.after, null, '\t')" language="javascript" maxHeight="300px"/>
 			</div>
 		</template>
->>>>>>> upstream/master
 
 		<details>
 			<summary>raw</summary>
@@ -129,8 +126,6 @@ const props = defineProps<{
 	border-radius: 6px;
 	overflow: clip;
 }
-<<<<<<< HEAD
-=======
 
 .logYellow {
 	color: var(--warning);
@@ -143,5 +138,4 @@ const props = defineProps<{
 .logGreen {
 	color: var(--success);
 }
->>>>>>> upstream/master
 </style>
