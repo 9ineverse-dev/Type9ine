@@ -20,14 +20,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template #label>{{ i18n.ts.color }}</template>
 			</MkColorInput>
 
-			<MkSwitch v-model="isSensitive">
-				<template #label>{{ i18n.ts.compartmentalization }}</template>
-			</MkSwitch>
-
-			<MkSwitch v-model="searchable">
-				{{ i18n.ts.channelSearchable }}
-			</MkSwitch>
-
 			<div>
 				<MkButton v-if="bannerId == null" @click="setBannerImage"><i class="ti ti-plus"></i> {{ i18n.ts._channel.setBanner }}</MkButton>
 				<div v-else-if="bannerUrl">
@@ -35,6 +27,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<MkButton @click="removeBannerImage()"><i class="ti ti-trash"></i> {{ i18n.ts._channel.removeBanner }}</MkButton>
 				</div>
 			</div>
+
+			<MkSwitch v-model="isSensitive">
+				<template #label>{{ i18n.ts.compartmentalization }}</template>
+			</MkSwitch>
+
+			<MkSwitch v-model="searchable">
+				{{ i18n.ts.channelSearchable }}
+			</MkSwitch>
 
 			<MkFolder :defaultOpen="true">
 				<template #label>{{ i18n.ts.pinnedNotes }}</template>
@@ -86,14 +86,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</MkFolder>
 
-			<div>
-				<MkButton v-if="bannerId == null" @click="setBannerImage"><i class="ti ti-plus"></i> {{ i18n.ts._channel.setBanner }}</MkButton>
-				<div v-else-if="bannerUrl">
-					<img :src="bannerUrl" style="width: 100%;"/>
-					<MkButton @click="removeBannerImage()"><i class="ti ti-trash"></i> {{ i18n.ts._channel.removeBanner }}</MkButton>
-				</div>
-			</div>
-
 			<div class="_buttons">
 				<MkButton primary @click="save()"><i class="ti ti-device-floppy"></i> {{ channelId ? i18n.ts.save : i18n.ts.create }}</MkButton>
 				<MkButton v-if="channelId" danger @click="archive()"><i class="ti ti-trash"></i> {{ i18n.ts.archive }}</MkButton>
@@ -119,6 +111,7 @@ import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from "@/components/MkSwitch.vue";
 import { $i } from '@/account.js';
 
+const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
 
 const router = useRouter();
 
