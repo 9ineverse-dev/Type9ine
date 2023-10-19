@@ -161,8 +161,11 @@ async function fetchChannel() {
 	searchable.value = channel.searchable;
 	isSensitive = channel.isSensitive;
 	isPrivate.value = channel.isPrivate;
+	const fetchPrivateUserIds = channel.privateUserIds;
+	const set = new Set(fetchPrivateUserIds);
+	const searchPrivateUserIds = [...set];
 	const pusers = await os.api('users/show', {
-		userIds: channel.privateUserIds,
+		userIds: searchPrivateUserIds,
 	});
 	if (pusers) {
 		let tmp: any[] = [];
@@ -188,6 +191,9 @@ async function addPrivateUserIds() {
 	if (canceled) return;
 
 	const show = (user) => {
+		for(const assignedUser of privateUserIds){
+			if(user.id == assignedUser.value) return;
+		}
 		privateUserIds.value = [{
 			value: user.id,
 			label: user.username,
