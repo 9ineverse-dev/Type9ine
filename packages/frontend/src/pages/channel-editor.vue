@@ -241,7 +241,7 @@ function removePinnedNote(index: number) {
 	pinnedNotes.value.splice(index, 1);
 }
 
-function save() {
+async function save() {
 
 	const fetchPrivateUserIds = privateUserIds.value.map(v => v.value);
 	const set = new Set(fetchPrivateUserIds);
@@ -260,11 +260,11 @@ function save() {
 
 	if (props.channelId) {
 		params.channelId = props.channelId;
-		os.api('channels/update', params).then(() => {
+		await os.api('channels/update', params).then(() => {
 			os.success();
 		});
 	} else {
-		os.api('channels/create', params).then(created => {
+		await os.api('channels/create', params).then(created => {
 			os.success();
 			router.push(`/channels/${created.id}`);
 		});
