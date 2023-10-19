@@ -192,7 +192,7 @@ async function addPrivateUserIds() {
 
 	const show = (user) => {
 		for(const assignedUser of privateUserIds){
-			if(user.id == assignedUser.value) return;
+			if( user.id === assignedUser.value ) return;
 		}
 		privateUserIds.value = [{
 			value: user.id,
