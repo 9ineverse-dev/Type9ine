@@ -269,6 +269,7 @@ function save() {
 			router.push(`/channels/${created.id}`);
 		});
 	}
+	fetchChannel();
 }
 
 async function archive() {
