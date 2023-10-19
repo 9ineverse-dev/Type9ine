@@ -191,9 +191,6 @@ async function addPrivateUserIds() {
 	if (canceled) return;
 
 	const show = (user) => {
-		for(const assignedUser of privateUserIds){
-			if( user.id === assignedUser.value ) return;
-		}
 		privateUserIds.value = [{
 			value: user.id,
 			label: user.username,
@@ -245,6 +242,10 @@ function removePinnedNote(index: number) {
 }
 
 function save() {
+
+	const fetchPrivateUserIds = privateUserIds.value.map(v => v.value);
+	const set = new Set(fetchPrivateUserIds);
+	const saverivateUserIds = [...set];
 	const params = {
 		name: name,
 		description: description,
@@ -254,7 +255,7 @@ function save() {
 		searchable: searchable.value,
 		isSensitive: isSensitive,
 		isPrivate: isPrivate.value,
-		privateUserIds: privateUserIds.value.map(v => v.value),
+		privateUserIds: saverivateUserIds,
 	};
 
 	if (props.channelId) {
