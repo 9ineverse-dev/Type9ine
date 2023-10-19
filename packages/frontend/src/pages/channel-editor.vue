@@ -161,8 +161,11 @@ async function fetchChannel() {
 	searchable.value = channel.searchable;
 	isSensitive = channel.isSensitive;
 	isPrivate.value = channel.isPrivate;
+	const fetchPrivateUserIds = channel.privateUserIds;
+	const set = new Set(fetchPrivateUserIds);
+	const searchPrivateUserIds = [...set];
 	const pusers = await os.api('users/show', {
-		userIds: channel.privateUserIds,
+		userIds: searchPrivateUserIds,
 	});
 	if (pusers) {
 		let tmp: any[] = [];
@@ -238,7 +241,11 @@ function removePinnedNote(index: number) {
 	pinnedNotes.value.splice(index, 1);
 }
 
-function save() {
+async function save() {
+
+	const fetchPrivateUserIds = privateUserIds.value.map(v => v.value);
+	const set = new Set(fetchPrivateUserIds);
+	const saverivateUserIds = [...set];
 	const params = {
 		name: name,
 		description: description,
@@ -248,20 +255,21 @@ function save() {
 		searchable: searchable.value,
 		isSensitive: isSensitive,
 		isPrivate: isPrivate.value,
-		privateUserIds: privateUserIds.value.map(v => v.value),
+		privateUserIds: saverivateUserIds,
 	};
 
 	if (props.channelId) {
 		params.channelId = props.channelId;
-		os.api('channels/update', params).then(() => {
+		await os.api('channels/update', params).then(() => {
 			os.success();
 		});
 	} else {
-		os.api('channels/create', params).then(created => {
+		await os.api('channels/create', params).then(created => {
 			os.success();
 			router.push(`/channels/${created.id}`);
 		});
 	}
+	fetchChannel();
 }
 
 async function archive() {
