@@ -127,6 +127,32 @@ export class QueryService {
 	}
 
 	@bindThis
+	public generateComunityQuery(q: SelectQueryBuilder<any>, me?: { id: MiUser['id'] } | null): void {
+		if (me == null) {
+			q.andWhere('note.channelId IS NOT NULL');
+		} else {
+			q.leftJoinAndSelect('note.channel', 'channel');
+			const followingQuery = this.followingsRepository.createQueryBuilder('following')
+			.select('following.followeeId')
+			.where('following.followerId = :followerId', { followerId: me.id });
+			const channelFollowingQuery = this.channelFollowingsRepository.createQueryBuilder('channelFollowing')
+				.select('channelFollowing.followeeId')
+				.where('channelFollowing.followerId = :followerId', { followerId: me.id });
+			q.andWhere('note.channelId IS NOT NULL');
+			q.andWhere(new Brackets(qb => { qb
+				// followしているユーザーの非棲み分けチャンネルノート
+				.where(`(note.userId IN (${ followingQuery.getQuery() })) AND (channel.isSensitive = false)`)
+				.orWhere(`(note.userId = :meId)`, { meId: me.id })
+				// または自分がフォローしているチャンネルのノート
+				.orWhere(`note.channelId IN (${ channelFollowingQuery.getQuery() })`);
+			}));
+
+			q.setParameters(channelFollowingQuery.getParameters());
+			q.setParameters(followingQuery.getParameters());
+		}
+	}
+
+	@bindThis
 	public generateMutedUserQuery(q: SelectQueryBuilder<any>, me: { id: MiUser['id'] }, exclude?: { id: MiUser['id'] }): void {
 		const mutingQuery = this.mutingsRepository.createQueryBuilder('muting')
 			.select('muting.muteeId')
