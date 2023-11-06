@@ -34,6 +34,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 						</MkInput>
 					</FormSplit>
 
+					<MkInput v-model="impressumUrl" type="url">
+						<template #label>{{ i18n.ts.impressumUrl }}</template>
+						<template #prefix><i class="ti ti-link"></i></template>
+						<template #caption>{{ i18n.ts.impressumDescription }}</template>
+					</MkInput>
+
 					<MkTextarea v-model="pinnedUsers">
 						<template #label>{{ i18n.ts.pinnedUsers }}</template>
 						<template #caption>{{ i18n.ts.pinnedUsersDescription }}</template>
@@ -120,16 +126,84 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</FormSection>
 
 					<FormSection>
-						<template #label>DeepL Translation</template>
+						<template #label>Stripe API</template>
+						<div class="_gaps_m">
+							<MkSwitch v-model="sellSubscription">
+								<template #label>Sell Subscription</template>
+							</MkSwitch>
+							<MkInput v-model="stripeAPIKey">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Stripe API Key</template>
+							</MkInput>
+							<MkInput v-model="stripeWebhookKey">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Stripe webhook Key</template>
+							</MkInput>
+							<MkInput v-model="basicPlanPriceId">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Basic Plan PriceID</template>
+							</MkInput>
+						</div>
+					</FormSection>
+
+					<FormSection>
+						<template #label>Subscription Plans</template>
+						<div class="_gaps_m">
+							<MkInput v-model="transactionsActNotationUrl">
+								<template #label>特商法に戻づく表記URL</template>
+							</MkInput>
+							<MkInput v-model="planAssignControlKey">
+								<template #label>有料ロール付与APIキー</template>
+							</MkInput>
+							<MkInput v-model="basicPlanRoleId">
+								<template #label>Basic Plan RoleId</template>
+							</MkInput>
+							<MkInput v-model="basicPlanPrice" type="number">
+								<template #label>Basic Plan Price</template>
+							</MkInput>
+						</div>
+					</FormSection>
+
+					<FormSection>
+						<template #label>Misskey® Fan-out Timeline Technology™ (FTT)</template>
 
 						<div class="_gaps_m">
-							<MkInput v-model="deeplAuthKey">
-								<template #prefix><i class="ti ti-key"></i></template>
-								<template #label>DeepL Auth Key</template>
-							</MkInput>
-							<MkSwitch v-model="deeplIsPro">
-								<template #label>Pro account</template>
+							<MkSwitch v-model="enableFanoutTimeline">
+								<template #label>{{ i18n.ts.enable }}</template>
+								<template #caption>{{ i18n.ts._serverSettings.fanoutTimelineDescription }}</template>
 							</MkSwitch>
+
+							<MkInput v-model="perLocalUserUserTimelineCacheMax" type="number">
+								<template #label>perLocalUserUserTimelineCacheMax</template>
+							</MkInput>
+
+							<MkInput v-model="perRemoteUserUserTimelineCacheMax" type="number">
+								<template #label>perRemoteUserUserTimelineCacheMax</template>
+							</MkInput>
+
+							<MkInput v-model="perUserHomeTimelineCacheMax" type="number">
+								<template #label>perUserHomeTimelineCacheMax</template>
+							</MkInput>
+
+							<MkInput v-model="perUserListTimelineCacheMax" type="number">
+								<template #label>perUserListTimelineCacheMax</template>
+							</MkInput>
+						</div>
+					</FormSection>
+
+					<FormSection>
+						<template #label>{{ i18n.ts._ad.adsSettings }}</template>
+
+						<div class="_gaps_m">
+							<div class="_gaps_s">
+								<MkInput v-model="notesPerOneAd" :min="0" type="number">
+									<template #label>{{ i18n.ts._ad.notesPerOneAd }}</template>
+									<template #caption>{{ i18n.ts._ad.setZeroToDisable }}</template>
+								</MkInput>
+								<MkInfo v-if="notesPerOneAd > 0 && notesPerOneAd < 20" :warn="true">
+									{{ i18n.ts._ad.adsTooClose }}
+								</MkInfo>
+							</div>
 						</div>
 					</FormSection>
 				</div>
@@ -152,6 +226,7 @@ import XHeader from './_header_.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkTextarea from '@/components/MkTextarea.vue';
+import MkInfo from '@/components/MkInfo.vue';
 import FormSection from '@/components/form/section.vue';
 import FormSplit from '@/components/form/split.vue';
 import FormSuspense from '@/components/form/suspense.vue';
@@ -166,6 +241,7 @@ let shortName: string | null = $ref(null);
 let description: string | null = $ref(null);
 let maintainerName: string | null = $ref(null);
 let maintainerEmail: string | null = $ref(null);
+let impressumUrl: string | null = $ref(null);
 let pinnedUsers: string = $ref('');
 let cacheRemoteFiles: boolean = $ref(false);
 let cacheRemoteSensitiveFiles: boolean = $ref(false);
@@ -180,8 +256,12 @@ let transactionsActNotationUrl: string | null = $ref('');
 let planAssignControlKey: string | null = $ref('');
 let basicPlanRoleId: any | null = $ref('');
 let basicPlanPrice: number = $ref(0);
-let deeplAuthKey: string = $ref('');
-let deeplIsPro: boolean = $ref(false);
+let enableFanoutTimeline: boolean = $ref(false);
+let perLocalUserUserTimelineCacheMax: number = $ref(0);
+let perRemoteUserUserTimelineCacheMax: number = $ref(0);
+let perUserHomeTimelineCacheMax: number = $ref(0);
+let perUserListTimelineCacheMax: number = $ref(0);
+let notesPerOneAd: number = $ref(0);
 
 async function init(): Promise<void> {
 	const meta = await os.api('admin/meta');
@@ -190,6 +270,7 @@ async function init(): Promise<void> {
 	description = meta.description;
 	maintainerName = meta.maintainerName;
 	maintainerEmail = meta.maintainerEmail;
+	impressumUrl = meta.impressumUrl;
 	pinnedUsers = meta.pinnedUsers.join('\n');
 	cacheRemoteFiles = meta.cacheRemoteFiles;
 	cacheRemoteSensitiveFiles = meta.cacheRemoteSensitiveFiles;
@@ -204,17 +285,22 @@ async function init(): Promise<void> {
 	basicPlanPriceId = meta.basicPlanPriceId,
 	basicPlanRoleId = meta.basicPlanRoleId,
 	basicPlanPrice = meta.basicPlanPrice,
-	deeplAuthKey = meta.deeplAuthKey;
-	deeplIsPro = meta.deeplIsPro;
+	enableFanoutTimeline = meta.enableFanoutTimeline;
+	perLocalUserUserTimelineCacheMax = meta.perLocalUserUserTimelineCacheMax;
+	perRemoteUserUserTimelineCacheMax = meta.perRemoteUserUserTimelineCacheMax;
+	perUserHomeTimelineCacheMax = meta.perUserHomeTimelineCacheMax;
+	perUserListTimelineCacheMax = meta.perUserListTimelineCacheMax;
+	notesPerOneAd = meta.notesPerOneAd;
 }
 
-function save(): void {
-	os.apiWithDialog('admin/update-meta', {
+async function save(): void {
+	await os.apiWithDialog('admin/update-meta', {
 		name,
 		shortName: shortName === '' ? null : shortName,
 		description,
 		maintainerName,
 		maintainerEmail,
+		impressumUrl,
 		pinnedUsers: pinnedUsers.split('\n'),
 		cacheRemoteFiles,
 		cacheRemoteSensitiveFiles,
@@ -229,11 +315,15 @@ function save(): void {
 		planAssignControlKey,
 		basicPlanRoleId,
 		basicPlanPrice,
-		deeplAuthKey,
-		deeplIsPro,
-	}).then(() => {
-		fetchInstance();
+		enableFanoutTimeline,
+		perLocalUserUserTimelineCacheMax,
+		perRemoteUserUserTimelineCacheMax,
+		perUserHomeTimelineCacheMax,
+		perUserListTimelineCacheMax,
+		notesPerOneAd,
 	});
+
+	fetchInstance();
 }
 
 const headerTabs = $computed(() => []);

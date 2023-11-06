@@ -41,6 +41,7 @@ export const meta = {
 export const paramDef = {
 	type: 'object',
 	properties: {
+		withFiles: { type: 'boolean', default: false },
 		withRenotes: { type: 'boolean', default: true },
 		limit: { type: 'integer', minimum: 1, maximum: 100, default: 10 },
 		sinceId: { type: 'string', format: 'misskey:id' },
@@ -150,7 +151,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			this.queryService.generateRepliesQuery(query, ps.withReplies, me);
 			if (me) {
 				this.queryService.generateMutedUserQuery(query, me);
-				this.queryService.generateMutedNoteQuery(query, me);
 				this.queryService.generateBlockedUserQuery(query, me);
 				this.queryService.generateMutedUserRenotesQueryForNotes(query, me);
 			}
@@ -161,9 +161,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (ps.withRenotes === false) {
 				query.andWhere(new Brackets(qb => {
-					qb.orWhere('note.renoteId IS NULL');
+					qb.where('note.renoteId IS NULL');
 					qb.orWhere(new Brackets(qb => {
-						qb.orWhere('note.text IS NOT NULL');
+						qb.where('note.text IS NOT NULL');
 						qb.orWhere('note.fileIds != \'{}\'');
 					}));
 				}));

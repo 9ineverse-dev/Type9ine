@@ -92,5 +92,9 @@ export const packedChannelSchema = {
 			type: 'boolean',
 			optional: false, nullable: false,
 		},
+		allowRenoteToExternal: {
+			type: 'boolean',
+			optional: false, nullable: false,
+		},
 	},
 } as const;

@@ -58,6 +58,7 @@ export const paramDef = {
 				type: 'string', format: 'misskey:id',
 			},
 		},
+		allowRenoteToExternal: { type: 'boolean', nullable: true },
 	},
 	required: ['name'],
 } as const;
@@ -88,8 +89,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			}
 
 			const channel = await this.channelsRepository.insert({
-				id: this.idService.genId(),
-				createdAt: new Date(),
+				id: this.idService.gen(),
 				userId: me.id,
 				name: ps.name,
 				description: ps.description ?? null,
@@ -99,6 +99,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				privateUserIds: ps.privateUserIds ?? [],
 				isSensitive: ps.isSensitive ?? false,
 				...(ps.color !== undefined ? { color: ps.color } : {}),
+				allowRenoteToExternal: ps.allowRenoteToExternal ?? true,
 			} as MiChannel).then(x => this.channelsRepository.findOneByOrFail(x.identifiers[0]));
 
 			return await this.channelEntityService.pack(channel, me);

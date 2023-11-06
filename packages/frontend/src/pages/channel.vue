@@ -21,7 +21,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<div :class="$style.bannerFade"></div>
 				</div>
 				<div v-if="channel.description" :class="$style.description">
-					<Mfm :text="channel.description" :isNote="false" :i="$i"/>
+					<Mfm :text="channel.description" :isNote="false"/>
 				</div>
 			</div>
 
@@ -130,7 +130,6 @@ let queueUserIds = $ref<string[]>([]);
 const featuredPagination = $computed(() => ({
 	endpoint: 'notes/featured' as const,
 	limit: 10,
-	offsetMode: true,
 	params: {
 		channelId: props.channelId,
 	},

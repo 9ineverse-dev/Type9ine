@@ -20,18 +20,19 @@ import { IdService } from '@/core/IdService.js';
 import { GlobalEventService } from '@/core/GlobalEventService.js';
 import { ModerationLogService } from '@/core/ModerationLogService.js';
 import type { Packed } from '@/misc/json-schema.js';
+import { FunoutTimelineService } from '@/core/FunoutTimelineService.js';
 import type { OnApplicationShutdown } from '@nestjs/common';
 
 export type RolePolicies = {
 	gtlAvailable: boolean;
 	ltlAvailable: boolean;
 	canPublicNote: boolean;
-	canEditNote: boolean;
 	canInvite: boolean;
 	inviteLimit: number;
 	inviteLimitCycle: number;
 	inviteExpirationTime: number;
 	canManageCustomEmojis: boolean;
+	canManageAvatarDecorations: boolean;
 	canSearchNotes: boolean;
 	canCreatePrivateChannel: boolean;
 	canUseTranslator: boolean;
@@ -54,12 +55,12 @@ export const DEFAULT_POLICIES: RolePolicies = {
 	gtlAvailable: true,
 	ltlAvailable: true,
 	canPublicNote: true,
-	canEditNote: true,
 	canInvite: false,
 	inviteLimit: 0,
 	inviteLimitCycle: 60 * 24 * 7,
 	inviteExpirationTime: 0,
 	canManageCustomEmojis: false,
+	canManageAvatarDecorations: false,
 	canSearchNotes: false,
 	canCreatePrivateChannel: false,
 	canUseTranslator: true,
@@ -108,6 +109,7 @@ export class RoleService implements OnApplicationShutdown {
 		private globalEventService: GlobalEventService,
 		private idService: IdService,
 		private moderationLogService: ModerationLogService,
+		private funoutTimelineService: FunoutTimelineService,
 	) {
 		//this.onMessage = this.onMessage.bind(this);
 
@@ -129,7 +131,6 @@ export class RoleService implements OnApplicationShutdown {
 					if (cached) {
 						cached.push({
 							...body,
-							createdAt: new Date(body.createdAt),
 							updatedAt: new Date(body.updatedAt),
 							lastUsedAt: new Date(body.lastUsedAt),
 						});
@@ -143,7 +144,6 @@ export class RoleService implements OnApplicationShutdown {
 						if (i > -1) {
 							cached[i] = {
 								...body,
-								createdAt: new Date(body.createdAt),
 								updatedAt: new Date(body.updatedAt),
 								lastUsedAt: new Date(body.lastUsedAt),
 							};
@@ -163,7 +163,6 @@ export class RoleService implements OnApplicationShutdown {
 					if (cached) {
 						cached.push({
 							...body,
-							createdAt: new Date(body.createdAt),
 							expiresAt: body.expiresAt ? new Date(body.expiresAt) : null,
 						});
 					}
@@ -202,10 +201,10 @@ export class RoleService implements OnApplicationShutdown {
 					return this.userEntityService.isRemoteUser(user);
 				}
 				case 'createdLessThan': {
-					return user.createdAt.getTime() > (Date.now() - (value.sec * 1000));
+					return this.idService.parse(user.id).date.getTime() > (Date.now() - (value.sec * 1000));
 				}
 				case 'createdMoreThan': {
-					return user.createdAt.getTime() < (Date.now() - (value.sec * 1000));
+					return this.idService.parse(user.id).date.getTime() < (Date.now() - (value.sec * 1000));
 				}
 				case 'followersLessThanOrEq': {
 					return user.followersCount <= value.value;
@@ -232,6 +231,12 @@ export class RoleService implements OnApplicationShutdown {
 			// TODO: log error
 			return false;
 		}
+	}
+
+	@bindThis
+	public async getRoles() {
+		const roles = await this.rolesCache.fetch(() => this.rolesRepository.findBy({}));
+		return roles;
 	}
 
 	@bindThis
@@ -302,12 +307,12 @@ export class RoleService implements OnApplicationShutdown {
 			gtlAvailable: calc('gtlAvailable', vs => vs.some(v => v === true)),
 			ltlAvailable: calc('ltlAvailable', vs => vs.some(v => v === true)),
 			canPublicNote: calc('canPublicNote', vs => vs.some(v => v === true)),
-			canEditNote: calc('canEditNote', vs => vs.some(v => v === true)),
 			canInvite: calc('canInvite', vs => vs.some(v => v === true)),
 			inviteLimit: calc('inviteLimit', vs => Math.max(...vs)),
 			inviteLimitCycle: calc('inviteLimitCycle', vs => Math.max(...vs)),
 			inviteExpirationTime: calc('inviteExpirationTime', vs => Math.max(...vs)),
 			canManageCustomEmojis: calc('canManageCustomEmojis', vs => vs.some(v => v === true)),
+			canManageAvatarDecorations: calc('canManageAvatarDecorations', vs => vs.some(v => v === true)),
 			canSearchNotes: calc('canSearchNotes', vs => vs.some(v => v === true)),
 			canCreatePrivateChannel: calc('canCreatePrivateChannel', vs => vs.some(v => v === true)),
 			canUseTranslator: calc('canUseTranslator', vs => vs.some(v => v === true)),
@@ -389,7 +394,7 @@ export class RoleService implements OnApplicationShutdown {
 
 	@bindThis
 	public async assign(userId: MiUser['id'], roleId: MiRole['id'], expiresAt: Date | null = null, moderator?: MiUser): Promise<void> {
-		const now = new Date();
+		const now = Date.now();
 
 		const role = await this.rolesRepository.findOneByOrFail({ id: roleId });
 
@@ -399,7 +404,7 @@ export class RoleService implements OnApplicationShutdown {
 		});
 
 		if (existing) {
-			if (existing.expiresAt && (existing.expiresAt.getTime() < now.getTime())) {
+			if (existing.expiresAt && (existing.expiresAt.getTime() < now)) {
 				await this.roleAssignmentsRepository.delete({
 					roleId: roleId,
 					userId: userId,
@@ -410,8 +415,7 @@ export class RoleService implements OnApplicationShutdown {
 		}
 
 		const created = await this.roleAssignmentsRepository.insert({
-			id: this.idService.genId(),
-			createdAt: now,
+			id: this.idService.gen(now),
 			expiresAt: expiresAt,
 			roleId: roleId,
 			userId: userId,
@@ -481,12 +485,7 @@ export class RoleService implements OnApplicationShutdown {
 		const redisPipeline = this.redisClient.pipeline();
 
 		for (const role of roles) {
-			redisPipeline.xadd(
-				`roleTimeline:${role.id}`,
-				'MAXLEN', '~', '1000',
-				'*',
-				'note', note.id);
-
+			this.funoutTimelineService.push(`roleTimeline:${role.id}`, note.id, 1000, redisPipeline);
 			this.globalEventService.publishRoleTimelineStream(role.id, 'note', note);
 		}
 
@@ -497,8 +496,7 @@ export class RoleService implements OnApplicationShutdown {
 	public async create(values: Partial<MiRole>, moderator?: MiUser): Promise<MiRole> {
 		const date = new Date();
 		const created = await this.rolesRepository.insert({
-			id: this.idService.genId(),
-			createdAt: date,
+			id: this.idService.gen(date.getTime()),
 			updatedAt: date,
 			lastUsedAt: date,
 			name: values.name,
