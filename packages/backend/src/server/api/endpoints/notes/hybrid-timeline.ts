@@ -211,39 +211,58 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		withReplies: boolean,
 	}, me: MiLocalUser) {
 		const followees = await this.userFollowingService.getFollowees(me.id);
-		const followingChannels = await this.channelFollowingsRepository.find({
-			where: {
-				followerId: me.id,
-			},
-		});
+		const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
+		let renoteCount = 2;
+		let scoreCount = 4;
 
+		const rnLimit = 10000;
+		const rnQuery1 = await this.notesRepository.createQueryBuilder('note')
+			.select('note.id')
+			.select('note.renoteId')
+			.leftJoinAndSelect('note.renote', 'renote')
+			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+			.andWhere('renote.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 7)) })
+			.andWhere('(renote.score > score)', { score: scoreCount })
+			.andWhere('note.text IS NULL')
+			.andWhere('note.renoteId IS NOT NULL')
+			.orderBy('note.id', 'DESC')
+			.limit(rnLimit)
+
+			this.queryService.generateVisibilityQuery(rnQuery1, me);
+			this.queryService.generateMutedUserQuery(rnQuery1, me);
+			this.queryService.generateBlockedUserQuery(rnQuery1, me);
+			this.queryService.generateMutedUserRenotesQueryForNotes(rnQuery1, me);
+
+		const rnQuery2 = await this.notesRepository.createQueryBuilder('note')
+			.select('note.id')
+			.select('note.renoteId')
+			.leftJoinAndSelect('note.renote', 'renote')
+			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+			.andWhere('renote.userId NOT IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 7)) })
+			.andWhere('(renote.renoteCount > renoteCount)', { score: renoteCount })
+			.andWhere('note.text IS NULL')
+			.andWhere('note.renoteId IS NOT NULL')
+			.orderBy('note.id', 'DESC')
+			.limit(rnLimit)
+
+			this.queryService.generateVisibilityQuery(rnQuery2, me);
+			this.queryService.generateMutedUserQuery(rnQuery2, me);
+			this.queryService.generateBlockedUserQuery(rnQuery2, me);
+			this.queryService.generateMutedUserRenotesQueryForNotes(rnQuery2, me);
+
+		const rn1 = await rnQuery1.getMany();
+		const rn2 = await rnQuery2.getMany();
+		const duplicationRn = [...rn1.map(d => d.renoteId),...rn2.map(d => d.id)]
+		const rnArray = [...new Set(duplicationRn)];
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'), ps.sinceId, ps.untilId)
-			.andWhere(new Brackets(qb => {
-				if (followees.length > 0) {
-					const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
-					qb.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds });
-					qb.orWhere('(note.visibility = \'public\') AND (note.userHost IS NULL)');
-				} else {
-					qb.where('note.userId = :meId', { meId: me.id });
-					qb.orWhere('(note.visibility = \'public\') AND (note.userHost IS NULL)');
-				}
-			}))
+			.andWhere('note.id IN (:...rnArray)', { rnArray: rnArray })
 			.innerJoinAndSelect('note.user', 'user')
 			.leftJoinAndSelect('note.reply', 'reply')
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
-
-		if (followingChannels.length > 0) {
-			const followingChannelIds = followingChannels.map(x => x.followeeId);
-
-			query.andWhere(new Brackets(qb => {
-				qb.where('note.channelId IN (:...followingChannelIds)', { followingChannelIds });
-				qb.orWhere('note.channelId IS NULL');
-			}));
-		} else {
-			query.andWhere('note.channelId IS NULL');
-		}
 
 		if (!ps.withReplies) {
 			query.andWhere(new Brackets(qb => {
