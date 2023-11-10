@@ -14,7 +14,7 @@ import { bindThis } from '@/decorators.js';
 import { RoleService } from '@/core/RoleService.js';
 import Channel from '../channel.js';
 
-class HybridTimelineChannel extends Channel {
+class GlobalTimelineChannel extends Channel {
 	public readonly chName = 'hybridTimeline';
 	public static shouldShare = true;
 	public static requireCredential = true;
@@ -118,9 +118,9 @@ class HybridTimelineChannel extends Channel {
 }
 
 @Injectable()
-export class HybridTimelineChannelService {
-	public readonly shouldShare = HybridTimelineChannel.shouldShare;
-	public readonly requireCredential = HybridTimelineChannel.requireCredential;
+export class GlobalTimelineChannelService {
+	public readonly shouldShare = GlobalTimelineChannel.shouldShare;
+	public readonly requireCredential = GlobalTimelineChannel.requireCredential;
 
 	constructor(
 		private metaService: MetaService,
@@ -130,8 +130,8 @@ export class HybridTimelineChannelService {
 	}
 
 	@bindThis
-	public create(id: string, connection: Channel['connection']): HybridTimelineChannel {
-		return new HybridTimelineChannel(
+	public create(id: string, connection: Channel['connection']): GlobalTimelineChannel {
+		return new GlobalTimelineChannel(
 			this.metaService,
 			this.roleService,
 			this.noteEntityService,
