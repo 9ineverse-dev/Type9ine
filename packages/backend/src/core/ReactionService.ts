@@ -188,6 +188,7 @@ export class ReactionService {
 		await this.notesRepository.createQueryBuilder().update()
 			.set({
 				reactions: () => sql,
+				...(!user.isBot ? { score: () => '"score" + 1' } : {}),
 				...(note.reactionAndUserPairCache.length < PER_NOTE_REACTION_USER_PAIR_CACHE_MAX ? {
 					reactionAndUserPairCache: () => `array_append("reactionAndUserPairCache", '${user.id}/${reaction}')`,
 				} : {}),
