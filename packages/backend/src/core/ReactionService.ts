@@ -298,6 +298,7 @@ export class ReactionService {
 		await this.notesRepository.createQueryBuilder().update()
 			.set({
 				reactions: () => sql,
+				...(!user.isBot ? { score: () => '"score" - 1' } : {}),
 				reactionAndUserPairCache: () => `array_remove("reactionAndUserPairCache", '${user.id}/${exist.reaction}')`,
 			})
 			.where('id = :id', { id: note.id })
