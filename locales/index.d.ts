@@ -2407,6 +2407,15 @@ export interface Locale {
         "createAd": string;
         "deleteAd": string;
         "updateAd": string;
+    };
+    "_subsc": {
+        "subscription": string;
+        "title": string;
+        "catchcopy": string;
+        "catchcopy2": string;
+        "benefits": string;
+        "create": string;
+        "manage": string;
         "createAvatarDecoration": string;
         "updateAvatarDecoration": string;
         "deleteAvatarDecoration": string;
@@ -2475,16 +2484,6 @@ export interface Locale {
             };
         };
     };
-    "_subsc": {
-        "subscription": string;
-        "title": string;
-        "catchcopy": string;
-        "catchcopy2": string;
-        "benefits": string;
-        "create": string;
-        "manage": string;
-    };
-
 }
 declare const locales: {
     [lang: string]: Locale;
