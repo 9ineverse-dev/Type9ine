@@ -257,12 +257,17 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		const duplicationRn = [...rn1.map(d => d.renoteId),...rn2.map(d => d.id)]
 		const rnArray = [...new Set(duplicationRn)];
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'), ps.sinceId, ps.untilId)
-			.andWhere('note.id IN (:...rnArray)', { rnArray: rnArray })
 			.innerJoinAndSelect('note.user', 'user')
 			.leftJoinAndSelect('note.reply', 'reply')
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
+			if ((followees.length > 1) || (rnArray.length >1)) {
+				query.andWhere('(note.renoteCount > :renoteCountScore)', { renoteCountScore: 20 })
+				query.andWhere('userHost IS NULL')
+			}else {
+				query.andWhere('note.id IN (:...rnArray)', { rnArray: rnArray })
+			}
 
 		if (!ps.withReplies) {
 			query.andWhere(new Brackets(qb => {
