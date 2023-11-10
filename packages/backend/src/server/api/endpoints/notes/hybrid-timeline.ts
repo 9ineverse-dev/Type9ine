@@ -226,7 +226,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.andWhere('renote.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 7)) })
 			.andWhere('(renote.score > :scoreCount)', { scoreCount: scoreCount })
-			.andWhere('note.text IS NULL')
 			.andWhere('note.renoteId IS NOT NULL')
 			.andWhere('note.visibility = \'public\'')
 			.orderBy('note.id', 'DESC')
@@ -244,7 +243,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.andWhere('renote.userId NOT IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 7)) })
 			.andWhere('(renote.score > :scoreCount)', { scoreCount: scoreCount })
-			.andWhere('note.text IS NULL')
 			.andWhere('note.renoteId IS NOT NULL')
 			.andWhere('note.visibility = \'public\'')
 			.orderBy('note.id', 'DESC')
@@ -256,7 +254,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 		const rn1 = await rnQuery1.getMany();
 		const rn2 = await rnQuery2.getMany();
-		const duplicationRn = [...rn1.map(d => d.renoteId),...rn2.map(d => d.id)]
+		const duplicationRn = [...rn1.map(d => d.renoteId),...rn2.map(d => d.renoteId)]
 		const rnArray = [...new Set(duplicationRn)];
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'), ps.sinceId, ps.untilId)
 			.innerJoinAndSelect('note.user', 'user')
@@ -264,11 +262,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
-			if (!(followees.length > 1) || !(rnArray.length > 1)) {
+			if ((followees.length > 1) || (rnArray.length > 1)) {
+				query.andWhere('note.id IN (:...rnArray)', { rnArray: rnArray })
+
+			} else {
 				query.andWhere('(note.renoteCount > :renoteCountScore)', { renoteCountScore: 20 })
 				query.andWhere('note.userHost IS NULL')
-			} else {
-				query.andWhere('note.id IN (:...rnArray)', { rnArray: rnArray })
 			}
 
 		if (!ps.withReplies) {
