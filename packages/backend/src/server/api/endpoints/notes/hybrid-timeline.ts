@@ -237,6 +237,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		const rnQuery2 = await this.notesRepository.createQueryBuilder('note')
 			.select('note.id')
 			.select('note.renoteId')
+			.select('renote.score')
 			.leftJoinAndSelect('note.renote', 'renote')
 			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('renote.userId NOT IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
