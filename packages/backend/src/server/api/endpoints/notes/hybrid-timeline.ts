@@ -226,10 +226,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.andWhere('(renote.score > :scoreCount)', { scoreCount: scoreCount })
 			.andWhere('note.text IS NULL')
 			.andWhere('note.renoteId IS NOT NULL')
+			.andWhere('note.visibility = \'public\'')
 			.orderBy('note.id', 'DESC')
 			.limit(rnLimit)
 
-			this.queryService.generateVisibilityQuery(rnQuery1, me);
 			this.queryService.generateMutedUserQuery(rnQuery1, me);
 			this.queryService.generateBlockedUserQuery(rnQuery1, me);
 			this.queryService.generateMutedUserRenotesQueryForNotes(rnQuery1, me);
@@ -244,10 +244,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.andWhere('(renote.score > :scoreCount)', { scoreCount: scoreCount })
 			.andWhere('note.text IS NULL')
 			.andWhere('note.renoteId IS NOT NULL')
+			.andWhere('note.visibility = \'public\'')
 			.orderBy('note.id', 'DESC')
 			.limit(rnLimit)
 
-			this.queryService.generateVisibilityQuery(rnQuery2, me);
 			this.queryService.generateMutedUserQuery(rnQuery2, me);
 			this.queryService.generateBlockedUserQuery(rnQuery2, me);
 			this.queryService.generateMutedUserRenotesQueryForNotes(rnQuery2, me);
@@ -264,7 +264,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.leftJoinAndSelect('renote.user', 'renoteUser');
 			if (!(followees.length > 5) || !(rnArray.length > 5)) {
 				query.andWhere('(note.renoteCount > :renoteCountScore)', { renoteCountScore: 20 })
-				query.andWhere('userHost IS NULL')
+				query.andWhere('note.userHost IS NULL')
 			} else {
 				query.andWhere('note.id IN (:...rnArray)', { rnArray: rnArray })
 			}
