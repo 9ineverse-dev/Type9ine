@@ -262,7 +262,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
-			if ((followees.length > 1) || (rnArray.length > 1)) {
+			if ((followees.length > 1) && (rnArray.length > 1)) {
 				query.andWhere('note.id IN (:...rnArray)', { rnArray: rnArray })
 
 			} else {
