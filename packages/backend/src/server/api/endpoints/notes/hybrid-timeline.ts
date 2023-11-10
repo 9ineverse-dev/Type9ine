@@ -213,7 +213,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		const followees = await this.userFollowingService.getFollowees(me.id);
 		const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 		let renoteCount = 2;
-		let scoreCount = 4;
+		let scoreCount = 3;
+
+
 
 		const rnLimit = 10000;
 		const rnQuery1 = await this.notesRepository.createQueryBuilder('note')
@@ -262,7 +264,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
-			if (!(followees.length > 5) || !(rnArray.length > 5)) {
+			if (!(followees.length > 1) || !(rnArray.length > 1)) {
 				query.andWhere('(note.renoteCount > :renoteCountScore)', { renoteCountScore: 20 })
 				query.andWhere('note.userHost IS NULL')
 			} else {
