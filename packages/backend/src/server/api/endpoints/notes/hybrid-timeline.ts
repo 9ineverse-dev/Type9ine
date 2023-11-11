@@ -213,7 +213,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		const followees = await this.userFollowingService.getFollowees(me.id);
 		const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
 
-		let scoreCount = followees.length*0.1 + 20;
+		const scoreHurdle = followees.length*0.1 + 20;
+		let scoreCount = Math.floor(scoreHurdle);
 		if(scoreCount > 100){
 			scoreCount = 100;
 		}
