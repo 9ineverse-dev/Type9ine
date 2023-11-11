@@ -1274,6 +1274,10 @@ export interface Locale {
     "_timelineDescription": {
         "home": string;
         "local": string;
+        "social": string;
+        "global": string;
+        "community": string;
+        "recommend": string;
     };
     "_serverRules": {
         "description": string;
