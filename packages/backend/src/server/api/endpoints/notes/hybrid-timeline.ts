@@ -212,23 +212,30 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 	}, me: MiLocalUser) {
 		const followees = await this.userFollowingService.getFollowees(me.id);
 		const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
-		let renoteCount = 2;
-		let scoreCount = 3;
 
+		let scoreCount = followees.length*0.1 + 20;
+		if(scoreCount > 100){
+			scoreCount = 100;
+		}
 
+		let rnLimit = followees.length * 10;
+		if(rnLimit > 10000){
+			rnLimit = 10000;
+		}
 
-		const rnLimit = 10000;
 		const rnQuery1 = await this.notesRepository.createQueryBuilder('note')
 			.select('note.id')
 			.select('note.renoteId')
+			.select('renote.score')
 			.leftJoinAndSelect('note.renote', 'renote')
 			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('renote.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 7)) })
-			.andWhere('(renote.score > :scoreCount)', { scoreCount: scoreCount })
+			.andWhere('renote.score > :scoreCount', { scoreCount: 10 })
+			.andWhere('note.userId = renote.userId')
 			.andWhere('note.renoteId IS NOT NULL')
 			.andWhere('note.visibility = \'public\'')
-			.orderBy('note.id', 'DESC')
+			.orderBy('renote.score', 'DESC')
 			.limit(rnLimit)
 
 			this.queryService.generateMutedUserQuery(rnQuery1, me);
@@ -242,27 +249,29 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('renote.userId NOT IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 7)) })
-			.andWhere('(renote.score > :scoreCount)', { scoreCount: scoreCount })
+			.andWhere('renote.score > :scoreCount', { scoreCount: scoreCount })
 			.andWhere('note.renoteId IS NOT NULL')
 			.andWhere('note.visibility = \'public\'')
-			.orderBy('note.id', 'DESC')
+			.orderBy('renote.score', 'DESC')
 			.limit(rnLimit)
 
 			this.queryService.generateMutedUserQuery(rnQuery2, me);
 			this.queryService.generateBlockedUserQuery(rnQuery2, me);
 			this.queryService.generateMutedUserRenotesQueryForNotes(rnQuery2, me);
-
-		const rn1 = await rnQuery1.getMany();
-		const rn2 = await rnQuery2.getMany();
-		const duplicationRn = [...rn1.map(d => d.renoteId),...rn2.map(d => d.renoteId)]
-		const rnArray = [...new Set(duplicationRn)];
+		let rnArray = new Array();
+		if (followees.length > 10) {
+			const rn1 = await rnQuery1.getMany();
+			const rn2 = await rnQuery2.getMany();
+			const duplicationRn = [...rn1.map(d => d.renoteId),...rn2.map(d => d.renoteId)]
+			rnArray = [...new Set(duplicationRn)];
+		}
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'), ps.sinceId, ps.untilId)
 			.innerJoinAndSelect('note.user', 'user')
 			.leftJoinAndSelect('note.reply', 'reply')
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
-			if ((followees.length > 1) && (rnArray.length > 1)) {
+			if ((followees.length > 5) && (rnArray.length > 10)) {
 				query.andWhere('note.id IN (:...rnArray)', { rnArray: rnArray })
 
 			} else {
