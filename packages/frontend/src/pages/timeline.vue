@@ -10,10 +10,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<div ref="rootEl" v-hotkey.global="keymap">
 			<MkInfo v-if="['home', 'local', 'social', 'global'].includes(src) && !defaultStore.reactiveState.timelineTutorials.value[src]" style="margin-bottom: var(--margin);" closable @close="closeTutorial()">
 				<div v-if="['social'].includes(src)">
-					{{ i18n.ts._timelineDescription.recommend }}
+					{{ i18n.ts._initialTutorial._timeline.recommend }}
 				</div>
 				<div v-else-if="['global'].includes(src)">
-					{{ i18n.ts._timelineDescription.community }}
+					{{ i18n.ts._initialTutorial._timeline.community }}
 				</div>
 				<div v-else>
 					{{ i18n.ts._timelineDescription[src] }}
