@@ -202,13 +202,13 @@ const headerTabs = $computed(() => [...(defaultStore.reactiveState.pinnedUserLis
 	iconOnly: true,
 },{
 	key: 'social',
-	title: i18n.ts._timelines.social,
-	icon: 'ti ti ti-users',
+	title: i18n.ts._timelines.recommend,
+	icon: 'ti ti ti-bolt',
 	iconOnly: true,
 }] : []),...(isGlobalTimelineAvailable ? [{
 	key: 'global',
-	title: i18n.ts._timelines.global,
-	icon: 'ti ti-bolt',
+	title: i18n.ts._timelines.social,
+	icon: 'ti ti ti-users',
 	iconOnly: true,
 }] : []),  {
 	icon: 'ti ti-list',

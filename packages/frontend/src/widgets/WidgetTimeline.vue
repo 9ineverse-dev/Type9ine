@@ -123,12 +123,12 @@ const choose = async (ev) => {
 		icon: 'ti ti-planet',
 		action: () => { setSrc('local'); },
 	}, {
-		text: i18n.ts._timelines.social,
-		icon: 'ti ti-users',
+		text: i18n.ts._timelines.recommend,
+		icon: 'ti ti-bolt',
 		action: () => { setSrc('social'); },
 	}, {
-		text: i18n.ts._timelines.global,
-		icon: 'ti ti-bolt',
+		text: i18n.ts._timelines.social,
+		icon: 'ti ti-users',
 		action: () => { setSrc('global'); },
 	}, antennaItems.length > 0 ? null : undefined, ...antennaItems, listItems.length > 0 ? null : undefined, ...listItems], ev.currentTarget ?? ev.target).then(() => {
 		menuOpened.value = false;
