@@ -1227,6 +1227,8 @@ export interface Locale {
             "local": string;
             "social": string;
             "global": string;
+            "community": string;
+            "recommend": string;
             "description2": string;
             "description3": string;
         };
@@ -1272,8 +1274,6 @@ export interface Locale {
     "_timelineDescription": {
         "home": string;
         "local": string;
-        "social": string;
-        "global": string;
     };
     "_serverRules": {
         "description": string;
@@ -2199,6 +2199,8 @@ export interface Locale {
         "local": string;
         "social": string;
         "global": string;
+        "community": string;
+        "recommend": string;
     };
     "_play": {
         "new": string;
