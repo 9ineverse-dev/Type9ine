@@ -220,8 +220,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		}
 
 		let rnLimit = followees.length * 10;
-		if(rnLimit > 10000){
-			rnLimit = 10000;
+		if(rnLimit > 1000){
+			rnLimit = 1000;
 		}
 
 		const rnQuery1 = await this.notesRepository.createQueryBuilder('note')
