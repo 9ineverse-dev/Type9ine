@@ -220,8 +220,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		}
 
 		let rnLimit = followees.length * 10;
-		if(rnLimit > 1000){
-			rnLimit = 1000;
+		if(rnLimit > 2500){
+			rnLimit = 2500;
 		}
 
 		const rnQuery1 = await this.notesRepository.createQueryBuilder('note')
@@ -231,8 +231,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.leftJoinAndSelect('note.renote', 'renote')
 			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('renote.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
-			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 7)) })
-			.andWhere('renote.score > :scoreCount', { scoreCount: 10 })
+			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 4)) })
 			.andWhere('note.userId = renote.userId')
 			.andWhere('note.renoteId IS NOT NULL')
 			.andWhere('note.visibility = \'public\'')
@@ -249,8 +248,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.leftJoinAndSelect('note.renote', 'renote')
 			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('renote.userId NOT IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
-			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 7)) })
-			.andWhere('renote.score > :scoreCount', { scoreCount: scoreCount })
+			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 4)) })
 			.andWhere('note.renoteId IS NOT NULL')
 			.andWhere('note.visibility = \'public\'')
 			.orderBy('renote.score', 'DESC')
