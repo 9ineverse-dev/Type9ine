@@ -52,7 +52,7 @@ class GlobalTimelineChannel extends Channel {
 
 		if (!(
 			(this.user!.id === note.userId) ||
-			(!Object.hasOwn(this.following, note.userId) && note.channel!.isSensitive === false) ||
+			(Object.hasOwn(this.following, note.userId) && note.channel!.isSensitive === false) ||
 			(this.followingChannels.has(note.channelId))
 		)) return;
 
