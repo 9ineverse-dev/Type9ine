@@ -212,7 +212,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 	}, me: MiLocalUser) {
 		const followees = await this.userFollowingService.getFollowees(me.id);
 		const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
-
 		const scoreHurdle = followees.length*0.1 + 20;
 		let scoreCount = Math.floor(scoreHurdle);
 		if(scoreCount > 100){
@@ -220,8 +219,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		}
 
 		let rnLimit = followees.length * 10;
-		if(rnLimit > 2500){
-			rnLimit = 2500;
+		if(rnLimit > 2000){
+			rnLimit = 2000;
 		}
 
 		const rnQuery1 = await this.notesRepository.createQueryBuilder('note')
@@ -233,7 +232,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.andWhere('renote.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 4)) })
 			.andWhere('(renote.score > score)', { score: 20 })
-			.andWhere('note.userId = renote.userId')
+			.andWhere('note.userId <> renote.userId')
 			.andWhere('note.renoteId IS NOT NULL')
 			.andWhere('note.visibility = \'public\'')
 			.orderBy('renote.score', 'DESC')
@@ -250,8 +249,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('renote.userId NOT IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 4)) })
+			.andWhere('(renote.score > score)', { score: scoreCount })
 			.andWhere('note.renoteId IS NOT NULL')
-			.andWhere('(renote.score > score)', { score: 20 })
 			.andWhere('note.visibility = \'public\'')
 			.orderBy('renote.score', 'DESC')
 			.limit(rnLimit)
@@ -263,7 +262,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		if (followees.length > 10) {
 			const rn1 = await rnQuery1.getMany();
 			const rn2 = await rnQuery2.getMany();
-			const duplicationRn = [...rn1.map(d => d.renoteId),...rn2.map(d => d.renoteId)]
+			const duplicationRn = [...rn1.map(d => d.renoteId),...rn2.map(d => d.renoteId)];
 			rnArray = [...new Set(duplicationRn)];
 		}
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'), ps.sinceId, ps.untilId)
@@ -272,12 +271,22 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
-			if ((followees.length > 5) && (rnArray.length > 10)) {
+			if ((followees.length > 15) && (rnArray.length > 20)) {
 				query.andWhere('note.id IN (:...rnArray)', { rnArray: rnArray })
-
-			} else {
-				query.andWhere('(note.renoteCount > :renoteCountScore)', { renoteCountScore: 20 })
+			} else if ((followees.length > 5)){
+				query.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+				query.andWhere('(note.score > :CountScore)', { CountScore: 20 })
 				query.andWhere('note.userHost IS NULL')
+			} else {
+				const recomend = await this.notesRepository.createQueryBuilder('note')
+				.select('note.id')
+				.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 7)) })
+				.andWhere('note.visibility = \'public\'')
+				.orderBy('note.score', 'DESC')
+				.limit(50);
+				const rc = await recomend.getMany();
+				const recomendNote = [...rc.map(d => d.id)];
+				query.andWhere('note.id IN (:...rnArray)', { rnArray: recomendNote })
 			}
 
 		if (!ps.withReplies) {
