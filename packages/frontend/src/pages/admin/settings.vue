@@ -281,6 +281,7 @@ async function save(): void {
 		transactionsActNotationUrl,
 		planAssignControlKey,
 		basicPlanRoleId,
+		failedRoleId,
 		basicPlanPrice,
 		enableFanoutTimeline,
 		perLocalUserUserTimelineCacheMax,
