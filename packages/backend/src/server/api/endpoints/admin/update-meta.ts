@@ -83,6 +83,7 @@ export const paramDef = {
 		summalyProxy: { type: 'string', nullable: true },
 		planAssignControlKey: { type: 'string', nullable: true },
 		basicPlanRoleId: { type: 'string', format: 'misskey:id', nullable: true },
+		failedRoleId: { type: 'string', format: 'misskey:id', nullable: true },
 		basicPlanPriceId: { type: 'string', nullable: true },
 		basicPlanPrice: { type: 'integer', nullable: true },
 		transactionsActNotationUrl: { type: 'string', nullable: true },
@@ -454,6 +455,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 					set.basicPlanRoleId = null;
 				} else {
 					set.basicPlanRoleId = ps.basicPlanRoleId;
+				}
+			}
+
+			if (ps.failedRoleId !== undefined) {
+				if (ps.failedRoleId === '') {
+					set.failedRoleId = null;
+				} else {
+					set.failedRoleId = ps.failedRoleId;
 				}
 			}
 

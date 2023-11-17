@@ -97,6 +97,9 @@ const price = instance.basicPlanPrice;
 if (!instance.sellSubscription) {
 	window.location.href = "https://" + host + "/";
 }
+if (isSubscriptionMember === false) {
+	await portal();
+}
 
 onBeforeMount(() => {
 	if (!instance.sellSubscription) {

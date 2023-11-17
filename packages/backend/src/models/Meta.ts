@@ -329,6 +329,13 @@ export class MiMeta {
 	})
 	public basicPlanRoleId: MiRole['id'] | null;
 
+	@Column({
+		...id(),
+		nullable: true,
+		comment: 'The ID of source Role.',
+	})
+	public failedRoleId: MiRole['id'] | null;
+
 	@Column('varchar', {
 		length: 1024,
 		nullable: true,

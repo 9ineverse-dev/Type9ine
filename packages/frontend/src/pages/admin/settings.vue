@@ -104,6 +104,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 								<template #prefix><i class="ti ti-key"></i></template>
 								<template #label>Basic Plan PriceID</template>
 							</MkInput>
+
 						</div>
 					</FormSection>
 
@@ -121,6 +122,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 							</MkInput>
 							<MkInput v-model="basicPlanPrice" type="number">
 								<template #label>Basic Plan Price</template>
+							</MkInput>
+							<MkInput v-model="failedRoleId">
+								<template #label>決済失敗RoleId</template>
 							</MkInput>
 						</div>
 					</FormSection>
@@ -216,6 +220,7 @@ let basicPlanPriceId: string | null = $ref('');
 let transactionsActNotationUrl: string | null = $ref('');
 let planAssignControlKey: string | null = $ref('');
 let basicPlanRoleId: any | null = $ref('');
+let failedRoleId: any | null = $ref('');
 let basicPlanPrice: number = $ref(0);
 let enableFanoutTimeline: boolean = $ref(false);
 let perLocalUserUserTimelineCacheMax: number = $ref(0);
@@ -245,6 +250,7 @@ async function init(): Promise<void> {
 	planAssignControlKey = meta.planAssignControlKey,
 	basicPlanPriceId = meta.basicPlanPriceId,
 	basicPlanRoleId = meta.basicPlanRoleId,
+	failedRoleId = meta.failedRoleId,
 	basicPlanPrice = meta.basicPlanPrice,
 	enableFanoutTimeline = meta.enableFanoutTimeline;
 	perLocalUserUserTimelineCacheMax = meta.perLocalUserUserTimelineCacheMax;

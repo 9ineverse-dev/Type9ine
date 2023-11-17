@@ -338,7 +338,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			const instance = await this.metaService.fetch(true);
 
 			let SubscriptionSelleble = false;
-			if ( instance.sellSubscription && instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanPrice && instance.basicPlanRoleId && instance.transactionsActNotationUrl) {
+			if ( instance.sellSubscription && instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanPrice && instance.basicPlanRoleId && instance.failedRoleId && instance.transactionsActNotationUrl) {
 				SubscriptionSelleble = instance.sellSubscription;
 			}
 
@@ -419,6 +419,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				objectStorageSetPublicRead: instance.objectStorageSetPublicRead,
 				objectStorageS3ForcePathStyle: instance.objectStorageS3ForcePathStyle,
 				basicPlanRoleId: instance.basicPlanRoleId,
+				failedRoleId: instance.failedRoleId,
 				basicPlanPriceId: instance.basicPlanPriceId,
 				basicPlanPrice: instance.basicPlanPrice,
 				transactionsActNotationUrl: instance.transactionsActNotationUrl,
