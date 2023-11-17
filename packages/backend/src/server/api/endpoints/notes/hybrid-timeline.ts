@@ -212,15 +212,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 	}, me: MiLocalUser) {
 		const followees = await this.userFollowingService.getFollowees(me.id);
 		const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
-		const scoreHurdle = followees.length*0.1 + 20;
-		let scoreCount = Math.floor(scoreHurdle);
+		let scoreCount = Math.floor(followees.length*0.1 + 20);
 		if(scoreCount > 100){
 			scoreCount = 100;
 		}
 
 		let rnLimit = followees.length * 10;
-		if(rnLimit > 2000){
-			rnLimit = 2000;
+		if(rnLimit > 2500){
+			rnLimit = 2500;
 		}
 
 		const rnQuery1 = await this.notesRepository.createQueryBuilder('note')
@@ -232,7 +231,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.andWhere('renote.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 4)) })
 			.andWhere('(renote.score > :CountScore)', { CountScore: 20 })
-			.andWhere('note.userId <> renote.userId')
+			.andWhere('note.userId != renote.userId')
 			.andWhere('note.renoteId IS NOT NULL')
 			.andWhere('note.visibility = \'public\'')
 			.orderBy('renote.score', 'DESC')
