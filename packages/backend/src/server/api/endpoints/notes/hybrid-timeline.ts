@@ -222,7 +222,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			rnLimit = 2500;
 		}
 
-		const rnQuery1 = this.notesRepository.createQueryBuilder('note')
+		const rnQuery1 = await this.notesRepository.createQueryBuilder('note')
 			.select('note.id')
 			.select('note.renoteId')
 			.select('renote.score')
@@ -239,7 +239,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			this.queryService.generateBlockedUserQuery(rnQuery1, me);
 			this.queryService.generateMutedUserRenotesQueryForNotes(rnQuery1, me);
 
-		const rnQuery2 = this.notesRepository.createQueryBuilder('note')
+		const rnQuery2 = await this.notesRepository.createQueryBuilder('note')
 			.select('note.id')
 			.select('note.renoteId')
 			.leftJoinAndSelect('note.renote', 'renote')
