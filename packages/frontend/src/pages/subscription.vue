@@ -97,9 +97,7 @@ const price = instance.basicPlanPrice;
 if (!instance.sellSubscription) {
 	window.location.href = "https://" + host + "/";
 }
-if (isSubscriptionMember === true) {
-	await portal();
-}
+
 
 onBeforeMount(() => {
 	if (!instance.sellSubscription) {
@@ -115,6 +113,10 @@ async function checkout() {
 async function portal() {
 	const redirect = await os.api('subscription/portal');
 	window.location.href = redirect.redirect.destination;
+}
+
+if (isSubscriptionMember === true) {
+	await portal();
 }
 </script>
 
