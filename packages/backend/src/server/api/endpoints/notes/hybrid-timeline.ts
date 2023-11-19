@@ -222,13 +222,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			rnLimit = 2500;
 		}
 
-		const rnQuery1 = await this.notesRepository.createQueryBuilder('note')
+		const rnQuery1 = this.notesRepository.createQueryBuilder('note')
 			.select('note.id')
 			.select('note.renoteId')
 			.select('renote.score')
 			.leftJoinAndSelect('note.renote', 'renote')
-			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
-			.andWhere('renote.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+			.andwhere('(note.userId IN (:...meOrFolloweeIds)) AND (renote.userId IN (:...meOrFolloweeIds))', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 4)) })
 			.andWhere('(renote.score > :CountScore)', { CountScore: 10 })
 			.andWhere('note.renoteId IS NOT NULL')
@@ -240,12 +239,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			this.queryService.generateBlockedUserQuery(rnQuery1, me);
 			this.queryService.generateMutedUserRenotesQueryForNotes(rnQuery1, me);
 
-		const rnQuery2 = await this.notesRepository.createQueryBuilder('note')
+		const rnQuery2 = this.notesRepository.createQueryBuilder('note')
 			.select('note.id')
 			.select('note.renoteId')
 			.leftJoinAndSelect('note.renote', 'renote')
-			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
-			.andWhere('renote.userId NOT IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+			.andwhere('(note.userId IN (:...meOrFolloweeIds)) AND (renote.userId IN (:...meOrFolloweeIds))', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 4)) })
 			.andWhere('(renote.score > :CountScore)', { CountScore: scoreCount })
 			.andWhere('note.renoteId IS NOT NULL')
