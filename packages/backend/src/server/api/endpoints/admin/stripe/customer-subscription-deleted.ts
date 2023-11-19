@@ -45,6 +45,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			const user = await this.userProfilesRepository.findOneBy({ stripeCustomerId: ps.customer });
 			if (user == null) { return; }
 			await this.roleService.unassign(user!.userId, role!.id);
+			if ( instance.basicPlanRoleId ){
+				const failedrole = await this.rolesRepository.findOneBy({ id: instance.failedRoleId });
+				await this.roleService.unassign(user!.userId, failedrole!.id);
+			}
 			return;
 		});
 	}
