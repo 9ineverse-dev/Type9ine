@@ -52,7 +52,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 	) {
 		super(meta, paramDef, async (ps, me) => {
 			const instance = await this.metaService.fetch(true);
-			if (!(instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanRoleId) || instance.sellSubscription === false) {return {
+			if (!(instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanRoleId && instance.failedRoleId) || instance.sellSubscription === false) {return {
 				redirect: {
 					permanent: false,
 					destination: `${this.config.url}`,
@@ -88,19 +88,30 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				subscribeUser = await this.userProfilesRepository.findOneByOrFail({ userId: me.id });
 			}
 
-			const session = await stripe.checkout.sessions.create({
-				mode: 'subscription',
-				line_items: [
-					{
-						price: instance.basicPlanPriceId,
-						// For metered billing, do not pass quantity
-						quantity: 1,
-					},
-				],
-				success_url: `${this.config.url}/subscription/succsess`,
-				cancel_url: `${this.config.url}/subscription/cancel`,
-				customer: subscribeUser.stripeCustomerId,
-			});
+			let session;
+
+			const assignRoles = await this.roleService.getUserAssigns(me.id);
+			const assignRoleIds = [...assignRoles.map(d => d.roleId)];
+			if( assignRoleIds.includes(instance.basicPlanRoleId) || assignRoleIds.includes(instance.failedRoleId)){
+				session = await stripe.billingPortal.sessions.create({
+					customer: subscribeUser.stripeCustomerId,
+					return_url: `${this.config.url}`,
+				});
+			} else {
+				session = await stripe.checkout.sessions.create({
+					mode: 'subscription',
+					line_items: [
+						{
+							price: instance.basicPlanPriceId,
+							// For metered billing, do not pass quantity
+							quantity: 1,
+						},
+					],
+					success_url: `${this.config.url}`,
+					cancel_url: `${this.config.url}/subscription/`,
+					customer: subscribeUser.stripeCustomerId,
+				});
+			}
 			return {
 				redirect: {
 					permanent: false,
