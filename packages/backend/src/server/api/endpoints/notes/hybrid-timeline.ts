@@ -260,8 +260,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		let rnArray = new Array();
 		if (followees.length > 10) {
 			const rn1 = await rnQuery1.getMany();
+			const duplicationRn1 = [...rn1.map(d => d.renoteId)];
 			const rn2 = await rnQuery2.getMany();
-			const duplicationRn = [...rn1.map(d => d.renoteId),...rn2.map(d => d.renoteId)];
+			const duplicationRn2 = [...rn2.map(d => d.renoteId)];
+			const duplicationRn = duplicationRn1.concat(duplicationRn2);
 			rnArray = [...new Set(duplicationRn)];
 		}
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'), ps.sinceId, ps.untilId)
