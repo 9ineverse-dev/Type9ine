@@ -98,6 +98,9 @@ if (!instance.sellSubscription) {
 	window.location.href = "https://" + host + "/";
 }
 
+if (isSubscriptionMember === true) {
+	await portal();
+}
 
 onBeforeMount(() => {
 	if (!instance.sellSubscription) {
@@ -115,9 +118,7 @@ async function portal() {
 	window.location.href = redirect.redirect.destination;
 }
 
-if (isSubscriptionMember === true) {
-	await portal();
-}
+
 </script>
 
 <style lang="scss" module>
