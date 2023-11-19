@@ -230,7 +230,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('renote.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
 			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 4)) })
-			.andWhere('(renote.score > :CountScore)', { CountScore: 20 })
+			.andWhere('(renote.score > :CountScore)', { CountScore: 10 })
 			//.andWhere('note.userId != renote.userId')
 			.andWhere('note.renoteId IS NOT NULL')
 			.andWhere('note.visibility = \'public\'')
