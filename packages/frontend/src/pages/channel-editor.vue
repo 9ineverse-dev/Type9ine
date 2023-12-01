@@ -346,5 +346,3 @@ definePageMetadata(computed(() => props.channelId ? {
 	opacity: 0.5;
 }
 </style>
-
-</style>
