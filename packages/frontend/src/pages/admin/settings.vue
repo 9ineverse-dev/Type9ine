@@ -138,6 +138,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 								<template #caption>{{ i18n.ts._serverSettings.fanoutTimelineDescription }}</template>
 							</MkSwitch>
 
+							<MkSwitch v-model="enableFanoutTimelineDbFallback">
+								<template #label>{{ i18n.ts._serverSettings.fanoutTimelineDbFallback }}</template>
+								<template #caption>{{ i18n.ts._serverSettings.fanoutTimelineDbFallbackDescription }}</template>
+							</MkSwitch>
+
 							<MkInput v-model="perLocalUserUserTimelineCacheMax" type="number">
 								<template #label>perLocalUserUserTimelineCacheMax</template>
 							</MkInput>
@@ -223,6 +228,7 @@ let basicPlanRoleId: any | null = $ref('');
 let failedRoleId: any | null = $ref('');
 let basicPlanPrice: number = $ref(0);
 let enableFanoutTimeline: boolean = $ref(false);
+let enableFanoutTimelineDbFallback: boolean = $ref(false);
 let perLocalUserUserTimelineCacheMax: number = $ref(0);
 let perRemoteUserUserTimelineCacheMax: number = $ref(0);
 let perUserHomeTimelineCacheMax: number = $ref(0);
@@ -253,6 +259,7 @@ async function init(): Promise<void> {
 	failedRoleId = meta.failedRoleId,
 	basicPlanPrice = meta.basicPlanPrice,
 	enableFanoutTimeline = meta.enableFanoutTimeline;
+	enableFanoutTimelineDbFallback = meta.enableFanoutTimelineDbFallback;
 	perLocalUserUserTimelineCacheMax = meta.perLocalUserUserTimelineCacheMax;
 	perRemoteUserUserTimelineCacheMax = meta.perRemoteUserUserTimelineCacheMax;
 	perUserHomeTimelineCacheMax = meta.perUserHomeTimelineCacheMax;
@@ -284,6 +291,7 @@ async function save(): void {
 		failedRoleId,
 		basicPlanPrice,
 		enableFanoutTimeline,
+		enableFanoutTimelineDbFallback,
 		perLocalUserUserTimelineCacheMax,
 		perRemoteUserUserTimelineCacheMax,
 		perUserHomeTimelineCacheMax,
