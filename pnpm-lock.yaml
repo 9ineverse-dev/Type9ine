@@ -682,9 +682,6 @@ importers:
       '@vue/compiler-sfc':
         specifier: 3.3.8
         version: 3.3.8
-      '@vueform/multiselect':
-        specifier: ^2.6.2
-        version: 2.6.6
       aiscript-vscode:
         specifier: github:aiscript-dev/aiscript-vscode#v0.0.6
         version: github.com/aiscript-dev/aiscript-vscode/b5a8aa0ad927831a0b867d1c183460a14e6c48cd
@@ -6944,7 +6941,7 @@ packages:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.3.8(typescript@5.2.2)
-      vue-component-type-helpers: 1.8.22
+      vue-component-type-helpers: 1.8.24
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -8500,10 +8497,6 @@ packages:
       vue: 3.3.8(typescript@5.2.2)
       vue-component-type-helpers: 1.8.4
     dev: true
-
-  /@vueform/multiselect@2.6.6:
-    resolution: {integrity: sha512-JDWesVRmyGz9HmHp2Ooy1cb8XgKohiztwMDtjm8c0/Th+7wEZENZuYa0iY5CTvaJNANl3LVqh9BNnCc/YlM/Bg==}
-    dev: false
 
   /@webgpu/types@0.1.30:
     resolution: {integrity: sha512-9AXJSmL3MzY8ZL//JjudA//q+2kBRGhLBFpkdGksWIuxrMy81nFrCzj2Am+mbh8WoU6rXmv7cY5E3rdlyru2Qg==}
@@ -17447,10 +17440,6 @@ packages:
       immutable: 4.2.2
       source-map-js: 1.0.2
 
-  /save-dev@0.0.1-security:
-    resolution: {integrity: sha512-k6knZTDNK8PKKbIqnvxiOveJinuw2LcQjqDoaorZWP9M5AR2EPsnpDeSbeoZZ0pHr5ze1uoaKdK8NBGQrJ34Uw==}
-    dev: false
-
   /sax@1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
     dev: false
@@ -18256,7 +18245,7 @@ packages:
     resolution: {integrity: sha512-yPxVJxUzP1QHhHeFnYjJl48QwDS1+5befcL7ju7+t+i88D5r0rbsL+GkCCS6zgcU+TiV5bF9eMGcKyJfLf8BZQ==}
     engines: {node: '>=12.*'}
     dependencies:
-      '@types/node': 20.8.10
+      '@types/node': 20.9.1
       qs: 6.11.1
     dev: false
 
@@ -19401,8 +19390,8 @@ packages:
     resolution: {integrity: sha512-AFbieoL7a5LMqcnOF04ji+rpXadgOXnZsxQr//r83kLPr7biP7am3g9zbaZIaBGwBRWeSvoMD4mgPdX3e4NWBg==}
     dev: false
 
-  /vue-component-type-helpers@1.8.22:
-    resolution: {integrity: sha512-LK3wJHs3vJxHG292C8cnsRusgyC5SEZDCzDCD01mdE/AoREFMl2tzLRuzwyuEsOIz13tqgBcnvysN3Lxsa14Fw==}
+  /vue-component-type-helpers@1.8.24:
+    resolution: {integrity: sha512-lqWs/7fdRXoSBAlbouHBX+LNuaY6gI9xWW34m/ZIz9zVPYHEyw0b2/zaCBwlKx0NtKTeF/6pOpvrxVkh7nhIYg==}
     dev: true
 
   /vue-component-type-helpers@1.8.4:
