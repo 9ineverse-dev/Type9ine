@@ -61,7 +61,7 @@ function compileQuery(q: Q): string {
 
 @Injectable()
 export class SearchService {
-	private readonly meilisearchIndexScope: 'local' | 'global' | string[] = 'local';
+	private readonly meilisearchIndexScope: 'local' | 'global' | string[] = 'global';
 	private meilisearchNoteIndex: Index | null = null;
 
 	constructor(
