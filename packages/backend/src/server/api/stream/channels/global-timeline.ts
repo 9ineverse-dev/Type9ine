@@ -18,7 +18,7 @@ class GlobalTimelineChannel extends Channel {
 	public readonly chName = 'hybridTimeline';
 	public static shouldShare = true;
 	public static requireCredential = true;
-	private withReplies: boolean as const;
+	private withReplies: boolean;
 	private withRenotes: boolean;
 
 	constructor(
