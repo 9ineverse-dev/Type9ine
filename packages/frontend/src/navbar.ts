@@ -1,9 +1,10 @@
 /*
- * SPDX-FileCopyrightText: syuilo and other misskey contributors
+ * SPDX-FileCopyrightText: syuilo and misskey-project
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
 import { computed, reactive } from 'vue';
+import { clearCache } from './scripts/clear-cache.js';
 import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
 import { miLocalStorage } from '@/local-storage.js';
@@ -123,6 +124,11 @@ export const navbarItemDef = reactive({
 		show: computed(() => $i != null),
 		to: '/my/achievements',
 	},
+	games: {
+		title: 'Misskey Games',
+		icon: 'ti ti-device-gamepad',
+		to: '/games',
+	},
 	ui: {
 		title: i18n.ts.switchUi,
 		icon: 'ti ti-devices',
@@ -177,5 +183,12 @@ export const navbarItemDef = reactive({
 		icon: 'ti ti-user',
 		show: computed(() => $i != null),
 		to: `/@${$i?.username}`,
+	},
+	cacheClear: {
+		title: i18n.ts.clearCache,
+		icon: 'ti ti-trash',
+		action: (ev) => {
+			clearCache();
+		},
 	},
 });
