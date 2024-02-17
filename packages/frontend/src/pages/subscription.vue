@@ -81,6 +81,7 @@ import { $i } from '@/account.js';
 import * as os from '@/os.js';
 import { i18n } from '@/i18n.js';
 import { host } from '@/config.js';
+import { misskeyApi } from '@/scripts/misskey-api.js';
 
 const props = withDefaults(defineProps<{
 	role: string;
@@ -89,7 +90,7 @@ const props = withDefaults(defineProps<{
 });
 
 const isSubscriptionMember = $i.roles.some(r => r.id === instance.basicPlanRoleId);
-let subscriptionRole = await os.api('roles/show', {	roleId: props.role, });
+let subscriptionRole = await misskeyApi('roles/show', {	roleId: props.role, });
 const driveCapacityGb = subscriptionRole.policies.driveCapacityMb.value / 1024;
 const yourdriveCapacityGb = $i.policies.driveCapacityMb / 1024;
 const price = instance.basicPlanPrice;
@@ -108,12 +109,12 @@ onBeforeMount(() => {
 });
 
 async function checkout() {
-	const redirect = await os.api('subscription/checkout');
+	const redirect = await misskeyApi('subscription/checkout');
 	window.location.href = redirect.redirect.destination;
 }
 
 async function portal() {
-	const redirect = await os.api('subscription/portal');
+	const redirect = await misskeyApi('subscription/portal');
 	window.location.href = redirect.redirect.destination;
 }
 
