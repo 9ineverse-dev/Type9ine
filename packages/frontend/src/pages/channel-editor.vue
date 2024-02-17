@@ -131,8 +131,8 @@ const bannerUrl = ref<string | null>(null);
 const bannerId = ref<string | null>(null);
 const color = ref('#000');
 const isSensitive = ref(false);
-let searchable = ref(true);
-let isPrivate = ref(false);
+const searchable = ref(true);
+const isPrivate = ref(false);
 const privateUserIds = ref<{ value: string, label: string}[]>([]);
 const allowRenoteToExternal = ref(true);
 const pinnedNotes = ref<{ id: Misskey.entities.Note['id'] }[]>([]);
@@ -164,13 +164,13 @@ async function fetchChannel() {
 	description.value = channel.value.description;
 	bannerId.value = channel.value.bannerId;
 	bannerUrl.value = channel.value.bannerUrl;
-	searchable.value = channel.searchable;
+	searchable.value = channel.value.searchable;
 	isSensitive.value = channel.value.isSensitive;
-	isPrivate.value = channel.isPrivate;
+	isPrivate.value = channel.value.isPrivate;
 	const fetchPrivateUserIds = channel.privateUserIds;
 	const set = new Set(fetchPrivateUserIds);
 	const searchPrivateUserIds = [...set];
-	const pusers = await os.api('users/show', {
+	const pusers = await misskeyApi('users/show', {
 		userIds: searchPrivateUserIds,
 	});
 	if (pusers) {
@@ -204,8 +204,8 @@ async function addPrivateUserIds() {
 		}, ...privateUserIds.value];
 	};
 
-	const usernamePromise = os.api('users/show', Misskey.acct.parse(result) );
-	const idPromise = os.api('users/show', { userId: result });
+	const usernamePromise = await misskeyApi('users/show', Misskey.acct.parse(result) );
+	const idPromise = await misskeyApi('users/show', { userId: result });
 	let _notFound = false;
 	const notFound = () => {
 		if (_notFound) {
