@@ -148,15 +148,14 @@ const featuredPagination = computed(() => ({
 watch(() => props.channelId, async () => {
 	channel.value = await misskeyApi('channels/show', {
 		channelId: props.channelId,
-	}).then(_channel => {
-		channel = _channel;
-		queueUserIds = channel.privateUserIds;
-		queueUserIds.unshift(channel.userId);
-		favorited.value = channel.value.isFavorited ?? false;
-		if (favorited.value || channel.value.isFollowing) {
-			tab.value = 'timeline';
-	}
+	});
 
+	favorited.value = channel.value.isFavorited ?? false;
+	if (favorited.value || channel.value.isFollowing) {
+		tab.value = 'timeline';
+	}
+	queueUserIds = channel.privateUserIds;
+	queueUserIds.unshift(channel.userId);
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
 		const lastNotedAt = Date.parse(channel.value.lastNotedAt);
@@ -164,9 +163,8 @@ watch(() => props.channelId, async () => {
 		if (lastNotedAt > lastReadedAt) {
 			miLocalStorage.setItemAsJson(`channelLastReadedAt:${channel.value.id}`, lastNotedAt);
 		}
-		}
-		fetchMoreUsers();
-});
+	}
+	fetchMoreUsers();
 }, { immediate: true });
 
 async function fetchMoreUsers() {
