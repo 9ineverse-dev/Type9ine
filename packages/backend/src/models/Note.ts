@@ -135,7 +135,7 @@ export class MiNote {
 	})
 	public score: number;
 
-	@Index()
+	@Index('IDX_NOTE_FILE_IDS', { synchronize: false })
 	@Column({
 		...id(),
 		array: true, default: '{}',
@@ -147,14 +147,14 @@ export class MiNote {
 	})
 	public attachedFileTypes: string[];
 
-	@Index()
+	@Index('IDX_NOTE_VISIBLE_USER_IDS', { synchronize: false })
 	@Column({
 		...id(),
 		array: true, default: '{}',
 	})
 	public visibleUserIds: MiUser['id'][];
 
-	@Index()
+	@Index('IDX_NOTE_MENTIONS', { synchronize: false })
 	@Column({
 		...id(),
 		array: true, default: '{}',
@@ -176,7 +176,7 @@ export class MiNote {
 	})
 	public emojis: string[];
 
-	@Index()
+	@Index('IDX_NOTE_TAGS', { synchronize: false })
 	@Column('varchar', {
 		length: 128, array: true, default: '{}',
 	})
