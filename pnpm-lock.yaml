@@ -380,9 +380,6 @@ importers:
       stripe:
         specifier: ^13.7.0
         version: 13.11.0
-      summaly:
-        specifier: github:misskey-dev/summaly
-        version: github.com/misskey-dev/summaly/d2d8db49943ccb201c1b1b283e9d0a630519fac7
       systeminformation:
         specifier: 5.21.24
         version: 5.21.24
@@ -1954,6 +1951,7 @@ packages:
 
   /@babel/helper-create-regexp-features-plugin@7.22.15(@babel/core@7.23.5):
     resolution: {integrity: sha512-29FkPLFjn4TPEa3RE7GpW+qbE8tlsu3jntNYNfcGsc49LphF1PQIiD+vMZ1z1xVOKt+93khA9tc2JBs3kBjA7w==}
+    engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0
     dependencies:
@@ -2014,6 +2012,7 @@ packages:
 
   /@babel/helper-module-transforms@7.23.3(@babel/core@7.23.5):
     resolution: {integrity: sha512-7bBs4ED9OmswdfDzpz4MpWgSrV7FXlc3zIagvLFjS5H+Mk7Snr21vQ6QwrsoCGMfNC4e4LQPdoULEt4ykz0SRQ==}
+    engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0
     dependencies:
@@ -3401,6 +3400,7 @@ packages:
 
   /@esbuild/android-arm64@0.19.11:
     resolution: {integrity: sha512-aiu7K/5JnLj//KOnOfEZ0D90obUkRzDMyqd/wNAUQ34m4YUPVhRZpnqKV9uqDGxT7cToSDnIHsGooyIczu9T+Q==}
+    engines: {node: '>=12'}
     cpu: [arm64]
     os: [android]
     requiresBuild: true
@@ -3655,6 +3655,7 @@ packages:
 
   /@esbuild/linux-x64@0.19.11:
     resolution: {integrity: sha512-grbyMlVCvJSfxFQUndw5mCtWs5LO1gUlwP4CDi4iJBbVpZcqLVT29FxgGuBJGSzyOxotFG4LoO5X+M1350zmPA==}
+    engines: {node: '>=12'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
@@ -3756,6 +3757,7 @@ packages:
 
   /@esbuild/win32-x64@0.19.11:
     resolution: {integrity: sha512-vfkhltrjCAb603XaFhqhAF4LGDi2M4OrCRrFusyQ+iTLQ/o60QQXxc9cZC/FFpihBI9N1Grn6SMKVJ4KP7Fuiw==}
+    engines: {node: '>=12'}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
@@ -4593,6 +4595,7 @@ packages:
 
   /@nestjs/core@10.2.10(@nestjs/common@10.2.10)(@nestjs/platform-express@10.3.1)(reflect-metadata@0.1.14)(rxjs@7.8.1):
     resolution: {integrity: sha512-+ckOI6BPi2ZMHikT9MCG4ctHDc4OnjhoIytrn7f2AYMMXI4bnutJhqyQKc30VDka5x3Wq6QAD57pgSP7y+JjJg==}
+    requiresBuild: true
     peerDependencies:
       '@nestjs/common': ^10.0.0
       '@nestjs/microservices': ^10.0.0
@@ -5075,10 +5078,6 @@ packages:
 
   /@simplewebauthn/types@9.0.1:
     resolution: {integrity: sha512-tGSRP1QvsAvsJmnOlRQyw/mvK9gnPtjEc5fg2+m8n+QUa+D7rvrKkOYyfpy42GTs90X3RDOnqJgfHt+qO67/+w==}
-
-  /@sinclair/typebox@0.24.51:
-    resolution: {integrity: sha512-1P1OROm/rdubP5aFDSZQILU0vrLCJ4fvHt6EoqHEM+2D/G5MK3bIaymUKLit8Js9gbns5UyJnkP/TZROLw4tUA==}
-    dev: true
 
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
@@ -7362,7 +7361,6 @@ packages:
     resolution: {integrity: sha512-HhmzZh5LSJNS5O8jQKpJ/3ZcrrlG6L70hpGqMIAoM9YVD0YBRNWYsfwcXq8VnSjlNpCpgLzMXdiPo+dxcvSmiA==}
     dependencies:
       undici-types: 5.26.5
-    dev: true
 
   /@types/nodemailer@6.4.14:
     resolution: {integrity: sha512-fUWthHO9k9DSdPCSPRqcu6TWhYyxTBg382vlNIttSe9M7XfsT06y0f24KHXtbnijPGGRIcVvdKHTNikOI6qiHA==}
@@ -8179,6 +8177,7 @@ packages:
 
   /acorn-walk@8.3.2:
     resolution: {integrity: sha512-cjkyv4OtNCIeqhHrfS81QWXoCBPExR/J62oyEqepVw8WaQeSqpW2uhuLPh1m9eWhDuOo/jUXVTlifvesOWp/4A==}
+    engines: {node: '>=0.4.0'}
     dev: true
 
   /acorn@7.4.1:
@@ -15892,6 +15891,7 @@ packages:
 
   /postcss-colormin@6.0.2(postcss@8.4.33):
     resolution: {integrity: sha512-TXKOxs9LWcdYo5cgmcSHPkyrLAh86hX1ijmyy6J8SbOhyv6ua053M3ZAM/0j44UsnQNIWdl8gb5L7xX2htKeLw==}
+    engines: {node: ^14 || ^16 || >=18.0}
     peerDependencies:
       postcss: ^8.4.31
     dependencies:
@@ -18300,6 +18300,7 @@ packages:
 
   /three@0.160.1:
     resolution: {integrity: sha512-Bgl2wPJypDOZ1stAxwfWAcJ0WQf7QzlptsxkjYiURPz+n5k4RBDLsq+6f9Y75TYxn6aHLcWz+JNmwTOXWrQTBQ==}
+    dev: false
 
   /throttle-debounce@5.0.0:
     resolution: {integrity: sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==}
