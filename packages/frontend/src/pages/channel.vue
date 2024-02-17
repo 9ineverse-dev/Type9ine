@@ -146,8 +146,7 @@ const featuredPagination = computed(() => ({
 	},
 }));
 
-watch(() => props.channelId, async () => {
-	await misskeyApi('channels/show', {
+	misskeyApi('channels/show', {
 		channelId: props.channelId,
 	}).then(_channel => {
 	channel.value = _channel;
