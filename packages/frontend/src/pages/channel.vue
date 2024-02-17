@@ -168,8 +168,8 @@ watch(() => props.channelId, async () => {
 }, { immediate: true });
 
 function fetchMoreUsers() {
-	if ( !channel ) return;
-	if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
+	//if ( !channel ) return;
+	//if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
 	misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, 10),
 	}).then(_users => {
