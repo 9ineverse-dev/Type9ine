@@ -162,7 +162,6 @@ watch(() => props.channelId, async () => {
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
 		fetching = false;
 	});
-	fetchMoreUsers();
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
 		const lastNotedAt = Date.parse(channel.value.lastNotedAt);
