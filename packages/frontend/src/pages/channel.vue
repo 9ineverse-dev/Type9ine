@@ -156,9 +156,10 @@ watch(() => props.channelId, async () => {
 	}
 	queueUserIds = channel.value.privateUserIds;
 	queueUserIds.unshift(channel.value.userId);
-	pusers = await misskeyApi('users/show', {
+	await misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
-	}).then(() => {
+	}).then(_users => {
+		pusers = _users;
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
 	}).finally(() => {
 		fetching = false;
