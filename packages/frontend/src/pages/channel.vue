@@ -152,7 +152,7 @@ watch(() => props.channelId,() => {
 	}).then(_channel => {
 	channel.value = _channel;
 	favorited.value = channel.value.isFavorited ?? false;
-	if (favorited.value || channel.value.isFollowing) {
+	if (favorited.value || channel.value.isFollowing || channel.value.isPrivate) {
 		tab.value = 'timeline';
 	}
 	queueUserIds = channel.value.privateUserIds;
@@ -163,7 +163,6 @@ watch(() => props.channelId,() => {
 		pusers = _users;
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
 		fetching = false;
-		getCurrentInstance().proxy.forceUpdate();
 	}).finally(() => {});
 
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
