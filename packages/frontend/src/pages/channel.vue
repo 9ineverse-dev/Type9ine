@@ -169,10 +169,10 @@ watch(() => props.channelId, async () => {
 });
 }, { immediate: true });
 
-function fetchMoreUsers() {
+async function fetchMoreUsers() {
 	if ( !channel ) return;
 	if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
-	os.api('users/show', {
+	await misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
 	}).then(_users => {
 		pusers = pusers.concat(_users);
