@@ -171,10 +171,9 @@ function fetchMoreUsers() {
 	//if ( !channel ) return;
 	//if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
 	misskeyApi('users/show', {
-		userIds: queueUserIds.slice(0, 10),
+		userIds: channel.value.privateUserIds,
 	}).then(_users => {
 		pusers.value = _users;
-		queueUserIds = queueUserIds.slice(10);
 	}).finally(() => {
 		fetching = false;
 	});
