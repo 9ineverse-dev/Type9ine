@@ -146,6 +146,7 @@ const featuredPagination = computed(() => ({
 	},
 }));
 
+watch(() => props.channelId,() => {
 	misskeyApi('channels/show', {
 		channelId: props.channelId,
 	}).then(_channel => {
