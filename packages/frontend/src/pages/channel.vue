@@ -155,7 +155,7 @@ watch(() => props.channelId, async () => {
 		tab.value = 'timeline';
 	}
 	queueUserIds = channel.value.privateUserIds;
-	queueUserIds.unshift(channel.userId);
+	queueUserIds.unshift(channel.value.userId);
 	fetchMoreUsers();
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
