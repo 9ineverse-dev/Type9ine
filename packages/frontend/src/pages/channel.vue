@@ -135,7 +135,7 @@ const searchQuery = ref('');
 const searchPagination = ref();
 const searchKey = ref('');
 const pusers = ref<Misskey.entities.UserDetailed[]>([]);
-let fetching = ref(true);
+const fetching = ref(false);
 let queueUserIds = ref<string[]>([]);
 const featuredPagination = computed(() => ({
 	endpoint: 'notes/featured' as const,
@@ -177,7 +177,7 @@ async function fetchMoreUsers() {
 			pusers.value = _users;
 	});
 	queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
-	fetching = false;
+	fetching.valu = false;
 }
 
 function edit() {
