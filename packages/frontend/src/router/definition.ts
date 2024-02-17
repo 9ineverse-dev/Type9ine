@@ -551,8 +551,7 @@ const routes: RouteDef[] = [{
 	loginRequired: false,
 }, {
 	path: '/subscription',
-	component: page(() => import('./pages/subscription.vue')),
-	loginRequired: true,
+	component: page(() => import('@/pages/subscription.vue')),
 }, {
 	path: '/timeline',
 	component: page(() => import('@/pages/timeline.vue')),
