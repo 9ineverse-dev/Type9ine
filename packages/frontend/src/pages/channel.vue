@@ -173,7 +173,7 @@ function fetchMoreUsers() {
 	misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
 	}).then(_users => {
-		pusers = pusers.concat(_users);
+		pusers = pusers.concat(_users.value);
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
 	}).finally(() => {
 		fetching = false;
