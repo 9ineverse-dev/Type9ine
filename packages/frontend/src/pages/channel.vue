@@ -170,10 +170,9 @@ watch(() => props.channelId, async () => {
 async function fetchMoreUsers() {
 	if ( !channel.isPrivate ) return;
 	if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
-	const setusers = await misskeyApi('users/show', {
+	pusers = await misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
 	});
-	pusers = pusers.concat(setusers);
 	queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
 	fetching = false;
 }
