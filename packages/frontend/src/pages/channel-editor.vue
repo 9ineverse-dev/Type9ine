@@ -220,10 +220,8 @@ async function addPrivateUserIds() {
 	usernamePromise.then(show).catch(err => {
 		if (err.code === 'NO_SUCH_USER') {
 			notFound();
+			idPromise.then(show).catch(err => { notFound(); });
 		}
-	});
-	idPromise.then(show).catch(err => {
-		notFound();
 	});
 }
 
