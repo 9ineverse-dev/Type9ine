@@ -134,7 +134,7 @@ const favorited = ref(false);
 const searchQuery = ref('');
 const searchPagination = ref();
 const searchKey = ref('');
-let pusers = ref<UserLite[]>([]);
+const pusers = ref<Misskey.entities.UserDetailed[]>([]);
 let fetching = ref(true);
 let queueUserIds = ref<string[]>([]);
 const featuredPagination = computed(() => ({
@@ -170,8 +170,10 @@ watch(() => props.channelId, async () => {
 async function fetchMoreUsers() {
 	if ( !channel.isPrivate ) return;
 	if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
-	pusers = await misskeyApi('users/show', {
+	 await misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
+	}).then(_users => {
+			pusers.value = _users;
 	});
 	queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
 	fetching = false;
