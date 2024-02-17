@@ -155,8 +155,8 @@ watch(() => props.channelId, async () => {
 		tab.value = 'timeline';
 	}
 	queueUserIds = channel.value.privateUserIds;
-	//queueUserIds.unshift(channel.value.userId);
 	fetchMoreUsers();
+//queueUserIds.unshift(channel.userId);
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
 		const lastNotedAt = Date.parse(channel.value.lastNotedAt);
@@ -175,9 +175,8 @@ function fetchMoreUsers() {
 	}).then(_users => {
 		pusers.value = _users;
 		queueUserIds = queueUserIds.slice(10);
-		fetching = false;
 	}).finally(() => {
-
+		fetching = false;
 	});
 }
 
