@@ -155,8 +155,8 @@ watch(() => props.channelId, async () => {
 		tab.value = 'timeline';
 	}
 	queueUserIds = channel.value.privateUserIds;
+	queueUserIds.unshift(channel.value.userId);
 	fetchMoreUsers();
-//queueUserIds.unshift(channel.userId);
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
 		const lastNotedAt = Date.parse(channel.value.lastNotedAt);
@@ -168,8 +168,8 @@ watch(() => props.channelId, async () => {
 }, { immediate: true });
 
 function fetchMoreUsers() {
-	//if ( !channel ) return;
-	//if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
+	if ( !channel ) return;
+	if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
 	misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, 10),
 	}).then(_users => {
