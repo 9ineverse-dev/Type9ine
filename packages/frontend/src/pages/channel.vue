@@ -135,7 +135,7 @@ const searchQuery = ref('');
 const searchPagination = ref();
 const searchKey = ref('');
 const pusers = ref<Misskey.entities.UserDetailed[]>([]);
-const fetching = ref(false);
+let fetching = ref(true);
 let queueUserIds = ref<string[]>([]);
 const featuredPagination = computed(() => ({
 	endpoint: 'notes/featured' as const,
@@ -156,7 +156,6 @@ watch(() => props.channelId, async () => {
 	}
 	queueUserIds = channel.value.privateUserIds;
 	queueUserIds.unshift(channel.userId);
-	await fetchMoreUsers();
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
 		const lastNotedAt = Date.parse(channel.value.lastNotedAt);
@@ -165,19 +164,20 @@ watch(() => props.channelId, async () => {
 			miLocalStorage.setItemAsJson(`channelLastReadedAt:${channel.value.id}`, lastNotedAt);
 		}
 	}
-
+	fetchMoreUsers();
 }, { immediate: true });
 
 async function fetchMoreUsers() {
 	if ( !channel.isPrivate ) return;
 	if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
 	 await misskeyApi('users/show', {
-		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
+		userIds: queueUserIds.slice(0, 10),
 	}).then(_users => {
 			pusers.value = _users;
+			queueUserIds = queueUserIds.slice(10);
 	});
-	queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
-	fetching.valu = false;
+
+	fetching = false;
 }
 
 function edit() {
