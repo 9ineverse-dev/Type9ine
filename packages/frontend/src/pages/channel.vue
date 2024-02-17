@@ -164,7 +164,7 @@ watch(() => props.channelId, async () => {
 			miLocalStorage.setItemAsJson(`channelLastReadedAt:${channel.value.id}`, lastNotedAt);
 		}
 	}
-	fetchMoreUsers();
+	await fetchMoreUsers();
 }, { immediate: true });
 
 async function fetchMoreUsers() {
