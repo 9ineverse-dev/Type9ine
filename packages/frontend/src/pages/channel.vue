@@ -170,13 +170,10 @@ watch(() => props.channelId, async () => {
 async function fetchMoreUsers() {
 	if ( !channel ) return;
 	if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
-	 await misskeyApi('users/show', {
+	pusers.value = await misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, 10),
-	}).then(_users => {
-			pusers.value = _users;
-			queueUserIds = queueUserIds.slice(10);
 	});
-
+	queueUserIds = queueUserIds.slice(10);
 	fetching = false;
 }
 
