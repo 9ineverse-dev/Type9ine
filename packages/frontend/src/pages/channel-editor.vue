@@ -204,8 +204,8 @@ async function addPrivateUserIds() {
 		}, ...privateUserIds.value];
 	};
 
-	const usernamePromise = await misskeyApi('users/show', Misskey.acct.parse(result) );
-	const idPromise = await misskeyApi('users/show', { userId: result });
+	const usernamePromise = misskeyApi('users/show', Misskey.acct.parse(result) );
+	const idPromise = misskeyApi('users/show', { userId: result });
 	let _notFound = false;
 	const notFound = () => {
 		if (_notFound) {
@@ -220,8 +220,10 @@ async function addPrivateUserIds() {
 	usernamePromise.then(show).catch(err => {
 		if (err.code === 'NO_SUCH_USER') {
 			notFound();
-			idPromise.then(show).catch(err => { notFound(); });
 		}
+	});
+	idPromise.then(show).catch(err => {
+		notFound();
 	});
 }
 
