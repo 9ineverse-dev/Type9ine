@@ -134,7 +134,7 @@ const favorited = ref(false);
 const searchQuery = ref('');
 const searchPagination = ref();
 const searchKey = ref('');
-const pusers = ref<Misskey.entities.UserDetailed[]>([]);
+let pusers = ref<Misskey.entities.UserLite[]>([]);
 let fetching = ref(true);
 let queueUserIds = ref<string[]>([]);
 const featuredPagination = computed(() => ({
@@ -173,7 +173,7 @@ function fetchMoreUsers() {
 	misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
 	}).then(_users => {
-		pusers.value = pusers.concat(_users);
+		pusers = pusers.concat(_users);
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
 	}).finally(() => {
 		fetching = false;
