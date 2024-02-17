@@ -172,8 +172,8 @@ watch(() => props.channelId, async () => {
 		if (lastNotedAt > lastReadedAt) {
 			miLocalStorage.setItemAsJson(`channelLastReadedAt:${channel.value.id}`, lastNotedAt);
 		}
-		renderKey.value = renderKey.value + 1
 	}});
+	renderKey.value = renderKey.value + 1
 }, { immediate: true });
 
 function fetchMoreUsers() {
