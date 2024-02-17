@@ -87,7 +87,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, watch, ref, getCurrentInstance } from 'vue';
+import { computed, watch, ref } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkPostForm from '@/components/MkPostForm.vue';
 import MkTimeline from '@/components/MkTimeline.vue';
@@ -134,7 +134,6 @@ const favorited = ref(false);
 const searchQuery = ref('');
 const searchPagination = ref();
 const searchKey = ref('');
-const renderKey = ref(0)
 let pusers = ref<Misskey.entities.UserLite[]>([]);
 let fetching = ref(true);
 let queueUserIds = ref<string[]>([]);
@@ -146,25 +145,22 @@ const featuredPagination = computed(() => ({
 	},
 }));
 
-watch(() => props.channelId,() => {
-	misskeyApi('channels/show', {
+watch(() => props.channelId, async () => {
+	channel.value = await misskeyApi('channels/show', {
 		channelId: props.channelId,
-	}).then(_channel => {
-	channel.value = _channel;
+	});
 	favorited.value = channel.value.isFavorited ?? false;
 	if (favorited.value || channel.value.isFollowing || channel.value.isPrivate) {
 		tab.value = 'timeline';
 	}
 	queueUserIds = channel.value.privateUserIds;
 	queueUserIds.unshift(channel.value.userId);
-	misskeyApi('users/show', {
+	await misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
 	}).then(_users => {
 		pusers = _users;
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
-		fetching = false;
-	}).finally(() => {});
-
+	}).finally(() => {fetching = false;});
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
 		const lastNotedAt = Date.parse(channel.value.lastNotedAt);
@@ -172,8 +168,7 @@ watch(() => props.channelId,() => {
 		if (lastNotedAt > lastReadedAt) {
 			miLocalStorage.setItemAsJson(`channelLastReadedAt:${channel.value.id}`, lastNotedAt);
 		}
-	}});
-	//renderKey.value = renderKey.value + 1
+	}
 }, { immediate: true });
 
 function fetchMoreUsers() {
