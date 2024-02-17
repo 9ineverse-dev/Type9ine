@@ -87,7 +87,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, watch, ref } from 'vue';
+import { computed, watch, ref, getCurrentInstance } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkPostForm from '@/components/MkPostForm.vue';
 import MkTimeline from '@/components/MkTimeline.vue';
@@ -162,9 +162,10 @@ watch(() => props.channelId, async () => {
 	}).then(_users => {
 		pusers = _users;
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
-
+		fetching = false;
+		getCurrentInstance().proxy.forceUpdate();
 	}).finally(() => {});
-	fetching = false;
+
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
 		const lastNotedAt = Date.parse(channel.value.lastNotedAt);
