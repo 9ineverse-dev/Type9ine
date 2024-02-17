@@ -167,7 +167,7 @@ async function fetchChannel() {
 	searchable.value = channel.value.searchable;
 	isSensitive.value = channel.value.isSensitive;
 	isPrivate.value = channel.value.isPrivate;
-	const fetchPrivateUserIds = channel.privateUserIds;
+	const fetchPrivateUserIds = channel.value.privateUserIds;
 	const set = new Set(fetchPrivateUserIds);
 	const searchPrivateUserIds = [...set];
 	const pusers = await misskeyApi('users/show', {
