@@ -155,6 +155,7 @@ watch(() => props.channelId, async () => {
 		tab.value = 'timeline';
 	}
 	queueUserIds = channel.privateUserIds;
+	fetchMoreUsers();
 	//queueUserIds.unshift(channel.userId);
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
@@ -164,17 +165,19 @@ watch(() => props.channelId, async () => {
 			miLocalStorage.setItemAsJson(`channelLastReadedAt:${channel.value.id}`, lastNotedAt);
 		}
 	}
-	await fetchMoreUsers();
 }, { immediate: true });
 
-async function fetchMoreUsers() {
+function fetchMoreUsers() {
 	if ( !channel ) return;
 	if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
-	pusers.value = await misskeyApi('users/show', {
+	misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, 10),
+	}).then(_users => {
+		pusers.value = _users;
+		queueUserIds = queueUserIds.slice(10);
+	}).finally(() => {
+		fetching = false;
 	});
-	queueUserIds = queueUserIds.slice(10);
-	fetching = false;
 }
 
 function edit() {
