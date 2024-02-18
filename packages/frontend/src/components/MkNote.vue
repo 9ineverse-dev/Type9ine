@@ -351,7 +351,7 @@ function renote(viaKeyboard = false) {
 	});
 }
 async function chooseRnChannel(viaKeyboard = false): Promise<void> {
-	const channels = await os.api('channels/my-favorites', {
+	const channels = await misskeyApi('channels/my-favorites', {
 		limit: 20,
 	});
 	const Channelitems = channels.map(channel => ({
