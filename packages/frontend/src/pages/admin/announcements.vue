@@ -87,9 +87,26 @@ import MkTextarea from '@/components/MkTextarea.vue';
 
 const announcements = ref<any[]>([]);
 
-misskeyApi('admin/announcements/list').then(announcementResponse => {
-	announcements.value = announcementResponse;
-});
+function selectUserFilter(): void {
+	os.selectUser().then(_user => {
+		user.value = _user;
+	});
+}
+
+function editUser(announcement): void {
+	os.selectUser().then(_user => {
+		announcement.userId = _user.id;
+		announcement.user = _user;
+	});
+}
+
+function insertEmoji(ev: MouseEvent): void {
+	os.openEmojiPicker(
+		(ev.currentTarget ?? ev.target) as HTMLElement,
+		{ asReactionPicker: false },
+		announceTitleEl.value
+	);
+}
 
 function add() {
 	announcements.value.unshift({

@@ -13,19 +13,25 @@ SPDX-License-Identifier: AGPL-3.0-only
 	:front="true"
 	@closed="emit('closed')"
 >
-	<MkEmojiPicker :showPinned="showPinned" :asReactionPicker="asReactionPicker" :targetNote="targetNote" asWindow :class="$style.picker" @chosen="chosen"/>
+	<MkEmojiPicker
+		:class="$style.picker"
+		:showPinned="showPinned"
+		:pinnedEmojis="pinnedEmojis"
+		:asReactionPicker="asReactionPicker"
+		asWindow
+		@chosen="chosen"
+	/>
 </MkWindow>
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
-import * as Misskey from 'misskey-js';
 import MkWindow from '@/components/MkWindow.vue';
 import MkEmojiPicker from '@/components/MkEmojiPicker.vue';
 
 withDefaults(defineProps<{
 	src?: HTMLElement;
 	showPinned?: boolean;
+	pinnedEmojis?: string[],
 	asReactionPicker?: boolean;
 	targetNote?: Misskey.entities.Note
 }>(), {

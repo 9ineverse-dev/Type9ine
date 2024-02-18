@@ -12,6 +12,7 @@ import * as Misskey from 'misskey-js';
 import type { ComponentProps } from 'vue-component-type-helpers';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { i18n } from '@/i18n.js';
+import { defaultStore } from '@/store.js';
 import MkPostFormDialog from '@/components/MkPostFormDialog.vue';
 import MkWaitingDialog from '@/components/MkWaitingDialog.vue';
 import MkPageWindow from '@/components/MkPageWindow.vue';
@@ -546,6 +547,7 @@ export async function openEmojiPicker(src?: HTMLElement, opts, initialTextarea: 
 
 	openingEmojiPicker = await popup(MkEmojiPickerWindow, {
 		src,
+		pinnedEmojis: opts?.asReactionPicker ? defaultStore.reactiveState.reactions : defaultStore.reactiveState.pinnedEmojis,
 		...opts,
 	}, {
 		chosen: emoji => {
