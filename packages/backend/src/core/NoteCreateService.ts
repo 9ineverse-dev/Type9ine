@@ -807,7 +807,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 
 	@bindThis
 	private index(note: MiNote) {
-		if ((note.text == null && note.cw == null) || (note.channel?.searchable == false && note.channel !== null)) return;
+		if ((note.text == null && note.cw == null) || (note.channel?.searchable === false && note.channel !== null)) return;
 
 		this.searchService.indexNote(note);
 	}
