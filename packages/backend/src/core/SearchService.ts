@@ -167,7 +167,7 @@ export class SearchService {
 		sinceId?: MiNote['id'];
 		limit?: number;
 	}): Promise<MiNote[]> {
-		if (this.meilisearch && opts.channelId === null) {
+		if ((this.meilisearch && opts.channelId === null) && (this.meilisearch && opts.userId === null)) {
 			const filter: Q = {
 				op: 'and',
 				qs: [],
