@@ -1037,10 +1037,4 @@ export class NoteCreateService implements OnApplicationShutdown {
 	public onApplicationShutdown(signal?: string | undefined): void {
 		this.dispose();
 	}
-
-	@bindThis
-	private async checkwhiteList( id: MiUser['id']): boolean {
-		for (const u of mentionedUsers.filter(u => this.userEntityService.isLocalUser(u))) {
-		return true;
-	}
 }
