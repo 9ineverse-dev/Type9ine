@@ -5,10 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
 	<div class="_gaps_m">
-		<MkInfo>{{ i18n.ts._instanceMute.title }}</MkInfo>
+		<MkInfo>{{ i18n.ts._whiteInstance.title }}</MkInfo>
 		<MkTextarea v-model="whitelist">
-			<template #label>{{ i18n.ts._instanceMute.heading }}</template>
-			<template #caption>{{ i18n.ts._instanceMute.instanceMuteDescription }}<br>{{ i18n.ts._instanceMute.instanceMuteDescription2 }}</template>
+			<template #label>{{ i18n.ts._whiteInstance.heading }}</template>
+			<template #caption>{{ i18n.ts._whiteInstance.whiteInstanceDescription }}<br>{{ i18n.ts._whiteInstance.whiteInstanceDescription2 }}</template>
 		</MkTextarea>
 		<MkButton primary :disabled="!changed" @click="save()"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
 	</div>
