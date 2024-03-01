@@ -394,7 +394,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 			const deleteVisibility = data.visibleUsers;
 			if(user.host!==null && meta.defaultWhiteHosts!==null){
 				for (const u of deleteVisibility.filter(u => this.userEntityService.isLocalUser(u))) {
-					const profiles = await this.userProfilesRepository.findBy({ userId: In(u.id) });
+					const profiles = await this.userProfilesRepository.findByOne({ userId: u.id });
 					let allowInstance = [];
 					if(profiles.userWhiteInstances===null)
 					{allowInstance = meta.defaultWhiteHosts }
@@ -411,7 +411,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 		const deleteMentions = mentionedUsers;
 		if(user.host!==null && deleteMentions!==null && meta.defaultWhiteHosts!==null){
 			for (const u of deleteMentions.filter(u => this.userEntityService.isLocalUser(u))) {
-				const profiles = await this.userProfilesRepository.findBy({ userId: In(u.id) });
+				const profiles = await this.userProfilesRepository.findByOne({ userId: u.id });
 				let allowInstance = [];
 				if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances) };
 				if (!(allowInstance.includes(user.host))){
@@ -679,7 +679,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 
 				// Notify
 				if (data.renote.userHost === null) {
-					const profiles = await this.userProfilesRepository.findBy({ userId: In(data.renote.userId) });
+					const profiles = await this.userProfilesRepository.findByOne({ userId: data.renote.userId });
 					let allowInstance = [];
 					if(user.host){
 						if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{ allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances) };
