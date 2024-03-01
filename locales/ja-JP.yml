@@ -1858,7 +1858,7 @@ _instanceMute:
 _whiteInstance:
   heading: "ノート関連通知を許可するサーバー"
   title: "設定したサーバーからノート関連通知を受け取ります。"
-  whiteInstanceDescription: "設定したサーバーからとどいたDM、リプライ、リノートの通知を届くようにします。"
+  whiteInstanceDescription: "設定したサーバーから届いたDM、リプライ、リノートの通知を受け取るようにします。"
   whiteInstanceDescription2: "また、設定したサーバーとはDMの送受信が可能となります。改行で区切って設定します"
 _theme:
   explore: "テーマを探す"

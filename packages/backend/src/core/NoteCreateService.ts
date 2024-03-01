@@ -409,7 +409,22 @@ export class NoteCreateService implements OnApplicationShutdown {
 						});
 					}
 				}
-			}
+			} else if(user.host===null && meta.defaultWhiteHosts!==null) {
+				const profiles = await this.userProfilesRepository.findOne({
+					where: {
+						userId: user.id,
+					},
+				});
+				let allowInstance = [];
+					if(profiles.userWhiteInstances===null)
+					{allowInstance = meta.defaultWhiteHosts }
+					else { allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances)};
+					for (const v of data.visibleUsers){
+						if (v.host===null)continue;
+						if (allowInstance.includes(v.host)){
+							throw new Error("Not allowed to send to that instance");
+					};
+				}
 		}
 
 		const deleteMentions = mentionedUsers;
