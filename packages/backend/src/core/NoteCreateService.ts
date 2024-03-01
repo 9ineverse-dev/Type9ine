@@ -396,7 +396,9 @@ export class NoteCreateService implements OnApplicationShutdown {
 				for (const u of deleteVisibility.filter(u => this.userEntityService.isLocalUser(u))) {
 					const profiles = await this.userProfilesRepository.findBy({ userId: In(u.id) });
 					let allowInstance = [];
-					if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{ allowInstance = [...new Set(meta.defaultWhiteHosts.concat(profiles.userWhiteInstances))] };
+					if(profiles.userWhiteInstances===null)
+					{allowInstance = meta.defaultWhiteHosts }
+					else { allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances)};
 					if (!(allowInstance.includes(user.host))){
 						data.visibleUsers = data.visibleUsers.filter(function(a) {
 							return a !== u;
@@ -411,7 +413,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 			for (const u of deleteMentions.filter(u => this.userEntityService.isLocalUser(u))) {
 				const profiles = await this.userProfilesRepository.findBy({ userId: In(u.id) });
 				let allowInstance = [];
-				if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{allowInstance = [...new Set(meta.defaultWhiteHosts.concat(profiles.userWhiteInstances))] };
+				if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances) };
 				if (!(allowInstance.includes(user.host))){
 					mentionedUsers = mentionedUsers.filter(function(a) {
 						return a !== u;
@@ -680,7 +682,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 					const profiles = await this.userProfilesRepository.findBy({ userId: In(data.renote.userId) });
 					let allowInstance = [];
 					if(user.host){
-						if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{ allowInstance = [...new Set(meta.defaultWhiteHosts.concat(profiles.userWhiteInstances))] };
+						if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{ allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances) };
 						if (allowInstance.includes(user.host)) nm.push(data.renote.userId, type);
 				}}
 
