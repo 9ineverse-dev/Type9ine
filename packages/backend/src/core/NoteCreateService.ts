@@ -668,7 +668,18 @@ export class NoteCreateService implements OnApplicationShutdown {
 					});
 
 					if (!isThreadMuted) {
-						nm.push(data.reply.userId, 'reply');
+
+						const profiles = await this.userProfilesRepository.findOne({
+							where: {
+								userId: data.reply.userId,
+							},
+						});
+						let allowInstance = [];
+						if(user.host){
+							if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{ allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances) };
+							if (allowInstance.includes(user.host)) nm.push(data.reply.userId, 'reply');
+					}
+
 						this.globalEventService.publishMainStream(data.reply.userId, 'reply', noteObj);
 
 						const webhooks = (await this.webhookService.getActiveWebhooks()).filter(x => x.userId === data.reply!.userId && x.on.includes('reply'));
