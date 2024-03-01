@@ -396,7 +396,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 				for (const u of deleteVisibility.filter(u => this.userEntityService.isLocalUser(u))) {
 					const profiles = await this.userProfilesRepository.findOne({
 						where: {
-							userId: user.id,
+							userId: u.id,
 						},
 					});
 					let allowInstance = [];
@@ -417,7 +417,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 			for (const u of deleteMentions.filter(u => this.userEntityService.isLocalUser(u))) {
 				const profiles = await this.userProfilesRepository.findOne({
 					where: {
-						userId: user.id,
+						userId: u.id,
 					},
 				});
 				let allowInstance = [];
@@ -689,7 +689,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 				if (data.renote.userHost === null) {
 					const profiles = await this.userProfilesRepository.findOne({
 						where: {
-							userId: user.id,
+							userId: data.renote.userId,
 						},
 					});
 					let allowInstance = [];
