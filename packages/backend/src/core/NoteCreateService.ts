@@ -421,7 +421,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 					else { allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances)};
 					for (const v of data.visibleUsers){
 						if (v.host===null)continue;
-						if (!allowInstance.includes(v.host)){
+						if (allowInstance.includes(v.host)){
 							throw new Error("Not allowed to send to that instance");
 					};
 				}
