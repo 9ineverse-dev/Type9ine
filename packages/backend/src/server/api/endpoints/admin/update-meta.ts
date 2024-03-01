@@ -159,6 +159,11 @@ export const paramDef = {
 				type: 'string',
 			},
 		},
+		defaultWhiteHosts: {
+			type: 'array', nullable: true, items: {
+				type: 'string',
+			},
+	},
 	},
 	required: [],
 } as const;
@@ -201,6 +206,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 					lastValue = h;
 					return h !== '' && h !== lv && !set.blockedHosts?.includes(h);
 				});
+			}
+			if (Array.isArray(ps.defaultWhiteHosts)) {
+				set.defaultWhiteHosts = ps.defaultWhiteHosts.filter(Boolean).map(x => x.toLowerCase());
 			}
 			if (ps.themeColor !== undefined) {
 				set.themeColor = ps.themeColor;
