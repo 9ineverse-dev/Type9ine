@@ -392,10 +392,10 @@ export class NoteCreateService implements OnApplicationShutdown {
 			}
 
 			const deleteVisibility = data.visibleUsers;
-			if(user.host!==null){
+			if(user.host!==null && meta.defaultWhiteHosts!==null){
 				for (const u of deleteVisibility.filter(u => this.userEntityService.isLocalUser(u))) {
 					const profiles = await this.userProfilesRepository.findBy({ userId: In(u.id) });
-					if (!([...new Set(profiles.userWhiteInstances.concat(meta.defaultWhiteHosts))].includes(user.host))){
+					if (!(meta.defaultWhiteHosts.includes(user.host))){
 						data.visibleUsers = data.visibleUsers.filter(function(a) {
 							return a !== u;
 						});
@@ -405,10 +405,10 @@ export class NoteCreateService implements OnApplicationShutdown {
 		}
 
 		const deleteMentions = mentionedUsers;
-		if(user.host!==null && deleteMentions!==null){
+		if(user.host!==null && deleteMentions!==null && meta.defaultWhiteHosts!==null){
 			for (const u of deleteMentions.filter(u => this.userEntityService.isLocalUser(u))) {
 				const profiles = await this.userProfilesRepository.findBy({ userId: In(u.id) });
-				if (!([...new Set(profiles.userWhiteInstances.concat(meta.defaultWhiteHosts))].includes(user.host))){
+				if (!(meta.defaultWhiteHosts.includes(user.host))){
 					mentionedUsers = mentionedUsers.filter(function(a) {
 						return a !== u;
 					});
