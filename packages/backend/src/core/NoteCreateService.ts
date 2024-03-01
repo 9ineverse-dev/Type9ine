@@ -395,7 +395,9 @@ export class NoteCreateService implements OnApplicationShutdown {
 			if(user.host!==null && meta.defaultWhiteHosts!==null){
 				for (const u of deleteVisibility.filter(u => this.userEntityService.isLocalUser(u))) {
 					const profiles = await this.userProfilesRepository.findBy({ userId: In(u.id) });
-					if (!(meta.defaultWhiteHosts.includes(user.host))){
+					let allowInstance = [];
+					if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{ allowInstance = [...new Set(meta.defaultWhiteHosts.concat(profiles.userWhiteInstances))] };
+					if (!(allowInstance.includes(user.host))){
 						data.visibleUsers = data.visibleUsers.filter(function(a) {
 							return a !== u;
 						});
@@ -408,7 +410,9 @@ export class NoteCreateService implements OnApplicationShutdown {
 		if(user.host!==null && deleteMentions!==null && meta.defaultWhiteHosts!==null){
 			for (const u of deleteMentions.filter(u => this.userEntityService.isLocalUser(u))) {
 				const profiles = await this.userProfilesRepository.findBy({ userId: In(u.id) });
-				if (!(meta.defaultWhiteHosts.includes(user.host))){
+				let allowInstance = [];
+				if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{allowInstance = [...new Set(meta.defaultWhiteHosts.concat(profiles.userWhiteInstances))] };
+				if (!(allowInstance.includes(user.host))){
 					mentionedUsers = mentionedUsers.filter(function(a) {
 						return a !== u;
 					});
@@ -673,6 +677,13 @@ export class NoteCreateService implements OnApplicationShutdown {
 
 				// Notify
 				if (data.renote.userHost === null) {
+					const profiles = await this.userProfilesRepository.findBy({ userId: In(data.renote.userId) });
+					let allowInstance = [];
+					if(user.host){
+						if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{ allowInstance = [...new Set(meta.defaultWhiteHosts.concat(profiles.userWhiteInstances))] };
+						if (!(allowInstance.includes(user.host)))
+					}
+
 					nm.push(data.renote.userId, type);
 				}
 
