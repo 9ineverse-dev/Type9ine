@@ -653,6 +653,14 @@ export const packedMeDetailedOnlySchema = {
 				},
 			},
 		},
+		userWhiteInstances: {
+			type: 'array',
+			nullable: true, optional: false,
+			items: {
+				type: 'string',
+				nullable: false, optional: false,
+			},
+		},
 		//#endregion
 	},
 } as const;

@@ -477,6 +477,7 @@ export class UserEntityService implements OnModuleInit {
 				achievements: profile!.achievements,
 				loggedInDays: profile!.loggedInDates.length,
 				policies: this.roleService.getUserPolicies(user.id),
+				userWhiteInstances: profile!.userWhiteInstances,
 			} : {}),
 
 			...(opts.includeSecrets ? {
