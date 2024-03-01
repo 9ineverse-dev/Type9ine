@@ -642,4 +642,9 @@ export class MiMeta {
 		default: 0,
 	})
 	public notesPerOneAd: number;
+
+	@Column('varchar', {
+		length: 1024, array: true, default: '{}',
+	})
+	public defaultWhiteHosts: string[];
 }

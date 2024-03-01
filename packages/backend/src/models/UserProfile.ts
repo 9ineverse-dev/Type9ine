@@ -242,6 +242,12 @@ export class MiUserProfile {
 	public mutedInstances: string[];
 
 	@Column('jsonb', {
+		default: [],
+		comment: 'List of instances muted by the user.',
+	})
+	public userWhiteInstances: string[];
+
+	@Column('jsonb', {
 		default: {},
 	})
 	public notificationRecieveConfig: {

@@ -451,6 +451,13 @@ export const meta = {
 				type: 'string',
 				optional: false, nullable: false,
 			},
+			defaultWhiteHosts: {
+				type: 'array',
+				optional: false, nullable: false,
+				items: {
+					type: 'string',
+				},
+			},
 		},
 	},
 } as const;
@@ -591,6 +598,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				perUserHomeTimelineCacheMax: instance.perUserHomeTimelineCacheMax,
 				perUserListTimelineCacheMax: instance.perUserListTimelineCacheMax,
 				notesPerOneAd: instance.notesPerOneAd,
+				defaultWhiteHosts: instance.defaultWhiteHosts,
 			};
 		});
 	}

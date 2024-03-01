@@ -16,6 +16,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<span>{{ i18n.ts.silencedInstances }}</span>
 				<template #caption>{{ i18n.ts.silencedInstancesDescription }}</template>
 			</MkTextarea>
+			<MkTextarea v-else-if="tab === 'white'" v-model="defaultWhiteHosts" class="_formBlock">
+				<span>{{ i18n.ts.whiteInstances }}</span>
+				<template #caption></template>
+			</MkTextarea>
 			<MkButton primary @click="save"><i class="ti ti-device-floppy"></i> {{ i18n.ts.save }}</MkButton>
 		</FormSuspense>
 	</MkSpacer>
@@ -36,19 +40,21 @@ import { definePageMetadata } from '@/scripts/page-metadata.js';
 
 const blockedHosts = ref<string>('');
 const silencedHosts = ref<string>('');
+const defaultWhiteHosts = ref<string>('');
 const tab = ref('block');
 
 async function init() {
 	const meta = await misskeyApi('admin/meta');
 	blockedHosts.value = meta.blockedHosts.join('\n');
 	silencedHosts.value = meta.silencedHosts.join('\n');
+	defaultWhiteHosts.value = meta.defaultWhiteHosts.join('\n');
 }
 
 function save() {
 	os.apiWithDialog('admin/update-meta', {
 		blockedHosts: blockedHosts.value.split('\n') || [],
 		silencedHosts: silencedHosts.value.split('\n') || [],
-
+		defaultWhiteHosts: defaultWhiteHosts.value.split('\n') || [],
 	}).then(() => {
 		fetchInstance();
 	});
@@ -63,6 +69,10 @@ const headerTabs = computed(() => [{
 }, {
 	key: 'silence',
 	title: i18n.ts.silence,
+	icon: 'ti ti-eye-off',
+},{
+	key: 'white',
+	title: i18n.ts.whiteInstances,
 	icon: 'ti ti-eye-off',
 }]);
 

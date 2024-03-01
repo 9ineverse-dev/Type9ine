@@ -185,6 +185,9 @@ export const paramDef = {
 		mutedInstances: { type: 'array', items: {
 			type: 'string',
 		} },
+		userWhiteInstances: { type: 'array', items: {
+			type: 'string',
+		} },
 		notificationRecieveConfig: {
 			type: 'object',
 			nullable: false,
@@ -301,6 +304,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				profileUpdates.hardMutedWords = ps.hardMutedWords;
 			}
 			if (ps.mutedInstances !== undefined) profileUpdates.mutedInstances = ps.mutedInstances;
+			if (ps.userWhiteInstances !== undefined) profileUpdates.userWhiteInstances = ps.userWhiteInstances;
 			if (ps.notificationRecieveConfig !== undefined) profileUpdates.notificationRecieveConfig = ps.notificationRecieveConfig;
 			if (typeof ps.isLocked === 'boolean') updates.isLocked = ps.isLocked;
 			if (typeof ps.isExplorable === 'boolean') updates.isExplorable = ps.isExplorable;

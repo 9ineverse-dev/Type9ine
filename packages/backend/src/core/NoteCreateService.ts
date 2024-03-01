@@ -390,6 +390,30 @@ export class NoteCreateService implements OnApplicationShutdown {
 			if (data.reply && !data.visibleUsers.some(x => x.id === data.reply!.userId)) {
 				data.visibleUsers.push(await this.usersRepository.findOneByOrFail({ id: data.reply!.userId }));
 			}
+
+			const deleteVisibility = data.visibleUsers;
+			if(user.host!==null){
+				for (const u of deleteVisibility.filter(u => this.userEntityService.isLocalUser(u))) {
+					const profiles = await this.userProfilesRepository.findBy({ userId: In(u.id) });
+					if (!([...new Set(profiles.userWhiteInstances.concat(meta.defaultWhiteHosts))].includes(user.host))){
+						data.visibleUsers = data.visibleUsers.filter(function(a) {
+							return a !== u;
+						});
+					}
+				}
+			}
+		}
+
+		const deleteMentions = mentionedUsers;
+		if(user.host!==null && deleteMentions!==null){
+			for (const u of deleteMentions.filter(u => this.userEntityService.isLocalUser(u))) {
+				const profiles = await this.userProfilesRepository.findBy({ userId: In(u.id) });
+				if (!([...new Set(profiles.userWhiteInstances.concat(meta.defaultWhiteHosts))].includes(user.host))){
+					mentionedUsers = mentionedUsers.filter(function(a) {
+						return a !== u;
+					});
+				}
+			}
 		}
 
 		const note = await this.insertNote(user, data, tags, emojis, mentionedUsers);
@@ -1012,5 +1036,11 @@ export class NoteCreateService implements OnApplicationShutdown {
 	@bindThis
 	public onApplicationShutdown(signal?: string | undefined): void {
 		this.dispose();
+	}
+
+	@bindThis
+	private async checkwhiteList( id: MiUser['id']): boolean {
+		for (const u of mentionedUsers.filter(u => this.userEntityService.isLocalUser(u))) {
+		return true;
 	}
 }
