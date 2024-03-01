@@ -682,7 +682,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 					if(user.host){
 						if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{ allowInstance = [...new Set(meta.defaultWhiteHosts.concat(profiles.userWhiteInstances))] };
 						if (allowInstance.includes(user.host)) nm.push(data.renote.userId, type);
-				}
+				}}
 
 				// Publish event
 				if ((user.id !== data.renote.userId) && data.renote.userHost === null) {
