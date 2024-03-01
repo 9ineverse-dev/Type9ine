@@ -921,6 +921,10 @@ export interface Locale extends ILocale {
      */
     "silencedInstancesDescription": string;
     /**
+     * サーバーホワイトリスト
+     */
+    "whiteInstances": string;
+    /**
      * ミュートとブロック
      */
     "muteAndBlock": string;
