@@ -425,6 +425,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 							throw new Error("Not allowed to send to that instance");
 					};
 				}
+			}
 		}
 
 		const deleteMentions = mentionedUsers;
