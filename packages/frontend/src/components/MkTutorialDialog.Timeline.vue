@@ -9,8 +9,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 	<div class="_gaps_s">
 		<div><i class="ti ti-home"></i> <b>{{ i18n.ts._timelines.home }}</b> … {{ i18n.ts._initialTutorial._timeline.home }}</div>
 		<div><i class="ti ti-planet"></i> <b>{{ i18n.ts._timelines.local }}</b> … {{ i18n.ts._initialTutorial._timeline.local }}</div>
-		<div><i class="ti ti-universe"></i> <b>{{ i18n.ts._timelines.social }}</b> … {{ i18n.ts._initialTutorial._timeline.recommend }}</div>
-		<div><i class="ti ti-whirl"></i> <b>{{ i18n.ts._timelines.global }}</b> … {{ i18n.ts._initialTutorial._timeline.community }}</div>
+		<div><i class="ti ti-universe"></i> <b>{{ i18n.ts._timelines.recommend }}</b> … {{ i18n.ts._initialTutorial._timeline.recommend }}</div>
+		<div><i class="ti ti-whirl"></i> <b>{{ i18n.ts._timelines.community }}</b> … {{ i18n.ts._initialTutorial._timeline.community }}</div>
 	</div>
 	<div class="_gaps_s">
 		<div>{{ i18n.ts._initialTutorial._timeline.description2 }}</div>

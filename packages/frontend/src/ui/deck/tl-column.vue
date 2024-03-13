@@ -92,9 +92,9 @@ async function setType() {
 		}, {
 			value: 'local' as const, text: i18n.ts._timelines.local,
 		}, {
-			value: 'social' as const, text: i18n.ts._timelines.social,
+			value: 'social' as const, text: i18n.ts._timelines.recommend,
 		}, {
-			value: 'global' as const, text: i18n.ts._timelines.global,
+			value: 'global' as const, text: i18n.ts._timelines.community,
 		}],
 	});
 	if (canceled) {
