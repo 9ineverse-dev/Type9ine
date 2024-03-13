@@ -7134,6 +7134,24 @@ export interface Locale extends ILocale {
          */
         "heading": string;
     };
+    "_whiteInstance": {
+        /**
+         * ノート関連通知を許可するサーバー
+         */
+        "heading": string;
+        /**
+         * 設定したサーバーからノート関連通知を受け取ります。
+         */
+        "title": string;
+        /**
+         * 設定したサーバーから届いたDM、リプライ、リノートの通知を受け取るようにします。
+         */
+        "whiteInstanceDescription": string;
+        /**
+         * また、設定したサーバーとはDMの送受信が可能となります。改行で区切って設定します
+         */
+        "whiteInstanceDescription2": string;
+    };
     "_theme": {
         /**
          * テーマを探す
