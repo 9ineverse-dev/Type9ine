@@ -56,7 +56,7 @@ function save() {
 		silencedHosts: silencedHosts.value.split('\n') || [],
 		defaultWhiteHosts: defaultWhiteHosts.value.split('\n') || [],
 	}).then(() => {
-		fetchInstance();
+		fetchInstance(true);
 	});
 }
 
