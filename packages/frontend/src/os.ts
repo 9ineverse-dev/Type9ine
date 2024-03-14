@@ -20,6 +20,7 @@ import MkToast from '@/components/MkToast.vue';
 import MkDialog from '@/components/MkDialog.vue';
 import MkPasswordDialog from '@/components/MkPasswordDialog.vue';
 import MkEmojiPickerDialog from '@/components/MkEmojiPickerDialog.vue';
+import MkEmojiPickerWindow from '@/components/MkEmojiPickerWindow.vue';
 import MkPopupMenu from '@/components/MkPopupMenu.vue';
 import MkContextMenu from '@/components/MkContextMenu.vue';
 import { MenuItem } from '@/types/menu.js';
@@ -599,6 +600,42 @@ export async function cropImage(image: Misskey.entities.DriveFile, options: {
 				resolve(x);
 			},
 		}, 'closed');
+	});
+}
+
+type AwaitType<T> =
+	T extends Promise<infer U> ? U :
+	T extends (...args: any[]) => Promise<infer V> ? V :
+	T;
+let openingEmojiPicker: AwaitType<ReturnType<typeof popup>> | null = null;
+let activeTextarea: HTMLTextAreaElement | HTMLInputElement | null = null;
+
+export async function openEmojiPicker(src: HTMLElement, opts: ComponentProps<typeof MkEmojiPickerWindow>, initialTextarea: typeof activeTextarea) {
+	if (openingEmojiPicker) return;
+
+	activeTextarea = initialTextarea;
+
+	for (const textarea of Array.from(
+		document.querySelectorAll('textarea, input'),
+	)) {
+		textarea.addEventListener('focus', () => {
+			activeTextarea = textarea as HTMLTextAreaElement | HTMLInputElement;
+		});
+	}
+
+	const observer = new MutationObserver(records => {
+		for (const record of records) {
+			for (const node of Array.from(record.addedNodes).filter(n => n instanceof HTMLElement) as HTMLElement[]) {
+				for (const textarea of Array.from(
+					node.querySelectorAll('textarea, input'),
+				).filter(el => (el as HTMLTextAreaElement | HTMLInputElement).dataset.preventEmojiInsert == null)) {
+					if (document.activeElement === textarea) activeTextarea = textarea as HTMLTextAreaElement | HTMLInputElement;
+					textarea.addEventListener('focus', () => {
+						activeTextarea = textarea as HTMLTextAreaElement | HTMLInputElement;
+					});
+				}
+			}
+		}
 	});
 }
 
