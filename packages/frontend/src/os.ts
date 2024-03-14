@@ -21,7 +21,7 @@ import MkToast from '@/components/MkToast.vue';
 import MkDialog from '@/components/MkDialog.vue';
 import MkPasswordDialog from '@/components/MkPasswordDialog.vue';
 import MkEmojiPickerDialog from '@/components/MkEmojiPickerDialog.vue';
-import MkEmojiPickerWindow from '@/components/MkEmojiPickerWindow.vue';
+//import MkEmojiPickerWindow from '@/components/MkEmojiPickerWindow.vue';
 import MkPopupMenu from '@/components/MkPopupMenu.vue';
 import MkContextMenu from '@/components/MkContextMenu.vue';
 import { MenuItem } from '@/types/menu.js';
@@ -611,7 +611,7 @@ type AwaitType<T> =
 let openingEmojiPicker: AwaitType<ReturnType<typeof popup>> | null = null;
 let activeTextarea: HTMLTextAreaElement | HTMLInputElement | null = null;
 
-export async function openEmojiPicker(src: HTMLElement, opts: ComponentProps<typeof MkEmojiPickerWindow>, initialTextarea: typeof activeTextarea) {
+export async function openEmojiPicker(src: HTMLElement, opts: ComponentProps<typeof MkEmojiPickerDialog>, initialTextarea: typeof activeTextarea) {
 	if (openingEmojiPicker) return;
 
 	activeTextarea = initialTextarea;
@@ -646,7 +646,7 @@ export async function openEmojiPicker(src: HTMLElement, opts: ComponentProps<typ
 		characterData: false,
 	});
 
-	openingEmojiPicker = await popup(MkEmojiPickerWindow, {
+	openingEmojiPicker = await popup(MkEmojiPickerDialog, {
 		src,
 		pinnedEmojis: opts.asReactionPicker ? defaultStore.reactiveState.reactions : defaultStore.reactiveState.pinnedEmojis,
 		...opts,
