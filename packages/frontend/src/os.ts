@@ -7,6 +7,7 @@
 
 import { Component, markRaw, Ref, ref, defineAsyncComponent } from 'vue';
 import { EventEmitter } from 'eventemitter3';
+import insertTextAtCursor from 'insert-text-at-cursor';
 import * as Misskey from 'misskey-js';
 import type { ComponentProps as CP } from 'vue-component-type-helpers';
 import type { Form, GetFormResultType } from '@/scripts/form.js';
@@ -636,6 +637,28 @@ export async function openEmojiPicker(src: HTMLElement, opts: ComponentProps<typ
 				}
 			}
 		}
+	});
+
+	observer.observe(document.body, {
+		childList: true,
+		subtree: true,
+		attributes: false,
+		characterData: false,
+	});
+
+	openingEmojiPicker = await popup(MkEmojiPickerWindow, {
+		src,
+		pinnedEmojis: opts.asReactionPicker ? defaultStore.reactiveState.reactions : defaultStore.reactiveState.pinnedEmojis,
+		...opts,
+	}, {
+		chosen: emoji => {
+			insertTextAtCursor(activeTextarea, emoji);
+		},
+		closed: () => {
+			openingEmojiPicker!.dispose();
+			openingEmojiPicker = null;
+			observer.disconnect();
+		},
 	});
 }
 
