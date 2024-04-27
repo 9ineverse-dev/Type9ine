@@ -252,6 +252,10 @@ export const packedMetaLiteSchema = {
 			optional: false, nullable: true,
 			default: 0,
 		},
+		transactionsActNotationUrl: {
+			type: 'string',
+			optional: false, nullable: true,
+		},
 	},
 } as const;
 
