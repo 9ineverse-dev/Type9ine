@@ -95,6 +95,7 @@ export class MetaEntityService {
 			sellSubscription: SubscriptionSelleble,
 			basicPlanRoleId: instance.basicPlanRoleId,
 			basicPlanPrice: instance.basicPlanPrice,
+			transactionsActNotationUrl: instance.transactionsActNotationUrl,
 			backgroundImageUrl: instance.backgroundImageUrl,
 			logoImageUrl: instance.logoImageUrl,
 			maxNoteTextLength: MAX_NOTE_TEXT_LENGTH,
