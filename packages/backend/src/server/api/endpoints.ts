@@ -90,6 +90,7 @@ import * as ep___admin_stripe_customerSubscriptionResumed from './endpoints/admi
 import * as ep___admin_stripe_invoicePaid from './endpoints/admin/stripe/invoice-paid.js';
 import * as ep___admin_stripe_invoicePaymentFailed from './endpoints/admin/stripe/invoice-payment-failed.js';
 import * as ep___announcements from './endpoints/announcements.js';
+import * as ep___announcements_show from './endpoints/announcements/show.js';
 import * as ep___antennas_create from './endpoints/antennas/create.js';
 import * as ep___antennas_delete from './endpoints/antennas/delete.js';
 import * as ep___antennas_list from './endpoints/antennas/list.js';
@@ -470,6 +471,7 @@ const eps = [
 	['admin/stripe/invoice-paid', ep___admin_stripe_invoicePaid],
 	['admin/stripe/invoice-payment-failed', ep___admin_stripe_invoicePaymentFailed],
 	['announcements', ep___announcements],
+	['announcements/show', ep___announcements_show],
 	['antennas/create', ep___antennas_create],
 	['antennas/delete', ep___antennas_delete],
 	['antennas/list', ep___antennas_list],

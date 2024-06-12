@@ -90,6 +90,7 @@ import * as ep___admin_stripe_customerSubscriptionResumed from './endpoints/admi
 import * as ep___admin_stripe_invoicePaid from './endpoints/admin/stripe/invoice-paid.js';
 import * as ep___admin_stripe_invoicePaymentFailed from './endpoints/admin/stripe/invoice-payment-failed.js';
 import * as ep___announcements from './endpoints/announcements.js';
+import * as ep___announcements_show from './endpoints/announcements/show.js';
 import * as ep___antennas_create from './endpoints/antennas/create.js';
 import * as ep___antennas_delete from './endpoints/antennas/delete.js';
 import * as ep___antennas_list from './endpoints/antennas/list.js';
@@ -471,6 +472,7 @@ const $admin_stripe_customerSubscriptionResumed: Provider = { provide: 'ep:admin
 const $admin_stripe_invoicePaid: Provider = { provide: 'ep:admin/stripe/invoice-paid', useClass: ep___admin_stripe_invoicePaid.default };
 const $admin_stripe_invoicePaymentFailed: Provider = { provide: 'ep:admin/stripe/invoice-payment-failed', useClass: ep___admin_stripe_invoicePaymentFailed.default };
 const $announcements: Provider = { provide: 'ep:announcements', useClass: ep___announcements.default };
+const $announcements_show: Provider = { provide: 'ep:announcements/show', useClass: ep___announcements_show.default };
 const $antennas_create: Provider = { provide: 'ep:antennas/create', useClass: ep___antennas_create.default };
 const $antennas_delete: Provider = { provide: 'ep:antennas/delete', useClass: ep___antennas_delete.default };
 const $antennas_list: Provider = { provide: 'ep:antennas/list', useClass: ep___antennas_list.default };
@@ -856,6 +858,7 @@ const $subscription_webhook: Provider = { provide: 'ep:subscription/webhook', us
 		$admin_stripe_invoicePaid,
 		$admin_stripe_invoicePaymentFailed,
 		$announcements,
+		$announcements_show,
 		$antennas_create,
 		$antennas_delete,
 		$antennas_list,
@@ -1235,6 +1238,7 @@ const $subscription_webhook: Provider = { provide: 'ep:subscription/webhook', us
 		$admin_stripe_invoicePaid,
 		$admin_stripe_invoicePaymentFailed,
 		$announcements,
+		$announcements_show,
 		$antennas_create,
 		$antennas_delete,
 		$antennas_list,

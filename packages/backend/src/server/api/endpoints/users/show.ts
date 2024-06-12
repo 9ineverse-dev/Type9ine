@@ -110,15 +110,16 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				});
 
 				// リクエストされた通りに並べ替え
+				// 順番は保持されるけど数は減ってる可能性がある
 				const _users: MiUser[] = [];
 				for (const id of ps.userIds) {
 					const pushuser = users.find(x => x.id === id)!
 					if(pushuser !== undefined){  _users.push(pushuser); }
 				}
 
-				return await Promise.all(_users.map(u => this.userEntityService.pack(u, me, {
-					schema: 'UserDetailed',
-				})));
+				const _userMap = await this.userEntityService.packMany(_users, me, { schema: 'UserDetailed' })
+					.then(users => new Map(users.map(u => [u.id, u])));
+				return _users.map(u => _userMap.get(u.id)!);
 			} else {
 				// Lookup user
 				if (typeof ps.host === 'string' && typeof ps.username === 'string') {
