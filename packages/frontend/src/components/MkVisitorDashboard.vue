@@ -192,6 +192,7 @@ function exploreOtherServers() {
 
 .mainAbout {
 	padding: 0 32px;
+	text-align: left;
 }
 
 .mainWarn {
