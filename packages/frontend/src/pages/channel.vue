@@ -160,7 +160,7 @@ watch(() => props.channelId, async () => {
 	}).then(_users => {
 		pusers = _users;
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
-	}).finally(() => {/*fetching = false;*/});
+	}).finally(() => {fetching = false;});
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
 		const lastNotedAt = Date.parse(channel.value.lastNotedAt);
@@ -178,6 +178,10 @@ function fetchMoreUsers() {
 	misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
 	}).then(_users => {
+		for (let i = 0; i < _users.length; i++) {
+			const element = _users[i];
+			pusers = pusers.push(element);
+		}
 		pusers = pusers.concat(_users);
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
 	}).finally(() => {fetching = false;});
