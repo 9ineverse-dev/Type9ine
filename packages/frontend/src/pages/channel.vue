@@ -172,6 +172,7 @@ watch(() => props.channelId, async () => {
 }, { immediate: true });
 
 function fetchMoreUsers() {
+	fetching = true;
 	//if ( !channel ) return;
 	//if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
 	misskeyApi('users/show', {
@@ -179,10 +180,7 @@ function fetchMoreUsers() {
 	}).then(_users => {
 		pusers = pusers.concat(_users);
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
-		fetching = false;
-	}).finally(() => {
-
-	});
+	}).finally(() => {fetching = false;});
 }
 
 function edit() {
