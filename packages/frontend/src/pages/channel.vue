@@ -87,7 +87,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, watch, ref } from 'vue';
+import { computed, watch, ref, getCurrentInstance } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkPostForm from '@/components/MkPostForm.vue';
 import MkTimeline from '@/components/MkTimeline.vue';
@@ -182,9 +182,13 @@ function fetchMoreUsers() {
 			const element = _users[i];
 			pusers = pusers.push(element);
 		}
-		pusers = pusers.concat(_users);
+		//pusers = pusers.concat(_users);
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
-	}).finally(() => {fetching = false;});
+	}).finally(() => {
+		fetching = false;
+		const instance = getCurrentInstance();
+		instance.proxy.forceUpdate();
+	});
 }
 
 function edit() {
