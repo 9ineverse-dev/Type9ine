@@ -2220,6 +2220,7 @@ _timelines:
   local: "로컬"
   social: "지역 사회"
   global: "주시"
+  recommend: "추천"
 _play:
   new: "Play 만들기"
   edit: "Play 수정하기"
