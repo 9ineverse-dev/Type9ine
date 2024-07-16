@@ -115,7 +115,6 @@ import { miLocalStorage } from '@/local-storage.js';
 import { useRouter } from '@/router/supplier.js';
 import MkFolder from '@/components/MkFolder.vue';
 import MkUserCardMini from '@/components/MkUserCardMini.vue';
-import { UserLite } from 'misskey-js/built/entities';
 import { userPage } from '@/filters/user';
 const {
 	enableInfiniteScroll,
@@ -178,7 +177,7 @@ function fetchMoreUsers() {
 	misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
 	}).then(_users => {
-		pusers = _users.concat(pusers);
+		pusers = pusers.concat(_users);
 		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
 		fetching = false;
 	}).finally(() => {
