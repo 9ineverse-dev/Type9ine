@@ -129,7 +129,7 @@ const name = ref<string | null>(null);
 const description = ref<string | null>(null);
 const bannerUrl = ref<string | null>(null);
 const bannerId = ref<string | null>(null);
-const color = ref('#000');
+const color = ref('#FFFFFF');
 const isSensitive = ref(false);
 const searchable = ref(true);
 const isPrivate = ref(false);
@@ -160,7 +160,7 @@ async function fetchChannel() {
 		channelId: props.channelId,
 	});
 
-	name.value = channel.value.name;
+	name.value = "testooooo"//channel.value.name;
 	description.value = channel.value.description;
 	bannerId.value = channel.value.bannerId;
 	bannerUrl.value = channel.value.bannerUrl;
@@ -185,7 +185,7 @@ async function fetchChannel() {
 	pinnedNotes.value = channel.value.pinnedNoteIds.map(id => ({
 		id,
 	}));
-	color.value = channel.color;
+	color.value = channel.value.color;
 	allowRenoteToExternal.value = channel.value.allowRenoteToExternal;
 }
 
