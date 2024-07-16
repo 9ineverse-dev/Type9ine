@@ -129,7 +129,7 @@ const name = ref<string | null>(null);
 const description = ref<string | null>(null);
 const bannerUrl = ref<string | null>(null);
 const bannerId = ref<string | null>(null);
-const color = ref('#FFFFFF');
+const color = ref('#000');
 const isSensitive = ref(false);
 const searchable = ref(true);
 const isPrivate = ref(false);
@@ -185,7 +185,7 @@ async function fetchChannel() {
 	pinnedNotes.value = channel.value.pinnedNoteIds.map(id => ({
 		id,
 	}));
-	color.value = channel.value.color;
+	color.value = channel.color;
 	allowRenoteToExternal.value = channel.value.allowRenoteToExternal;
 }
 
