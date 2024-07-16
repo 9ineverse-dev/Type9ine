@@ -160,7 +160,7 @@ async function fetchChannel() {
 		channelId: props.channelId,
 	});
 
-	name.value = "testooooo"//channel.value.name;
+	name.value = channel.value.name;
 	description.value = channel.value.description;
 	bannerId.value = channel.value.bannerId;
 	bannerUrl.value = channel.value.bannerUrl;
@@ -168,6 +168,8 @@ async function fetchChannel() {
 	isSensitive.value = channel.value.isSensitive;
 	isPrivate.value = channel.value.isPrivate;
 	const fetchPrivateUserIds = channel.value.privateUserIds;
+	color.value = channel.value.color;
+	allowRenoteToExternal.value = channel.value.allowRenoteToExternal;
 	const set = new Set(fetchPrivateUserIds);
 	const searchPrivateUserIds = [...set];
 	const pusers = await misskeyApi('users/show', {
@@ -185,8 +187,7 @@ async function fetchChannel() {
 	pinnedNotes.value = channel.value.pinnedNoteIds.map(id => ({
 		id,
 	}));
-	color.value = channel.value.color;
-	allowRenoteToExternal.value = channel.value.allowRenoteToExternal;
+	
 }
 
 //fetchChannel();
