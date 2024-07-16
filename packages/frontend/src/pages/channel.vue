@@ -32,23 +32,21 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<MkNote v-for="note in channel.pinnedNotes" :key="note.id" class="_panel" :note="note"/>
 					</div>
 				</MkFoldableSection>
-
-			<MkFolder v-if="channel.isPrivate" defaultOpen>
-				<template #label>{{ i18n.ts.members }}</template>
-				<template #caption>{{ i18n.t('nUsers', { n: `${channel.privateUserIds.length}` }) }}</template>
-
-				<div class="_gaps_s">
-					<div v-for="user in pusers" :key="user.id" :class="$style.userItem">
-						<MkA :class="$style.userItemBody" :to="`${userPage(user)}`">
-							<MkUserCardMini :user="user"/>
-						</MkA>
-					</div>
-					<MkButton v-if="!fetching && queueUserIds.length !== 0" v-appear="enableInfiniteScroll ? fetchMoreUsers : null" :class="$style.more" :style="{ cursor: 'pointer' }" primary rounded @click="fetchMoreUsers">
-						{{ i18n.ts.loadMore }}
-					</MkButton>
-					<MkLoading v-if="fetching" class="loading"/>
-				</div>
-			</MkFolder>
+				
+				<MkFolder v-if="channel.isPrivate" defaultOpen><template #label>{{ i18n.ts.members }}</template>
+					<template #caption>{{ i18n.t('nUsers', { n: `${channel.privateUserIds.length}` }) }}</template>
+					<MkPagination :pagination="usersPagination">
+						<template #default="{ items }">
+							<div class="_gaps_s">
+								<div v-for="item in items" :key="item.user.id" :class="[$style.userItem, { [$style.userItemOpend]: expandedItems.includes(item.id) }]">
+									<MkA :class="$style.userItemBody" :to="`${userPage(user)}`">
+										<MkUserCardMini :user="user"/>
+									</MkA>
+								</div>
+							</div>
+						</template>
+					</MkPagination>
+					</MkFolder>
 			</div>
 			<div v-if="channel && tab === 'timeline'" key="timeline" class="_gaps">
 				<MkInfo v-if="channel.isArchived" warn>{{ i18n.ts.thisChannelArchived }}</MkInfo>
@@ -116,6 +114,7 @@ import { useRouter } from '@/router/supplier.js';
 import MkFolder from '@/components/MkFolder.vue';
 import MkUserCardMini from '@/components/MkUserCardMini.vue';
 import { userPage } from '@/filters/user';
+import MkPagination from '@/components/MkPagination.vue';
 const {
 	enableInfiniteScroll,
 } = defaultStore.reactiveState;
@@ -144,6 +143,13 @@ const featuredPagination = computed(() => ({
 		channelId: props.channelId,
 	},
 }));
+const usersPagination = {
+	endpoint: 'users/show' as const,
+	limit: 20,
+	params: computed(() => ({
+		userIds: channel.value.privateUserIds,
+	})),
+};
 
 watch(() => props.channelId, async () => {
 	channel.value = await misskeyApi('channels/show', {
