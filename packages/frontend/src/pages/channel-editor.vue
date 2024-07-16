@@ -100,7 +100,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch, defineAsyncComponent } from 'vue';
+import { computed, ref, watch, defineAsyncComponent, onMounted } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
@@ -129,7 +129,7 @@ const name = ref<string | null>(null);
 const description = ref<string | null>(null);
 const bannerUrl = ref<string | null>(null);
 const bannerId = ref<string | null>(null);
-const color = ref<string | null>(null);
+const color = ref('#000');
 const isSensitive = ref(false);
 const searchable = ref(true);
 const isPrivate = ref(false);
@@ -189,7 +189,11 @@ async function fetchChannel() {
 	allowRenoteToExternal.value = channel.value.allowRenoteToExternal;
 }
 
-fetchChannel();
+//fetchChannel();
+
+onMounted(() => {
+	fetchChannel();
+});
 
 async function addPrivateUserIds() {
 	const { canceled, result } = await os.inputText({
