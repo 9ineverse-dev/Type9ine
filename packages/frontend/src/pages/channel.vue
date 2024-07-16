@@ -126,7 +126,7 @@ const props = defineProps<{
 	channelId: string;
 }>();
 
-const FETCH_USERS_LIMIT = 20;
+const FETCH_USERS_LIMIT = 2;
 const tab = ref('overview');
 
 const channel = ref<Misskey.entities.Channel | null>(null);
