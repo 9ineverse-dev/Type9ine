@@ -38,9 +38,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<MkPagination :pagination="usersPagination">
 						<template #default="{ items  }">
 							<div class="_gaps_s">
-								<div v-for="item in items " :key="item.id" :class="$style.userItem">
+								<div v-for="user in items " :key="user.id" :class="$style.userItem">
 									<MkA :class="$style.userItemBody" :to="`${userPage(user)}`">
-										<MkUserCardMini :user="item.user"/>
+										<MkUserCardMini :user="user"/>
 									</MkA>
 								</div>
 							</div>
