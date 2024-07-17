@@ -145,7 +145,7 @@ const featuredPagination = computed(() => ({
 }));
 const usersPagination = {
 	endpoint: 'users/show' as const,
-	limit: 2,
+	limit: 20,
 	params: computed(() => ({
 		userIds: channel.value.privateUserIds,
 	})),
