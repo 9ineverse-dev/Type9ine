@@ -36,11 +36,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<MkFolder v-if="channel.isPrivate" defaultOpen><template #label>{{ i18n.ts.members }}</template>
 					<template #caption>{{ i18n.t('nUsers', { n: `${channel.privateUserIds.length}` }) }}</template>
 					<MkPagination :pagination="usersPagination">
-						<template #default="{ users }">
+						<template #default="{ items  }">
 							<div class="_gaps_s">
-								<div v-for="user in users" :key="user.id" :class="[$style.userItem, { [$style.userItemOpend]: expandedItems.includes(user.id) }]">
+								<div v-for="item in items " :key="item.id" :class="$style.userItem">
 									<MkA :class="$style.userItemBody" :to="`${userPage(user)}`">
-										<MkUserCardMini :user="user"/>
+										<MkUserCardMini :user="item.user"/>
 									</MkA>
 								</div>
 							</div>
