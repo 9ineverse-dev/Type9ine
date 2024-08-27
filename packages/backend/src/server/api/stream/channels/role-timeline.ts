@@ -43,6 +43,7 @@ class RoleTimelineChannel extends Channel {
 				return;
 			}
 			if (note.visibility !== 'public') return;
+			if (note.channelId !== null ) return;
 
 			if (this.isNoteMutedOrBlocked(note)) return;
 
