@@ -141,7 +141,6 @@ import MkSwitch from '@/components/MkSwitch.vue';
 import { $i } from '@/account.js';
 import MkTextarea from '@/components/MkTextarea.vue';
 import { useRouter } from '@/router/supplier.js';
-import { $i } from '@/account.js';
 
 const Sortable = defineAsyncComponent(() => import('vuedraggable').then(x => x.default));
 
@@ -216,7 +215,7 @@ async function fetchChannel() {
 	pinnedNotes.value = channel.value.pinnedNoteIds.map(id => ({
 		id,
 	}));
-	
+
 	isLocalOnly.value = channel.value.isLocalOnly;
 	collaboratorUsers.value = channel.value.collaboratorUsers;
 }

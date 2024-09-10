@@ -16,15 +16,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<template #caption>{{ i18n.ts.blockedInstancesDescription }}</template>
 				</MkTextarea>
 			</template>
+			<MkTextarea v-else-if="tab === 'white'" v-model="defaultWhiteHosts" class="_formBlock">
+				<span>{{ i18n.ts.whiteInstances }}</span>
+				<template #caption></template>
+			</MkTextarea>
 			<template v-else-if="tab === 'silence'">
 				<MkTextarea v-model="silencedHosts" class="_formBlock">
 					<span>{{ i18n.ts.silencedInstances }}</span>
 					<template #caption>{{ i18n.ts.silencedInstancesDescription }}</template>
 				</MkTextarea>
-			<MkTextarea v-else-if="tab === 'white'" v-model="defaultWhiteHosts" class="_formBlock">
-				<span>{{ i18n.ts.whiteInstances }}</span>
-				<template #caption></template>
-			</MkTextarea>
+
 				<MkTextarea v-model="mediaSilencedHosts" class="_formBlock">
 					<span>{{ i18n.ts.mediaSilencedInstances }}</span>
 					<template #caption>{{ i18n.ts.mediaSilencedInstancesDescription }}</template>

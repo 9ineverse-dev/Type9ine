@@ -811,7 +811,7 @@ export interface Locale extends ILocale {
     /**
      * このアカウントがプログラムによって運用される場合は、このフラグをオンにします。オンにすると、反応の連鎖を防ぐためのフラグとして他の開発者に役立ったり、9ineverse.comのシステム上での扱いがBotに合ったものになります。
      */
-    "flagAsBotDescription": ParameterizedString<"name">;
+    "flagAsBotDescription": string;
     /**
      * にゃああああああああああああああ！！！！！！！！！！！！
      */
@@ -5616,7 +5616,7 @@ export interface Locale extends ILocale {
         /**
          * このまま9ineverse.comの使い方についてのチュートリアルに進むこともできますが、ここで中断してすぐに使い始めることもできます。
          */
-        "youCanContinueTutorial": ParameterizedString<"name">;
+        "youCanContinueTutorial": string;
         /**
          * チュートリアルを開始
          */
@@ -5655,7 +5655,7 @@ export interface Locale extends ILocale {
             /**
              * ここでは、9ineverse.comの基本的な使い方や機能を確認できます。
              */
-            "description": ParameterizedString<"name">;
+            "description": string;
         };
         "_note": {
             /**
@@ -5665,7 +5665,7 @@ export interface Locale extends ILocale {
             /**
              * 9ineverse.comでの投稿は「ノート」と呼びます。ノートはタイムラインに時系列で並んでいて、リアルタイムで更新されていきます。
              */
-            "description": ParameterizedString<"name">;
+            "description": string;
             /**
              * 返信することができます。返信に対しての返信も可能で、スレッドのように会話を続けることもできます。
              */
@@ -5717,7 +5717,7 @@ export interface Locale extends ILocale {
             /**
              * 9ineverse.comには、使い方に応じて複数のタイムラインが用意されています。
              */
-            "description1": ParameterizedString<"name">;
+            "description1": string;
             /**
              * あなたがフォローしているアカウントの投稿を見られます。
              */
@@ -5759,7 +5759,7 @@ export interface Locale extends ILocale {
             /**
              * 9ineverse.comにノートを投稿する際には、様々なオプションの設定が可能です。投稿フォームはこのようになっています。
              */
-            "description1": ParameterizedString<"name">;
+            "description1": string;
             "_visibility": {
                 /**
                  * ノートを表示できる相手を制限できます。
@@ -5859,7 +5859,7 @@ export interface Locale extends ILocale {
             /**
              * ここで紹介した機能はほんの一部にすぎません。9ineverse.comの使い方をより詳しく知るには、{link}をご覧ください。
              */
-            "description": ParameterizedString<"name" | "link">;
+            "description": ParameterizedString<"link">;
         };
     };
     "_timelineDescription": {
@@ -6038,7 +6038,7 @@ export interface Locale extends ILocale {
                 /**
                  * 良い9ineverse.comライフを！
                  */
-                "flavor": ParameterizedString<"name">;
+                "flavor": string;
             };
             "_notes10": {
                 /**
@@ -6836,7 +6836,7 @@ export interface Locale extends ILocale {
                 /**
                  * 9ineverse.com初心者講座 修了証
                  */
-                "title": ParameterizedString<"name">;
+                "title": string;
                 /**
                  * チュートリアルを完了した
                  */

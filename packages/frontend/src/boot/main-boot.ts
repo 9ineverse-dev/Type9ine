@@ -101,7 +101,7 @@ export async function mainBoot() {
 	if ($i) {
 		defaultStore.loaded.then(() => {
 			if (defaultStore.state.accountSetupWizard !== -1) {
-				const { dispose } = //popup(defineAsyncComponent(() => import('@/components/MkUserSetupDialog.vue')), {}, {
+				const { dispose } = popup(defineAsyncComponent(() => import('@/components/MkUserSetupDialog.vue')), {}, {
 					closed: () => dispose(),
 				});
 			}

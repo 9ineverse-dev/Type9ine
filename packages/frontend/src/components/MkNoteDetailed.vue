@@ -482,25 +482,6 @@ async function chooseRnChannel(viaKeyboard = false): Promise<void> {
 	});
 }
 
-async function chooseRnChannel(viaKeyboard = false): Promise<void> {
-	const channels = await misskeyApi('channels/my-favorites', {
-		limit: 20,
-	});
-	const Channelitems = channels.map(channel => ({
-		text: channel.name,
-		icon: 'ti ti-repeat',
-		action: () => {
-			os.post({
-				renote: appearNote,
-				channel: channel,
-			});
-		},
-	}));
-	os.popupMenu(Channelitems,renoteButton.value, {
-		viaKeyboard,
-	});
-}
-
 function reply(): void {
 	pleaseLogin(undefined, pleaseLoginContext.value);
 	showMovedDialog();

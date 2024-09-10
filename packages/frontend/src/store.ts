@@ -244,13 +244,20 @@ export const defaultStore = markRaw(
 			'channels',
 		],
 	},
+	timelineHeader: {
+		where: 'deviceAccount',
+		default: [
+			'home',
+			...(isLocalTimelineAvailable ? ['local', 'social'] : []),
+			...(isGlobalTimelineAvailable ? ['global'] : []),
+			'lists',
+			'antennas',
+			'channels',
+		] as TimelineHeaderItem[],
+	},
 	visibility: {
 		where: 'deviceAccount',
 		default: 'public' as (typeof Misskey.noteVisibilities)[number],
-	},
-	localOnly: {
-		where: 'deviceAccount',
-		default: false,
 	},
 	showPreview: {
 		where: 'device',
@@ -267,6 +274,10 @@ export const defaultStore = markRaw(
 			props: Record<string, any>;
 		}[],
 	},
+	userWordMute: {
+		where: 'account',
+		default: [] as { user: Misskey.entities.UserLite; words: Array<string | string[]> }[],
+	},
 	widgets: {
 		where: 'account',
 		default: [] as {
@@ -279,13 +290,19 @@ export const defaultStore = markRaw(
 	tl: {
 		where: 'deviceAccount',
 		default: {
-			src: 'home' as 'home' | 'local' | 'social' | 'global' | `list:${string}`,
+			src: 'social' as
+				| 'home'
+				| 'local'
+				| 'social'
+				| 'global'
+				| `list:${string}`,
 			userList: null as Misskey.entities.UserList | null,
 			filter: {
 				withReplies: true,
 				withRenotes: true,
 				withSensitive: true,
 				onlyFiles: false,
+				withCw: false,
 			},
 		},
 	},
@@ -293,7 +310,10 @@ export const defaultStore = markRaw(
 		where: 'deviceAccount',
 		default: [] as Misskey.entities.UserList[],
 	},
-
+	pinnedChannels: {
+		where: 'deviceAccount',
+		default: [] as Misskey.entities.Channel[],
+	},
 	overridedDeviceKind: {
 		where: 'device',
 		default: null as null | 'smartphone' | 'tablet' | 'desktop',
@@ -326,6 +346,14 @@ export const defaultStore = markRaw(
 		where: 'device',
 		default: false,
 	},
+	alwaysShowPlayer: {
+		where: 'device',
+		default: true,
+	},
+	alwaysExpandTweet: {
+		where: 'device',
+		default: false,
+	},
 	enableQuickAddMfmFunction: {
 		where: 'device',
 		default: false,
@@ -335,6 +363,14 @@ export const defaultStore = markRaw(
 		default: false,
 	},
 	imageNewTab: {
+		where: 'device',
+		default: false,
+	},
+	enableDataSaverMode: {
+		where: 'device',
+		default: false,
+	},
+	enableCellularWithDataSaver: {
 		where: 'device',
 		default: false,
 	},
@@ -360,7 +396,7 @@ export const defaultStore = markRaw(
 	},
 	showFixedPostForm: {
 		where: 'device',
-		default: false,
+		default: true,
 	},
 	showFixedPostFormInChannel: {
 		where: 'device',
@@ -374,6 +410,22 @@ export const defaultStore = markRaw(
 		where: 'device',
 		default: false,
 	},
+	topBarNameShown: {
+		where: 'device',
+		default: false,
+	},
+	showHomeTimeline: {
+		where: 'device',
+		default: true,
+	},
+	showLocalTimeline: {
+		where: 'device',
+		default: true,
+	},
+	showSocialTimeline: {
+		where: 'device',
+		default: true,
+	},
 	showGapBetweenNotesInTimeline: {
 		where: 'device',
 		default: false,
@@ -381,6 +433,26 @@ export const defaultStore = markRaw(
 	darkMode: {
 		where: 'device',
 		default: false,
+	},
+	gamingMode: {
+		where: 'device',
+		default: false,
+	},
+	gamingType: {
+		where: 'device',
+		default: 'none',
+	},
+	indicatorCounterToggle: {
+		where: 'device',
+		default: 'true',
+	},
+	bannerUrl: {
+		where: 'device',
+		default: bannerDark,
+	},
+	iconUrl: {
+		where: 'device',
+		default: iconDark,
 	},
 	instanceTicker: {
 		where: 'device',
@@ -405,6 +477,10 @@ export const defaultStore = markRaw(
 	recentlyUsedEmojis: {
 		where: 'device',
 		default: [] as string[],
+	},
+	enablehanntenn: {
+		where: 'device',
+		default: false,
 	},
 	recentlyUsedUsers: {
 		where: 'device',
@@ -442,15 +518,71 @@ export const defaultStore = markRaw(
 		where: 'device',
 		default: true,
 	},
+	virtualScrollOn: {
+		where: 'device',
+		default: false,
+	},
 	numberOfPageCache: {
 		where: 'device',
-		default: 3,
+		default: 5,
+	},
+	specifiedColor: {
+		where: 'device',
+		default: '#FFFF64',
+	},
+	followerColor: {
+		where: 'device',
+		default: '#FF00FF',
+	},
+	homeColor: {
+		where: 'device',
+		default: '#00FFFF',
+	},
+	localOnlyColor: {
+		where: 'device',
+		default: '#2b2c41',
+	},
+	numberOfGamingSpeed: {
+		where: 'device',
+		default: 44,
+	},
+	remoteLocalTimeline: {
+		where: 'device',
+		default: [],
+	},
+	onlyAndWithSave: {
+		where: 'device',
+		default: false,
+	},
+	onlyFiles: {
+		where: 'device',
+		default: false,
+	},
+	withReplies: {
+		where: 'device',
+		default: true,
+	},
+	withRenotes: {
+		where: 'device',
+		default: true,
 	},
 	showNoteActionsOnlyHover: {
 		where: 'device',
 		default: false,
 	},
 	showClipButtonInNoteFooter: {
+		where: 'device',
+		default: false,
+	},
+	showMediaTimeline: {
+		where: 'device',
+		default: true,
+	},
+	showGlobalTimeline: {
+		where: 'device',
+		default: true,
+	},
+	showVisibilityColor: {
 		where: 'device',
 		default: false,
 	},
@@ -480,7 +612,11 @@ export const defaultStore = markRaw(
 	},
 	notificationPosition: {
 		where: 'device',
-		default: 'rightBottom' as 'leftTop' | 'leftBottom' | 'rightTop' | 'rightBottom',
+		default: 'rightBottom' as
+			| 'leftTop'
+			| 'leftBottom'
+			| 'rightTop'
+			| 'rightBottom',
 	},
 	notificationStackAxis: {
 		where: 'device',
@@ -500,6 +636,10 @@ export const defaultStore = markRaw(
 	},
 	defaultWithReplies: {
 		where: 'account',
+		default: false,
+	},
+	hideMutedNotes: {
+		where: 'device',
 		default: false,
 	},
 	disableStreamingTimeline: {
@@ -550,36 +690,44 @@ export const defaultStore = markRaw(
 		where: 'device',
 		default: true,
 	},
+	confirmWhenRevealingSensitiveMedia: {
+		where: 'device',
+		default: false,
+	},
+	contextMenu: {
+		where: 'device',
+		default: 'app' as 'app' | 'appWithShift' | 'native',
+	},
 
-		sound_masterVolume: {
-			where: 'device',
-			default: 0.3,
-		},
-		sound_notUseSound: {
-			where: 'device',
-			default: false,
-		},
-		sound_useSoundOnlyWhenActive: {
-			where: 'device',
-			default: false,
-		},
-		sound_note: {
-			where: 'device',
-			default: { type: 'syuilo/n-aec', volume: 1 } as SoundStore,
-		},
-		sound_noteMy: {
-			where: 'device',
-			default: { type: 'syuilo/n-cea-4va', volume: 1 } as SoundStore,
-		},
-		sound_notification: {
-			where: 'device',
-			default: { type: 'syuilo/n-ea', volume: 1 } as SoundStore,
-		},
-		sound_reaction: {
-			where: 'device',
-			default: { type: 'syuilo/bubble2', volume: 1 } as SoundStore,
-		},
-	}),
+	sound_masterVolume: {
+		where: 'device',
+		default: 0.3,
+	},
+	sound_notUseSound: {
+		where: 'device',
+		default: false,
+	},
+	sound_useSoundOnlyWhenActive: {
+		where: 'device',
+		default: false,
+	},
+	sound_note: {
+		where: 'device',
+		default: { type: 'syuilo/n-aec', volume: 1 } as SoundStore,
+	},
+	sound_noteMy: {
+		where: 'device',
+		default: { type: 'syuilo/n-cea-4va', volume: 1 } as SoundStore,
+	},
+	sound_notification: {
+		where: 'device',
+		default: { type: 'syuilo/n-ea', volume: 1 } as SoundStore,
+	},
+	sound_reaction: {
+		where: 'device',
+		default: { type: 'syuilo/bubble2', volume: 1 } as SoundStore,
+	},
+}),
 );
 
 // TODO: 他のタブと永続化されたstateを同期
@@ -587,18 +735,18 @@ export const defaultStore = markRaw(
 const PREFIX = 'miux:' as const;
 
 export type Plugin = {
-	id: string;
-	name: string;
-	active: boolean;
-	config?: Record<string, { default: any }>;
-	configData: Record<string, any>;
-	token: string;
-	src: string | null;
-	version: string;
-	ast: any[];
-	author?: string;
-	description?: string;
-	permissions?: string[];
+id: string;
+name: string;
+active: boolean;
+config?: Record<string, { default: any }>;
+configData: Record<string, any>;
+token: string;
+src: string | null;
+version: string;
+ast: any[];
+author?: string;
+description?: string;
+permissions?: string[];
 };
 
 interface Watcher {
