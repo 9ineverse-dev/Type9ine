@@ -8,7 +8,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<div class="banner" :style="bannerStyle">
 			<div class="fade"></div>
 			<div class="name"><i class="ti ti-device-tv"></i> {{ channel.name }}</div>
-			<div v-if="channel.isSensitive" class="sensitiveIndicator">{{ i18n.ts.sensitive }}</div>
+			<div v-if="channel.isSensitive" class="sensitiveIndicator">{{ i18n.ts.compartmentalization }}</div>
 			<div class="status">
 				<div>
 					<i class="ti ti-users ti-fw"></i>

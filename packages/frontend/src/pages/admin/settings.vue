@@ -97,6 +97,49 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</FormSection>
 
 					<FormSection>
+						<template #label>Stripe API</template>
+						<div class="_gaps_m">
+							<MkSwitch v-model="sellSubscription">
+								<template #label>Sell Subscription</template>
+							</MkSwitch>
+							<MkInput v-model="stripeAPIKey">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Stripe API Key</template>
+							</MkInput>
+							<MkInput v-model="stripeWebhookKey">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Stripe webhook Key</template>
+							</MkInput>
+							<MkInput v-model="basicPlanPriceId">
+								<template #prefix><i class="ti ti-key"></i></template>
+								<template #label>Basic Plan PriceID</template>
+							</MkInput>
+
+						</div>
+					</FormSection>
+
+					<FormSection>
+						<template #label>Subscription Plans</template>
+						<div class="_gaps_m">
+							<MkInput v-model="transactionsActNotationUrl">
+								<template #label>特商法に戻づく表記URL</template>
+							</MkInput>
+							<MkInput v-model="planAssignControlKey">
+								<template #label>有料ロール付与APIキー</template>
+							</MkInput>
+							<MkInput v-model="basicPlanRoleId">
+								<template #label>Basic Plan RoleId</template>
+							</MkInput>
+							<MkInput v-model="basicPlanPrice" type="number">
+								<template #label>Basic Plan Price</template>
+							</MkInput>
+							<MkInput v-model="failedRoleId">
+								<template #label>決済失敗RoleId</template>
+							</MkInput>
+						</div>
+					</FormSection>
+
+					<FormSection>
 						<template #label>Misskey® Fan-out Timeline Technology™ (FTT)</template>
 						<template #description v-if="isManaged">{{ i18n.ts.managedInstanceIsNotEditable }}</template>
 
@@ -237,6 +280,15 @@ const cacheRemoteSensitiveFiles = ref<boolean>(false);
 const enableServiceWorker = ref<boolean>(false);
 const swPublicKey = ref<string | null>(null);
 const swPrivateKey = ref<string | null>(null);
+let sellSubscription: boolean = ref(false);
+let stripeAPIKey: string | null = ref('');
+let stripeWebhookKey: string | null = ref('');
+let basicPlanPriceId: string | null = ref('');
+let transactionsActNotationUrl: string | null = ref('');
+let planAssignControlKey: string | null = ref('');
+let basicPlanRoleId: any | null = ref('');
+let failedRoleId: any | null = ref('');
+let basicPlanPrice: number = ref(0);
 const enableFanoutTimeline = ref<boolean>(false);
 const enableFanoutTimelineDbFallback = ref<boolean>(false);
 const perLocalUserUserTimelineCacheMax = ref<number>(0);
@@ -266,6 +318,15 @@ async function init(): Promise<void> {
 	enableServiceWorker.value = meta.enableServiceWorker;
 	swPublicKey.value = meta.swPublickey;
 	swPrivateKey.value = meta.swPrivateKey;
+	sellSubscription = meta.sellSubscription,
+	stripeAPIKey = meta.stripeAPIKey,
+	stripeWebhookKey = meta.stripeWebhookKey,
+	transactionsActNotationUrl = meta.transactionsActNotationUrl,
+	planAssignControlKey = meta.planAssignControlKey,
+	basicPlanPriceId = meta.basicPlanPriceId,
+	basicPlanRoleId = meta.basicPlanRoleId,
+	failedRoleId = meta.failedRoleId,
+	basicPlanPrice = meta.basicPlanPrice,
 	enableFanoutTimeline.value = meta.enableFanoutTimeline;
 	enableFanoutTimelineDbFallback.value = meta.enableFanoutTimelineDbFallback;
 	perLocalUserUserTimelineCacheMax.value = meta.perLocalUserUserTimelineCacheMax;
@@ -297,6 +358,15 @@ async function save() {
 		enableServiceWorker: enableServiceWorker.value,
 		swPublicKey: swPublicKey.value,
 		swPrivateKey: swPrivateKey.value,
+		sellSubscription,
+		stripeAPIKey,
+		stripeWebhookKey,
+		basicPlanPriceId,
+		transactionsActNotationUrl,
+		planAssignControlKey,
+		basicPlanRoleId,
+		failedRoleId,
+		basicPlanPrice,
 		enableFanoutTimeline: enableFanoutTimeline.value,
 		enableFanoutTimelineDbFallback: enableFanoutTimelineDbFallback.value,
 		perLocalUserUserTimelineCacheMax: perLocalUserUserTimelineCacheMax.value,

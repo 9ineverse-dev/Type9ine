@@ -76,6 +76,22 @@ export class MiChannel {
 	public isArchived: boolean;
 
 	@Index()
+	@Column('boolean', {
+		default: true,
+	})
+	public searchable: boolean;
+
+	@Column('boolean', {
+		default: false,
+	})
+	public isPrivate: boolean;
+
+	@Column('varchar', {
+		array: true, length: 128, default: '{}',
+	})
+	public privateUserIds: User['id'][];
+
+	@Index()
 	@Column('integer', {
 		default: 0,
 		comment: 'The count of notes.',

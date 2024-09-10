@@ -595,6 +595,13 @@ export const meta = {
 				optional: false,
 				nullable: true,
 			},
+			defaultWhiteHosts: {
+				type: 'array',
+				optional: false, nullable: false,
+				items: {
+					type: 'string',
+				},
+			},
 			urlPreviewEnabled: {
 				type: 'boolean',
 				optional: false,
@@ -648,6 +655,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 	) {
 		super(meta, paramDef, async (_, me) => {
 			const instance = await this.metaService.fetch(true);
+
+			let SubscriptionSelleble = false;
+			if ( instance.sellSubscription && instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanPrice && instance.basicPlanRoleId && instance.failedRoleId && instance.transactionsActNotationUrl) {
+				SubscriptionSelleble = instance.sellSubscription;
+			}
 			const commonResponse = {
 				maintainerName: instance.maintainerName,
 				maintainerEmail: instance.maintainerEmail,
@@ -732,6 +744,15 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				objectStorageUseProxy: instance.objectStorageUseProxy,
 				objectStorageSetPublicRead: instance.objectStorageSetPublicRead,
 				objectStorageS3ForcePathStyle: instance.objectStorageS3ForcePathStyle,
+				basicPlanRoleId: instance.basicPlanRoleId,
+				failedRoleId: instance.failedRoleId,
+				basicPlanPriceId: instance.basicPlanPriceId,
+				basicPlanPrice: instance.basicPlanPrice,
+				transactionsActNotationUrl: instance.transactionsActNotationUrl,
+				planAssignControlKey: instance.planAssignControlKey,
+				sellSubscription: SubscriptionSelleble,
+				stripeAPIKey: instance.stripeAPIKey,
+				stripeWebhookKey: instance.stripeWebhookKey,
 				deeplAuthKey: instance.deeplAuthKey,
 				deeplIsPro: instance.deeplIsPro,
 				enableIpLogging: instance.enableIpLogging,
@@ -755,6 +776,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				perUserHomeTimelineCacheMax: instance.perUserHomeTimelineCacheMax,
 				perUserListTimelineCacheMax: instance.perUserListTimelineCacheMax,
 				notesPerOneAd: instance.notesPerOneAd,
+				defaultWhiteHosts: instance.defaultWhiteHosts,
 				DiscordWebhookUrl: instance.DiscordWebhookUrl,
 				DiscordWebhookUrlWordBlock: instance.DiscordWebhookUrlWordBlock,
 				EmojiBotToken: instance.EmojiBotToken,

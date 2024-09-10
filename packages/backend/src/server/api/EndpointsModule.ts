@@ -97,6 +97,13 @@ import * as ep___admin_roles_assign from './endpoints/admin/roles/assign.js';
 import * as ep___admin_roles_unassign from './endpoints/admin/roles/unassign.js';
 import * as ep___admin_roles_updateDefaultPolicies from './endpoints/admin/roles/update-default-policies.js';
 import * as ep___admin_roles_users from './endpoints/admin/roles/users.js';
+//import * as ep___admin_stripe_checkoutSessionCompleted from './endpoints/admin/stripe/checkout-session-completed.js';
+import * as ep___admin_stripe_customerSubscriptionCreated from './endpoints/admin/stripe/customer-subscription-created.js';
+import * as ep___admin_stripe_customerSubscriptionDeleted from './endpoints/admin/stripe/customer-subscription-deleted.js';
+import * as ep___admin_stripe_customerSubscriptionPaused from './endpoints/admin/stripe/customer-subscription-paused.js';
+import * as ep___admin_stripe_customerSubscriptionResumed from './endpoints/admin/stripe/customer-subscription-resumed.js';
+import * as ep___admin_stripe_invoicePaid from './endpoints/admin/stripe/invoice-paid.js';
+import * as ep___admin_stripe_invoicePaymentFailed from './endpoints/admin/stripe/invoice-payment-failed.js';
 import * as ep___admin_systemWebhook_create from './endpoints/admin/system-webhook/create.js';
 import * as ep___admin_systemWebhook_delete from './endpoints/admin/system-webhook/delete.js';
 import * as ep___admin_systemWebhook_list from './endpoints/admin/system-webhook/list.js';
@@ -401,6 +408,9 @@ import * as ep___reversi_invitations from './endpoints/reversi/invitations.js';
 import * as ep___reversi_showGame from './endpoints/reversi/show-game.js';
 import * as ep___reversi_surrender from './endpoints/reversi/surrender.js';
 import * as ep___reversi_verify from './endpoints/reversi/verify.js';
+import * as ep___subscription_checkout from './endpoints/subscription/checkout.js';
+import * as ep___subscription_portal from './endpoints/subscription/portal.js';
+import * as ep___subscription_webhook from './endpoints/subscription/webhook.js';
 import { GetterService } from './GetterService.js';
 import { ApiLoggerService } from './ApiLoggerService.js';
 import * as ep___admin_accounts_present_points from './endpoints/admin/accounts/present-points.js';
@@ -498,6 +508,12 @@ const $admin_roles_assign: Provider = { provide: 'ep:admin/roles/assign', useCla
 const $admin_roles_unassign: Provider = { provide: 'ep:admin/roles/unassign', useClass: ep___admin_roles_unassign.default };
 const $admin_roles_updateDefaultPolicies: Provider = { provide: 'ep:admin/roles/update-default-policies', useClass: ep___admin_roles_updateDefaultPolicies.default };
 const $admin_roles_users: Provider = { provide: 'ep:admin/roles/users', useClass: ep___admin_roles_users.default };
+const $admin_stripe_customerSubscriptionCreated: Provider = { provide: 'ep:admin/stripe/customer-subscription-created', useClass: ep___admin_stripe_customerSubscriptionCreated.default };
+const $admin_stripe_customerSubscriptionDeleted: Provider = { provide: 'ep:admin/stripe/customer-subscription-deleted', useClass: ep___admin_stripe_customerSubscriptionDeleted.default };
+const $admin_stripe_customerSubscriptionPaused: Provider = { provide: 'ep:admin/stripe/customer-subscription-paused', useClass: ep___admin_stripe_customerSubscriptionPaused.default };
+const $admin_stripe_customerSubscriptionResumed: Provider = { provide: 'ep:admin/stripe/customer-subscription-resumed', useClass: ep___admin_stripe_customerSubscriptionResumed.default };
+const $admin_stripe_invoicePaid: Provider = { provide: 'ep:admin/stripe/invoice-paid', useClass: ep___admin_stripe_invoicePaid.default };
+const $admin_stripe_invoicePaymentFailed: Provider = { provide: 'ep:admin/stripe/invoice-payment-failed', useClass: ep___admin_stripe_invoicePaymentFailed.default };
 const $admin_systemWebhook_create: Provider = { provide: 'ep:admin/system-webhook/create', useClass: ep___admin_systemWebhook_create.default };
 const $admin_systemWebhook_delete: Provider = { provide: 'ep:admin/system-webhook/delete', useClass: ep___admin_systemWebhook_delete.default };
 const $admin_systemWebhook_list: Provider = { provide: 'ep:admin/system-webhook/list', useClass: ep___admin_systemWebhook_list.default };
@@ -803,6 +819,9 @@ const $reversi_invitations: Provider = { provide: 'ep:reversi/invitations', useC
 const $reversi_showGame: Provider = { provide: 'ep:reversi/show-game', useClass: ep___reversi_showGame.default };
 const $reversi_surrender: Provider = { provide: 'ep:reversi/surrender', useClass: ep___reversi_surrender.default };
 const $reversi_verify: Provider = { provide: 'ep:reversi/verify', useClass: ep___reversi_verify.default };
+const $subscription_checkout: Provider = { provide: 'ep:subscription/checkout', useClass: ep___subscription_checkout.default };
+const $subscription_portal: Provider = { provide: 'ep:subscription/portal', useClass: ep___subscription_portal.default };
+const $subscription_webhook: Provider = { provide: 'ep:subscription/webhook', useClass: ep___subscription_webhook.default };
 
 @Module({
 	imports: [
@@ -903,6 +922,12 @@ const $reversi_verify: Provider = { provide: 'ep:reversi/verify', useClass: ep__
 		$admin_roles_unassign,
 		$admin_roles_updateDefaultPolicies,
 		$admin_roles_users,
+		$admin_stripe_customerSubscriptionCreated,
+		$admin_stripe_customerSubscriptionDeleted,
+		$admin_stripe_customerSubscriptionPaused,
+		$admin_stripe_customerSubscriptionResumed,
+		$admin_stripe_invoicePaid,
+		$admin_stripe_invoicePaymentFailed,
 		$admin_systemWebhook_create,
 		$admin_systemWebhook_delete,
 		$admin_systemWebhook_list,
@@ -1208,6 +1233,9 @@ const $reversi_verify: Provider = { provide: 'ep:reversi/verify', useClass: ep__
 		$reversi_showGame,
 		$reversi_surrender,
 		$reversi_verify,
+		$subscription_checkout,
+		$subscription_portal,
+		$subscription_webhook,
 	],
 	exports: [
 		$admin_meta,
@@ -1303,6 +1331,12 @@ const $reversi_verify: Provider = { provide: 'ep:reversi/verify', useClass: ep__
 		$admin_roles_unassign,
 		$admin_roles_updateDefaultPolicies,
 		$admin_roles_users,
+		$admin_stripe_customerSubscriptionCreated,
+		$admin_stripe_customerSubscriptionDeleted,
+		$admin_stripe_customerSubscriptionPaused,
+		$admin_stripe_customerSubscriptionResumed,
+		$admin_stripe_invoicePaid,
+		$admin_stripe_invoicePaymentFailed,
 		$admin_systemWebhook_create,
 		$admin_systemWebhook_delete,
 		$admin_systemWebhook_list,
@@ -1605,6 +1639,9 @@ const $reversi_verify: Provider = { provide: 'ep:reversi/verify', useClass: ep__
 		$reversi_showGame,
 		$reversi_surrender,
 		$reversi_verify,
+		$subscription_checkout,
+		$subscription_portal,
+		$subscription_webhook,
 	],
 })
 export class EndpointsModule {}

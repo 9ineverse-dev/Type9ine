@@ -32,6 +32,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 
       <XInstanceMute/>
     </MkFolder>
+
+    
+	<MkFolder>
+		<template #icon><i class="ti ti-planet-off"></i></template>
+		<template #label>ホワイトリスト</template>
+
+		<XWhiteList/>
+	</MkFolder>
+
     <MkFolder>
       <template #icon><i class="ti ti-message-off"></i></template>
       <template #label>{{ i18n.ts.userWordMute }}</template>
@@ -143,6 +152,7 @@ import { ref, computed } from 'vue';
 import XInstanceMute from './mute-block.instance-mute.vue';
 import XUserWordMute from './mute-block.user-word-mute.vue';
 import XWordMute from './mute-block.word-mute.vue';
+import XWhiteList from './mute-block.white-instances-setting.vue';
 import MkPagination from '@/components/MkPagination.vue';
 import { userPage } from '@/filters/user.js';
 import { i18n } from '@/i18n.js';

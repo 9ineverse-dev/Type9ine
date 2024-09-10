@@ -27,10 +27,11 @@ class HybridTimelineChannel extends Channel {
 		private roleService: RoleService,
 		private noteEntityService: NoteEntityService,
 
+
 		id: string,
 		connection: Channel['connection'],
 	) {
-		super(id, connection);
+		super(id, connection,);
 		//this.onNote = this.onNote.bind(this);
 	}
 
@@ -49,19 +50,17 @@ class HybridTimelineChannel extends Channel {
 
 	@bindThis
 	private async onNote(note: Packed<'Note'>) {
+		return;
 		const isMe = this.user!.id === note.userId;
 
 		if (this.withFiles && (note.fileIds == null || note.fileIds.length === 0)) return;
 
-		// チャンネルの投稿ではなく、自分自身の投稿 または
-		// チャンネルの投稿ではなく、その投稿のユーザーをフォローしている または
-		// チャンネルの投稿ではなく、全体公開のローカルの投稿 または
-		// フォローしているチャンネルの投稿 の場合だけ
+		if(note.channelId == null)return;
+
 		if (!(
-			(note.channelId == null && isMe) ||
-			(note.channelId == null && Object.hasOwn(this.following, note.userId)) ||
-			(note.channelId == null && (note.user.host == null && note.visibility === 'public')) ||
-			(note.channelId != null && this.followingChannels.has(note.channelId))
+			(this.user!.id === note.userId) ||
+			(this.following.has(note.userId) && note.channel!.isSensitive === false) ||
+			(this.followingChannels.has(note.channelId))
 		)) return;
 
 		if (note.visibility === 'followers') {

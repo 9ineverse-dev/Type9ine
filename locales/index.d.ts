@@ -601,6 +601,10 @@ export interface Locale extends ILocale {
      */
     "sensitive": string;
     /**
+     * 棲み分け
+     */
+    "compartmentalization": string;
+    /**
      * 追加
      */
     "add": string;
@@ -805,9 +809,9 @@ export interface Locale extends ILocale {
      */
     "flagAsBot": string;
     /**
-     * このアカウントがプログラムによって運用される場合は、このフラグをオンにします。オンにすると、反応の連鎖を防ぐためのフラグとして他の開発者に役立ったり、Type4nyのシステム上での扱いがBotに合ったものになります。
+     * このアカウントがプログラムによって運用される場合は、このフラグをオンにします。オンにすると、反応の連鎖を防ぐためのフラグとして他の開発者に役立ったり、9ineverse.comのシステム上での扱いがBotに合ったものになります。
      */
-    "flagAsBotDescription": string;
+    "flagAsBotDescription": ParameterizedString<"name">;
     /**
      * にゃああああああああああああああ！！！！！！！！！！！！
      */
@@ -936,6 +940,14 @@ export interface Locale extends ILocale {
      * 連合
      */
     "federation": string;
+    /**
+     * チャンネルのノートをノート検索で表示する。
+     */
+    "channelSearchable": string;
+    /**
+     * このノートは検索できません
+     */
+    "noteNotSearchable": string;
     /**
      * サーバー
      */
@@ -1076,6 +1088,10 @@ export interface Locale extends ILocale {
      * メディアサイレンスしたいサーバーのホストを改行で区切って設定します。メディアサイレンスされたサーバーに所属するアカウントによるファイルはすべてセンシティブとして扱われ、カスタム絵文字が使用できないようになります。ブロックしたインスタンスには影響しません。
      */
     "mediaSilencedInstancesDescription": string;
+    /**
+     * サーバーホワイトリスト
+     */
+    "whiteInstances": string;
     /**
      * ミュートとブロック
      */
@@ -4413,7 +4429,7 @@ export interface Locale extends ILocale {
      */
     "copyErrorInfo": string;
     /**
-     * このサーバーに登録する
+     * 登録する
      */
     "joinThisServer": string;
     /**
@@ -5598,7 +5614,7 @@ export interface Locale extends ILocale {
          */
         "haveFun": ParameterizedString<"name">;
         /**
-         * このまま{name}(Type4ny)の使い方についてのチュートリアルに進むこともできますが、ここで中断してすぐに使い始めることもできます。
+         * このまま9ineverse.comの使い方についてのチュートリアルに進むこともできますが、ここで中断してすぐに使い始めることもできます。
          */
         "youCanContinueTutorial": ParameterizedString<"name">;
         /**
@@ -5637,9 +5653,9 @@ export interface Locale extends ILocale {
              */
             "title": string;
             /**
-             * ここでは、Type4nyの基本的な使い方や機能を確認できます。
+             * ここでは、9ineverse.comの基本的な使い方や機能を確認できます。
              */
-            "description": string;
+            "description": ParameterizedString<"name">;
         };
         "_note": {
             /**
@@ -5647,9 +5663,9 @@ export interface Locale extends ILocale {
              */
             "title": string;
             /**
-             * Type4nyでの投稿は「ノート」と呼びます。ノートはタイムラインに時系列で並んでいて、リアルタイムで更新されていきます。
+             * 9ineverse.comでの投稿は「ノート」と呼びます。ノートはタイムラインに時系列で並んでいて、リアルタイムで更新されていきます。
              */
-            "description": string;
+            "description": ParameterizedString<"name">;
             /**
              * 返信することができます。返信に対しての返信も可能で、スレッドのように会話を続けることもできます。
              */
@@ -5699,9 +5715,9 @@ export interface Locale extends ILocale {
              */
             "title": string;
             /**
-             * Type4nyには、使い方に応じて複数のタイムラインが用意されています（サーバーによってはいずれかが無効になっていることがあります）。
+             * 9ineverse.comには、使い方に応じて複数のタイムラインが用意されています。
              */
-            "description1": string;
+            "description1": ParameterizedString<"name">;
             /**
              * あなたがフォローしているアカウントの投稿を見られます。
              */
@@ -5711,13 +5727,21 @@ export interface Locale extends ILocale {
              */
             "local": string;
             /**
-             * ホームタイムラインとローカルタイムラインの投稿が両方表示されます。
+             * あなたのフォロー情報から、おすすめノート情報を抽出し表示します。
              */
             "social": string;
             /**
-             * 接続している他のすべてのサーバーからの投稿を見られます。
+             * フォローしているアカウントのチャンネル投稿の一部が表示されます。
              */
             "global": string;
+            /**
+             * フォローしているアカウントのチャンネル投稿の一部が表示されます。
+             */
+            "community": string;
+            /**
+             * あなたのフォロー情報から、おすすめノート情報を抽出し表示します。
+             */
+            "recommend": string;
             /**
              * それぞれのタイムラインは、画面上部でいつでも切り替えられます。
              */
@@ -5733,9 +5757,9 @@ export interface Locale extends ILocale {
              */
             "title": string;
             /**
-             * Type4nyにノートを投稿する際には、様々なオプションの設定が可能です。投稿フォームはこのようになっています。
+             * 9ineverse.comにノートを投稿する際には、様々なオプションの設定が可能です。投稿フォームはこのようになっています。
              */
-            "description1": string;
+            "description1": ParameterizedString<"name">;
             "_visibility": {
                 /**
                  * ノートを表示できる相手を制限できます。
@@ -5762,7 +5786,7 @@ export interface Locale extends ILocale {
                  */
                 "doNotSendConfidencialOnDirect1": string;
                 /**
-                 * 送信先のサーバーの管理者は投稿内容を見ることが可能なので、信頼できないサーバーのユーザーにダイレクト投稿を送信する場合は、機密情報の扱いに注意が必要です。
+                 * 送信先のサーバー・SNSサービスの管理者は投稿内容を見ることが可能なので、信頼できないサーバー・SNSサービスのユーザーにダイレクト投稿を送信する場合は、機密情報の扱いに注意が必要です。
                  */
                 "doNotSendConfidencialOnDirect2": string;
                 /**
@@ -5833,9 +5857,9 @@ export interface Locale extends ILocale {
              */
             "title": string;
             /**
-             * ここで紹介した機能はほんの一部にすぎません。Type4nyの使い方をより詳しく知るには、{link}をご覧ください。
+             * ここで紹介した機能はほんの一部にすぎません。9ineverse.comの使い方をより詳しく知るには、{link}をご覧ください。
              */
-            "description": ParameterizedString<"link">;
+            "description": ParameterizedString<"name" | "link">;
         };
     };
     "_timelineDescription": {
@@ -5848,13 +5872,21 @@ export interface Locale extends ILocale {
          */
         "local": string;
         /**
-         * ソーシャルタイムラインには、ホームタイムラインとローカルタイムラインの投稿が両方表示されます。
+         * おすすめタイムラインでは、あなたのフォロー情報からおすすめノート情報を抽出し表示します。
          */
         "social": string;
         /**
-         * グローバルタイムラインでは、接続している他のすべてのサーバーからの投稿を見られます。
+         * コミュニティタイムラインでは、フォローしているアカウントのチャンネル投稿の一部が表示されます。
          */
         "global": string;
+        /**
+         * コミュニティTLには、フォローしているアカウントのチャンネル投稿の一部が表示されます。
+         */
+        "community": string;
+        /**
+         * おすすめTLでは、あなたのフォロー情報からおすすめノート情報を抽出し表示します。
+         */
+        "recommend": string;
     };
     "_serverRules": {
         /**
@@ -6004,9 +6036,9 @@ export interface Locale extends ILocale {
                  */
                 "description": string;
                 /**
-                 * 良いType4nyライフを！
+                 * 良い9ineverse.comライフを！
                  */
-                "flavor": string;
+                "flavor": ParameterizedString<"name">;
             };
             "_notes10": {
                 /**
@@ -6802,9 +6834,9 @@ export interface Locale extends ILocale {
             };
             "_tutorialCompleted": {
                 /**
-                 * Type4ny初心者講座 修了証
+                 * 9ineverse.com初心者講座 修了証
                  */
-                "title": string;
+                "title": ParameterizedString<"name">;
                 /**
                  * チュートリアルを完了した
                  */
@@ -7183,6 +7215,10 @@ export interface Locale extends ILocale {
              */
             "userEachUserListsMax": string;
             /**
+             * プライベートチャンネルを作成可能
+             */
+            "canCreatePrivateChannel": string;
+            /**
              * レートリミット
              */
             "rateLimitFactor": string;
@@ -7194,6 +7230,10 @@ export interface Locale extends ILocale {
              * 広告の非表示
              */
             "canHideAds": string;
+            /**
+             * アカウントを削除可能
+             */
+            "canAccountDelete": string;
             /**
              * ノート検索の利用
              */
@@ -7403,6 +7443,10 @@ export interface Locale extends ILocale {
          * 削除が進行中
          */
         "inProgress": string;
+        /**
+         * 有料プランに加入している、もしくはアカウント作成後まもないため、アカウントを削除できません。有料プラン解除（解約後の契約更新日以後）もしくは数日後にお試しください。
+         */
+        "cannotDelete": string;
     };
     "_ad": {
         /**
@@ -7736,6 +7780,14 @@ export interface Locale extends ILocale {
          */
         "nameOnly": string;
         /**
+         * プライベートチャンネル
+         */
+        "isPrivate": string;
+        /**
+         * チャンネルにアクセス可能なユーザー
+         */
+        "privateUserIds": string;
+        /**
          * チャンネル外へのリノートと引用リノートを許可する
          */
         "allowRenoteToExternal": string;
@@ -7821,6 +7873,24 @@ export interface Locale extends ILocale {
          * ミュートするサーバー
          */
         "heading": string;
+    };
+    "_whiteInstance": {
+        /**
+         * ノート関連通知を許可するサーバー
+         */
+        "heading": string;
+        /**
+         * 設定したサーバーからノート関連通知を受け取ります。
+         */
+        "title": string;
+        /**
+         * 設定したサーバーから届いたDM、リプライ、リノートの通知を受け取るようにします。
+         */
+        "whiteInstanceDescription": string;
+        /**
+         * また、設定したサーバーとはDMの送受信が可能となります。改行で区切って設定します
+         */
+        "whiteInstanceDescription2": string;
     };
     "_theme": {
         /**
@@ -9356,13 +9426,21 @@ export interface Locale extends ILocale {
          */
         "media": string;
         /**
-         * ソーシャル
+         * コミュニティ
          */
         "social": string;
         /**
-         * グローバル
+         * スポットライト
          */
         "global": string;
+        /**
+         * コミュニティ
+         */
+        "community": string;
+        /**
+         * おすすめ
+         */
+        "recommend": string;
     };
     "_play": {
         /**
@@ -10221,6 +10299,36 @@ export interface Locale extends ILocale {
          * 広告を更新
          */
         "updateAd": string;
+    };
+    "_subsc": {
+        /**
+         * サブスク
+         */
+        "subscription": string;
+        /**
+         * のサブスク
+         */
+        "title": string;
+        /**
+         * ユーザー体験を次のレベルへ。
+         */
+        "catchcopy": string;
+        /**
+         * を今すぐ獲得しよう。
+         */
+        "catchcopy2": string;
+        /**
+         * の特典
+         */
+        "benefits": string;
+        /**
+         * サブスクに登録する
+         */
+        "create": string;
+        /**
+         * サブスクを管理する
+         */
+        "manage": string;
         /**
          * アイコンデコレーションを作成
          */

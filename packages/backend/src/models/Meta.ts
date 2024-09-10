@@ -1,8 +1,10 @@
+
 /*
  * SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { MiRole } from './Role.js';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { id } from './util/id.js';
 import { MiUser } from './User.js';
@@ -402,6 +404,60 @@ export class MiMeta {
 	})
 	public swPrivateKey: string | null;
 
+	@Column('boolean', {
+		default: false,
+	})
+	public sellSubscription: boolean;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public planAssignControlKey: string | null;
+
+	@Column({
+		...id(),
+		nullable: true,
+		comment: 'The ID of source Role.',
+	})
+	public basicPlanRoleId: MiRole['id'] | null;
+
+	@Column({
+		...id(),
+		nullable: true,
+		comment: 'The ID of source Role.',
+	})
+	public failedRoleId: MiRole['id'] | null;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public basicPlanPriceId: string | null;
+
+	@Column('integer', {
+		nullable: true,
+	})
+	public basicPlanPrice: number | null;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public transactionsActNotationUrl: string | null;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public stripeAPIKey: string | null;
+
+	@Column('varchar', {
+		length: 1024,
+		nullable: true,
+	})
+	public stripeWebhookKey: string | null;
+
 	@Column('varchar', {
 		length: 1024,
 		nullable: true,
@@ -684,6 +740,11 @@ export class MiMeta {
 		default: 0,
 	})
 	public notesPerOneAd: number;
+
+	@Column('varchar', {
+		length: 1024, array: true, default: '{}',
+	})
+	public defaultWhiteHosts: string[];
 
 	@Column('boolean', {
 		default: false,

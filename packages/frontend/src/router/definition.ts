@@ -592,6 +592,9 @@ const routes: RouteDef[] = [{
 	component: page(() => import('@/pages/reversi/game.vue')),
 	loginRequired: false,
 }, {
+	path: '/subscription',
+	component: page(() => import('@/pages/subscription.vue')),
+}, {
 	path: '/timeline',
 	component: page(() => import('@/pages/timeline.vue')),
 }, {

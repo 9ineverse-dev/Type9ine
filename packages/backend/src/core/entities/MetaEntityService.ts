@@ -52,6 +52,12 @@ export class MetaEntityService {
 			)
 			.getMany();
 
+		let SubscriptionSelleble = false;
+
+		if ( instance.sellSubscription && instance.stripeAPIKey && instance.stripeWebhookKey && instance.basicPlanPriceId && instance.basicPlanPrice && instance.basicPlanRoleId && instance.transactionsActNotationUrl) {
+			SubscriptionSelleble = instance.sellSubscription;
+		}
+
 		// クライアントの手間を減らすためあらかじめJSONに変換しておく
 		let defaultLightTheme = null;
 		let defaultDarkTheme = null;
@@ -113,6 +119,10 @@ export class MetaEntityService {
 			googleAnalyticsId: instance.googleAnalyticsId,
 			notFoundImageUrl: instance.notFoundImageUrl,
 			iconUrl: instance.iconUrl,
+			sellSubscription: SubscriptionSelleble,
+			basicPlanRoleId: instance.basicPlanRoleId,
+			basicPlanPrice: instance.basicPlanPrice,
+			transactionsActNotationUrl: instance.transactionsActNotationUrl,
 			backgroundImageUrl: instance.backgroundImageUrl,
 			logoImageUrl: instance.logoImageUrl,
 			maxNoteTextLength: MAX_NOTE_TEXT_LENGTH,

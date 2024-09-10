@@ -1427,8 +1427,8 @@ _instanceCharts:
 _timelines:
   home: "Strona główna"
   local: "Lokalne"
-  social: "Społeczność"
-  global: "Globalna"
+  social: "Wspólnota"
+  global: "światło reflektora"
 _play:
   viewSource: "Zobacz źródło"
   featured: "Wyróżnione"

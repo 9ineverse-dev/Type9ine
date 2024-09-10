@@ -2264,8 +2264,8 @@ _instanceCharts:
 _timelines:
   home: "首页"
   local: "本地"
-  social: "社交"
-  global: "全局"
+  social: "社区"
+  global: "脚灯"
 _play:
   new: "创建 Play"
   edit: "编辑 Play"

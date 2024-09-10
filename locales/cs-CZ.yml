@@ -1867,9 +1867,10 @@ _instanceCharts:
   filesTotal: "Kumulativní počet souborů"
 _timelines:
   home: "Domů"
+
   local: "Místní"
   social: "Sociální síť"
-  global: "Globální"
+  global: "reflektor"
 _play:
   new: "Vytvořit Play"
   edit: "Upravit Play"

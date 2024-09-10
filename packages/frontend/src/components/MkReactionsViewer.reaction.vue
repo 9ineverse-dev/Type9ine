@@ -407,10 +407,10 @@ if (!mock) {
 	}
 }
 
-.limitWidth {
+/*.limitWidth {
 	max-width: 70px;
 	object-fit: contain;
-}
+}*/
 
 .count {
 	font-size: 0.7em;

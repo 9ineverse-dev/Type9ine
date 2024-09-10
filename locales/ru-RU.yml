@@ -1843,8 +1843,8 @@ _instanceCharts:
 _timelines:
   home: "Персональная"
   local: "Местная"
-  social: "Социальная"
-  global: "Всеобщая"
+  social: "Сообщество"
+  global: "центр внимания"
 _play:
   new: "Создать приложение "
   edit: "Редактировать приложение"

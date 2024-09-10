@@ -54,7 +54,15 @@ export const paramDef = {
 		description: { type: 'string', nullable: true, minLength: 1, maxLength: 2048 },
 		bannerId: { type: 'string', format: 'misskey:id', nullable: true },
 		isArchived: { type: 'boolean', nullable: true },
+		searchable: { type: 'boolean', nullable: true },
 		pinnedNoteIds: {
+			type: 'array',
+			items: {
+				type: 'string', format: 'misskey:id',
+			},
+		},
+		isPrivate: { type: 'boolean', nullable: true },
+		privateUserIds: {
 			type: 'array',
 			items: {
 				type: 'string', format: 'misskey:id',
@@ -138,9 +146,12 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				...(ps.pinnedNoteIds !== undefined ? { pinnedNoteIds: ps.pinnedNoteIds } : {}),
 				...(ps.color !== undefined ? { color: ps.color } : {}),
 				...(typeof ps.isArchived === 'boolean' ? { isArchived: ps.isArchived } : {}),
+				...(typeof ps.searchable === 'boolean' ? { searchable: ps.searchable } : {}),
 				...(banner ? { bannerId: banner.id } : {}),
 				...(typeof ps.isSensitive === 'boolean' ? { isSensitive: ps.isSensitive } : {}),
 				...(typeof ps.allowRenoteToExternal === 'boolean' ? { allowRenoteToExternal: ps.allowRenoteToExternal } : {}),
+				...(typeof ps.isPrivate === 'boolean' ? { isPrivate: ps.isPrivate } : {}),
+				...(ps.privateUserIds !== undefined ? { privateUserIds: ps.privateUserIds } : {}),
 				...(typeof ps.isLocalOnly === 'boolean' ? { isLocalOnly: ps.isLocalOnly } : {}),
 				...(collaboratorIds.length > 0 ? { collaboratorIds: collaboratorIds } : {}),
 			};

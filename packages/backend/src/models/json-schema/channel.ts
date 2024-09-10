@@ -40,6 +40,47 @@ export const packedChannelSchema = {
 			format: 'url',
 			nullable: true, optional: false,
 		},
+		isArchived: {
+			type: 'boolean',
+			optional: false, nullable: false,
+		},
+		searchable: {
+			type: 'boolean',
+			optional: false, nullable: false,
+		},
+		isPrivate: {
+			type: 'boolean',
+			optional: false, nullable: false,
+		},
+		privateUserIds: {
+			type: 'array',
+			nullable: false, optional: false,
+			items: {
+				type: 'string',
+				format: 'id',
+			},
+		},
+		notesCount: {
+			type: 'number',
+			nullable: false, optional: false,
+		},
+		usersCount: {
+			type: 'number',
+			nullable: false, optional: false,
+		},
+		isFollowing: {
+			type: 'boolean',
+			optional: true, nullable: false,
+		},
+		isFavorited: {
+			type: 'boolean',
+			optional: true, nullable: false,
+		},
+		userId: {
+			type: 'string',
+			nullable: true, optional: false,
+			format: 'id',
+		},
 		pinnedNoteIds: {
 			type: 'array',
 			nullable: false, optional: false,

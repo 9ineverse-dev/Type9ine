@@ -78,6 +78,12 @@ export class MiUserProfile {
 	})
 	public emailVerifyCode: string | null;
 
+	@Column('varchar', {
+		length: 128, nullable: true,
+		comment: 'The user ID to be used with Stripe Subscription',
+	})
+	public stripeCustomerId: string | null;
+
 	@Column('boolean', {
 		default: false,
 	})
@@ -234,6 +240,12 @@ export class MiUserProfile {
 		comment: 'List of instances muted by the user.',
 	})
 	public mutedInstances: string[];
+
+	@Column('jsonb', {
+		default: [],
+		comment: 'List of instances muted by the user.',
+	})
+	public userWhiteInstances: string[];
 
 	@Column('jsonb', {
 		default: [],

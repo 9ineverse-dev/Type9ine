@@ -146,6 +146,7 @@ pinned: "ピン留め"
 you: "あなた"
 clickToShow: "クリックして表示"
 sensitive: "センシティブ"
+compartmentalization: "棲み分け"
 add: "追加"
 reaction: "リアクション"
 reactions: "リアクション"
@@ -197,7 +198,7 @@ youCanCleanRemoteFilesCache: "ファイル管理の🗑️ボタンで全ての�
 cacheRemoteSensitiveFiles: "リモートのセンシティブなファイルをキャッシュする"
 cacheRemoteSensitiveFilesDescription: "この設定を無効にすると、リモートのセンシティブなファイルはキャッシュせず直リンクするようになります。"
 flagAsBot: "Botとして設定"
-flagAsBotDescription: "このアカウントがプログラムによって運用される場合は、このフラグをオンにします。オンにすると、反応の連鎖を防ぐためのフラグとして他の開発者に役立ったり、Type4nyのシステム上での扱いがBotに合ったものになります。"
+flagAsBotDescription: "このアカウントがプログラムによって運用される場合は、このフラグをオンにします。オンにすると、反応の連鎖を防ぐためのフラグとして他の開発者に役立ったり、9ineverse.comのシステム上での扱いがBotに合ったものになります。"
 flagAsCat: "にゃああああああああああああああ！！！！！！！！！！！！"
 flagAsGorilla: "ウホウホウホホウホウホウホウホホホ！！！！！！！！！！！"
 flagAsCatDescription: "にゃにゃにゃ？？"
@@ -230,6 +231,8 @@ selectUser: "ユーザーを選択"
 recipient: "宛先"
 annotation: "注釈"
 federation: "連合"
+channelSearchable: "チャンネルのノートをノート検索で表示する。"
+noteNotSearchable: "このノートは検索できません"
 instances: "サーバー"
 registeredAt: "初観測"
 latestRequestReceivedAt: "直近のリクエスト受信"
@@ -265,6 +268,8 @@ silencedInstances: "サイレンスしたサーバー"
 silencedInstancesDescription: "サイレンスしたいサーバーのホストを改行で区切って設定します。サイレンスされたサーバーに所属するアカウントはすべて「サイレンス」として扱われ、フォローがすべてリクエストになります。ブロックしたインスタンスには影響しません。"
 mediaSilencedInstances: "メディアサイレンスしたサーバー"
 mediaSilencedInstancesDescription: "メディアサイレンスしたいサーバーのホストを改行で区切って設定します。メディアサイレンスされたサーバーに所属するアカウントによるファイルはすべてセンシティブとして扱われ、カスタム絵文字が使用できないようになります。ブロックしたインスタンスには影響しません。"
+whiteInstances: "サーバーホワイトリスト"
+
 muteAndBlock: "ミュートとブロック"
 mutedUsers: "ミュートしたユーザー"
 blockedUsers: "ブロックしたユーザー"
@@ -1099,7 +1104,7 @@ collapseRenotesDescription: "リアクションやリノートをしたことが
 internalServerError: "サーバー内部エラー"
 internalServerErrorDescription: "サーバー内部で予期しないエラーが発生しました。"
 copyErrorInfo: "エラー情報をコピー"
-joinThisServer: "このサーバーに登録する"
+joinThisServer: "登録する"
 exploreOtherServers: "他のサーバーを探す"
 letsLookAtTimeline: "タイムラインを見てみる"
 disableFederationConfirm: "連合なしにしますか？"
@@ -1403,7 +1408,7 @@ _initialAccountSetting:
   pushNotificationDescription: "プッシュ通知を有効にすると{name}の通知をお使いのデバイスで受け取ることができます。"
   initialAccountSettingCompleted: "初期設定が完了しました！"
   haveFun: "{name}をお楽しみください！"
-  youCanContinueTutorial: "このまま{name}(Type4ny)の使い方についてのチュートリアルに進むこともできますが、ここで中断してすぐに使い始めることもできます。"
+  youCanContinueTutorial: "このまま9ineverse.comの使い方についてのチュートリアルに進むこともできますが、ここで中断してすぐに使い始めることもできます。"
   startTutorial: "チュートリアルを開始"
   skipAreYouSure: "初期設定をスキップしますか？"
   laterAreYouSure: "初期設定をあとでやり直しますか？"
@@ -1415,10 +1420,10 @@ _initialTutorial:
   skipAreYouSure: "チュートリアルを終了しますか？"
   _landing:
     title: "チュートリアルへようこそ"
-    description: "ここでは、Type4nyの基本的な使い方や機能を確認できます。"
+    description: "ここでは、9ineverse.comの基本的な使い方や機能を確認できます。"
   _note:
     title: "ノートって何？"
-    description: "Type4nyでの投稿は「ノート」と呼びます。ノートはタイムラインに時系列で並んでいて、リアルタイムで更新されていきます。"
+    description: "9ineverse.comでの投稿は「ノート」と呼びます。ノートはタイムラインに時系列で並んでいて、リアルタイムで更新されていきます。"
     reply: "返信することができます。返信に対しての返信も可能で、スレッドのように会話を続けることもできます。"
     renote: "そのノートを自分のタイムラインに流して共有することができます。テキストを追加して引用することも可能です。"
     reaction: "リアクションをつけることができます。詳しくは次のページで解説します。"
@@ -1432,16 +1437,18 @@ _initialTutorial:
     reactDone: "「ー」ボタンを押すとリアクションを取り消すことができます。"
   _timeline:
     title: "タイムラインのしくみ"
-    description1: "Type4nyには、使い方に応じて複数のタイムラインが用意されています（サーバーによってはいずれかが無効になっていることがあります）。"
+    description1: "9ineverse.comには、使い方に応じて複数のタイムラインが用意されています。"
     home: "あなたがフォローしているアカウントの投稿を見られます。"
     local: "このサーバーにいるユーザー全員の投稿を見られます。"
-    social: "ホームタイムラインとローカルタイムラインの投稿が両方表示されます。"
-    global: "接続している他のすべてのサーバーからの投稿を見られます。"
+    social: "あなたのフォロー情報から、おすすめノート情報を抽出し表示します。"
+    global: "フォローしているアカウントのチャンネル投稿の一部が表示されます。"
+    community: "フォローしているアカウントのチャンネル投稿の一部が表示されます。"
+    recommend: "あなたのフォロー情報から、おすすめノート情報を抽出し表示します。"
     description2: "それぞれのタイムラインは、画面上部でいつでも切り替えられます。"
     description3: "その他にも、リストタイムラインやチャンネルタイムラインなどがあります。詳しくは{link}をご覧ください。"
   _postNote:
     title: "ノートの投稿設定"
-    description1: "Type4nyにノートを投稿する際には、様々なオプションの設定が可能です。投稿フォームはこのようになっています。"
+    description1: "9ineverse.comにノートを投稿する際には、様々なオプションの設定が可能です。投稿フォームはこのようになっています。"
     _visibility:
       description: "ノートを表示できる相手を制限できます。"
       public: "すべてのユーザーに公開。"
@@ -1449,7 +1456,7 @@ _initialTutorial:
       followers: "フォロワーにのみ公開。本人以外がリノートすることはできず、またフォロワー以外は閲覧できません。"
       direct: "指定したユーザーにのみ公開され、また相手に通知が入ります。ダイレクトメッセージのかわりにお使いいただけます。"
       doNotSendConfidencialOnDirect1: "機密情報は送信する際は注意してください。"
-      doNotSendConfidencialOnDirect2: "送信先のサーバーの管理者は投稿内容を見ることが可能なので、信頼できないサーバーのユーザーにダイレクト投稿を送信する場合は、機密情報の扱いに注意が必要です。"
+      doNotSendConfidencialOnDirect2: "送信先のサーバー・SNSサービスの管理者は投稿内容を見ることが可能なので、信頼できないサーバー・SNSサービスのユーザーにダイレクト投稿を送信する場合は、機密情報の扱いに注意が必要です。"
       localOnly: "他のサーバーに投稿を連合しません。上記の公開範囲に関わらず、他のサーバーのユーザーは、この設定がついたノートを直接閲覧することができなくなります。"
     _cw:
       title: "内容を隠す（CW）"
@@ -1469,13 +1476,16 @@ _initialTutorial:
     doItToContinue: "画像をセンシティブに設定すると先に進めるようになります。"
   _done:
     title: "チュートリアルは終了です🎉"
-    description: "ここで紹介した機能はほんの一部にすぎません。Type4nyの使い方をより詳しく知るには、{link}をご覧ください。"
+    description: "ここで紹介した機能はほんの一部にすぎません。9ineverse.comの使い方をより詳しく知るには、{link}をご覧ください。"
 
 _timelineDescription:
   home: "ホームタイムラインでは、あなたがフォローしているアカウントの投稿を見られます。"
   local: "ローカルタイムラインでは、このサーバーにいるユーザー全員の投稿を見られます。"
-  social: "ソーシャルタイムラインには、ホームタイムラインとローカルタイムラインの投稿が両方表示されます。"
-  global: "グローバルタイムラインでは、接続している他のすべてのサーバーからの投稿を見られます。"
+  social: "おすすめタイムラインでは、あなたのフォロー情報からおすすめノート情報を抽出し表示します。"
+  global: "コミュニティタイムラインでは、フォローしているアカウントのチャンネル投稿の一部が表示されます。"
+  community: "コミュニティTLには、フォローしているアカウントのチャンネル投稿の一部が表示されます。"
+  recommend: "おすすめTLでは、あなたのフォロー情報からおすすめノート情報を抽出し表示します。"
+
 
 _serverRules:
   description: "新規登録前に表示する、サーバーの簡潔なルールを設定します。内容は利用規約の要約とすることを推奨します。"
@@ -1517,7 +1527,7 @@ _achievements:
     _notes1:
       title: "just setting up my tp4ny"
       description: "初めてノートを投稿した"
-      flavor: "良いType4nyライフを！"
+      flavor: "良い9ineverse.comライフを！"
     _notes10:
       title: "いくつかのノート"
       description: "ノートを10回投稿した"
@@ -1754,7 +1764,7 @@ _achievements:
       title: "テスト過剰"
       description: "通知のテストをごく短時間のうちに連続して行った"
     _tutorialCompleted:
-      title: "Type4ny初心者講座 修了証"
+      title: "9ineverse.com初心者講座 修了証"
       description: "チュートリアルを完了した"
     _bubbleGameExplodingHead:
       title: "🤯"
@@ -1854,9 +1864,11 @@ _role:
     noteEachClipsMax: "クリップ内のノートの最大数"
     userListMax: "ユーザーリストの作成可能数"
     userEachUserListsMax: "ユーザーリスト内のユーザーの最大数"
+    canCreatePrivateChannel: "プライベートチャンネルを作成可能"
     rateLimitFactor: "レートリミット"
     descriptionOfRateLimitFactor: "小さいほど制限が緩和され、大きいほど制限が強化されます。"
     canHideAds: "広告の非表示"
+    canAccountDelete: "アカウントを削除可能"
     canSearchNotes: "ノート検索の利用"
     canUseTranslator: "翻訳機能の利用"
     avatarDecorationLimit: "アイコンデコレーションの最大取付個数"
@@ -1917,6 +1929,7 @@ _accountDelete:
   requestAccountDelete: "アカウント削除をリクエスト"
   started: "削除処理が開始されました。"
   inProgress: "削除が進行中"
+  cannotDelete: "有料プランに加入している、もしくはアカウント作成後まもないため、アカウントを削除できません。有料プラン解除（解約後の契約更新日以後）もしくは数日後にお試しください。"
 
 _ad:
   back: "戻る"
@@ -2019,6 +2032,8 @@ _channel:
   notesCount: "{n}投稿があります"
   nameAndDescription: "名前と説明"
   nameOnly: "名前のみ"
+  isPrivate: "プライベートチャンネル"
+  privateUserIds: "チャンネルにアクセス可能なユーザー"
   allowRenoteToExternal: "チャンネル外へのリノートと引用リノートを許可する"
   isLocalOnly: "チャンネルでの投稿をローカルのみに制限する"
   addCollaborator: "共同管理者を追加"
@@ -2047,6 +2062,11 @@ _instanceMute:
   title: "設定したサーバーのノートを隠します。"
   heading: "ミュートするサーバー"
 
+_whiteInstance:
+  heading: "ノート関連通知を許可するサーバー"
+  title: "設定したサーバーからノート関連通知を受け取ります。"
+  whiteInstanceDescription: "設定したサーバーから届いたDM、リプライ、リノートの通知を受け取るようにします。"
+  whiteInstanceDescription2: "また、設定したサーバーとはDMの送受信が可能となります。改行で区切って設定します"
 _theme:
   explore: "テーマを探す"
   install: "テーマのインストール"
@@ -2465,8 +2485,10 @@ _timelines:
   home: "ホーム"
   local: "ローカル"
   media: "メディア"
-  social: "ソーシャル"
-  global: "グローバル"
+  social: "コミュニティ"
+  global: "スポットライト"
+  community: "コミュニティ"
+  recommend: "おすすめ"
 
 _play:
   new: "Playの作成"
@@ -2707,6 +2729,16 @@ _moderationLogTypes:
   createAd: "広告を作成"
   deleteAd: "広告を削除"
   updateAd: "広告を更新"
+
+
+_subsc:
+  subscription: "サブスク"
+  title: "のサブスク"
+  catchcopy: "ユーザー体験を次のレベルへ。"
+  catchcopy2: "を今すぐ獲得しよう。"
+  benefits: "の特典"
+  create: "サブスクに登録する"
+  manage: "サブスクを管理する"
   createAvatarDecoration: "アイコンデコレーションを作成"
   updateAvatarDecoration: "アイコンデコレーションを更新"
   deleteAvatarDecoration: "アイコンデコレーションを削除"

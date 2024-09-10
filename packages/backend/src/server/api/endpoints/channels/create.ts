@@ -50,6 +50,14 @@ export const paramDef = {
 		bannerId: { type: 'string', format: 'misskey:id', nullable: true },
 		color: { type: 'string', minLength: 1, maxLength: 16 },
 		isSensitive: { type: 'boolean', nullable: true },
+		searchable: { type: 'boolean', nullable: true },
+		isPrivate: { type: 'boolean', nullable: true },
+		privateUserIds: {
+			type: 'array',
+			items: {
+				type: 'string', format: 'misskey:id',
+			},
+		},
 		allowRenoteToExternal: { type: 'boolean', nullable: true },
 		isLocalOnly: { type: 'boolean', nullable: true },
 		collaboratorIds: {
@@ -93,6 +101,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				name: ps.name,
 				description: ps.description ?? null,
 				bannerId: banner ? banner.id : null,
+				searchable: true,
+				isPrivate: ps.isPrivate ?? false,
+				privateUserIds: ps.privateUserIds ?? [],
 				isSensitive: ps.isSensitive ?? false,
 				...(ps.color !== undefined ? { color: ps.color } : {}),
 				allowRenoteToExternal: ps.allowRenoteToExternal ?? true,

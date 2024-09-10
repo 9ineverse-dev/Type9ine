@@ -2119,12 +2119,6 @@ _timelines:
   local: "Local"
   social: "Social"
   global: "Global"
-_play:
-  viewSource: "Veure l'origen "
-  featured: "Popular"
-  title: "Títol "
-  script: "Script"
-  summary: "Descripció"
 _pages:
   viewSource: "Veure l'origen "
   viewPage: "Veure les teves pàgines "

@@ -51,7 +51,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				id: ps.channelId,
 			});
 
-			if (channel == null) {
+			if (channel == null || (!me && channel.isPrivate) || (me && channel.isPrivate && !((channel.userId === me.id) || channel.privateUserIds.includes(me.id)))) {
 				throw new ApiError(meta.errors.noSuchChannel);
 			}
 

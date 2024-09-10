@@ -18,7 +18,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<div><i class="ti ti-users ti-fw"></i><I18n :src="i18n.ts._channel.usersCount" tag="span" style="margin-left: 4px;"><template #n><b>{{ channel.usersCount }}</b></template></I18n></div>
 							<div><i class="ti ti-pencil ti-fw"></i><I18n :src="i18n.ts._channel.notesCount" tag="span" style="margin-left: 4px;"><template #n><b>{{ channel.notesCount }}</b></template></I18n></div>
 						</div>
-						<div v-if="channel.isSensitive" :class="$style.sensitiveIndicator">{{ i18n.ts.sensitive }}</div>
+						<div v-if="channel.isSensitive" :class="$style.sensitiveIndicator">{{ i18n.ts.compartmentalization }}</div>
 						<div :class="$style.bannerFade"></div>
 					</div>
 					<div v-if="channel.description" :class="$style.description">
@@ -32,6 +32,21 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<MkNote v-for="note in channel.pinnedNotes" :key="note.id" class="_panel" :note="note"/>
 					</div>
 				</MkFoldableSection>
+				
+				<MkFolder v-if="channel.isPrivate" defaultOpen><template #label>{{ i18n.ts.members }}</template>
+					<template #caption>{{ i18n.t('nUsers', { n: `${channel.privateUserIds.length}` }) }}</template>
+					<MkPagination :pagination="usersPagination">
+						<template #default="{ items  }">
+							<div class="_gaps_s">
+								<div v-for="user in items " :key="user.id" :class="$style.userItem">
+									<MkA :class="$style.userItemBody" :to="`${userPage(user)}`">
+										<MkUserCardMini :user="user"/>
+									</MkA>
+								</div>
+							</div>
+						</template>
+					</MkPagination>
+					</MkFolder>
 			</div>
 			<div v-if="channel && tab === 'timeline'" key="timeline" class="_gaps">
 				<MkInfo v-if="channel.isArchived" warn>{{ i18n.ts.thisChannelArchived }}</MkInfo>
@@ -69,7 +84,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, watch, ref, defineAsyncComponent } from 'vue';
+import { computed, watch, ref, getCurrentInstance, defineAsyncComponent } from 'vue';
 import * as Misskey from 'misskey-js';
 const MkPostForm = defineAsyncComponent(() => import('@/components/MkPostForm.vue'));
 
@@ -96,6 +111,13 @@ import { isSupportShare } from '@/scripts/navigator.js';
 import { copyToClipboard } from '@/scripts/copy-to-clipboard.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { useRouter } from '@/router/supplier.js';
+import MkFolder from '@/components/MkFolder.vue';
+import MkUserCardMini from '@/components/MkUserCardMini.vue';
+import { userPage } from '@/filters/user';
+import MkPagination from '@/components/MkPagination.vue';
+const {
+	enableInfiniteScroll,
+} = defaultStore.reactiveState;
 
 const router = useRouter();
 
@@ -103,6 +125,7 @@ const props = defineProps<{
 	channelId: string;
 }>();
 
+const FETCH_USERS_LIMIT = 2;
 const tab = ref('overview');
 
 const channel = ref<Misskey.entities.Channel | null>(null);
@@ -110,6 +133,9 @@ const favorited = ref(false);
 const searchQuery = ref('');
 const searchPagination = ref();
 const searchKey = ref('');
+let pusers = ref<Misskey.entities.UserLite[]>([]);
+let fetching = ref(true);
+let queueUserIds = ref<string[]>([]);
 const featuredPagination = computed(() => ({
 	endpoint: 'notes/featured' as const,
 	limit: 10,
@@ -117,16 +143,30 @@ const featuredPagination = computed(() => ({
 		channelId: props.channelId,
 	},
 }));
+const usersPagination = {
+	endpoint: 'users/show' as const,
+	limit: 20,
+	params: computed(() => ({
+		userIds: channel.value.privateUserIds,
+	})),
+};
 
 watch(() => props.channelId, async () => {
 	channel.value = await misskeyApi('channels/show', {
 		channelId: props.channelId,
 	});
 	favorited.value = channel.value.isFavorited ?? false;
-	if (favorited.value || channel.value.isFollowing) {
+	if (favorited.value || channel.value.isFollowing || channel.value.isPrivate) {
 		tab.value = 'timeline';
 	}
-
+	queueUserIds = channel.value.privateUserIds;
+	queueUserIds.unshift(channel.value.userId);
+	await misskeyApi('users/show', {
+		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
+	}).then(_users => {
+		pusers = _users;
+		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
+	}).finally(() => {fetching = false;});
 	if ((favorited.value || channel.value.isFollowing) && channel.value.lastNotedAt) {
 		const lastReadedAt: number = miLocalStorage.getItemAsJson(`channelLastReadedAt:${channel.value.id}`) ?? 0;
 		const lastNotedAt = Date.parse(channel.value.lastNotedAt);
@@ -136,6 +176,26 @@ watch(() => props.channelId, async () => {
 		}
 	}
 }, { immediate: true });
+
+function fetchMoreUsers() {
+	fetching = true;
+	//if ( !channel ) return;
+	//if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
+	misskeyApi('users/show', {
+		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
+	}).then(_users => {
+		for (let i = 0; i < _users.length; i++) {
+			const element = _users[i];
+			pusers = pusers.push(element);
+		}
+		//pusers = pusers.concat(_users);
+		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
+	}).finally(() => {
+		fetching = false;
+		const instance = getCurrentInstance();
+		instance.proxy.forceUpdate();
+	});
+}
 
 function edit() {
 	router.push(`/channels/${channel.value?.id}/edit`);
@@ -187,6 +247,7 @@ async function search() {
 		params: {
 			query: query,
 			channelId: channel.value.id,
+			checkChannelSearchable: false,
 		},
 	};
 

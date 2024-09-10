@@ -4,6 +4,7 @@
  */
 
 import { Inject, Injectable } from '@nestjs/common';
+import { Brackets } from 'typeorm';
 import { Endpoint } from '@/server/api/endpoint-base.js';
 import type { ChannelsRepository } from '@/models/_.js';
 import { ChannelEntityService } from '@/core/entities/ChannelEntityService.js';
@@ -43,6 +44,17 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			const query = this.channelsRepository.createQueryBuilder('channel')
 				.where('channel.lastNotedAt IS NOT NULL')
 				.andWhere('channel.isArchived = FALSE')
+				//.andWhere('channel.searchable = TRUE')
+				.andWhere(new Brackets(qb => { qb
+					.where('channel.isPrivate = FALSE')
+					.orWhere(new Brackets(qb2 => { qb2
+						.where('channel.isPrivate = TRUE')
+						.andWhere(new Brackets(qb3 => { qb3
+							.where(':id = ANY(channel.privateUserIds)', { id: me?.id })
+							.orWhere('channel.userId = :id', { id: me?.id });
+						}));
+					}));
+				}))
 				.orderBy('channel.lastNotedAt', 'DESC');
 
 			const channels = await query.limit(10).getMany();

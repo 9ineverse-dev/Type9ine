@@ -346,6 +346,23 @@ export const packedMetaLiteSchema = {
 			nullable: false,
 			ref: 'RolePolicies',
 		},
+		sellSubscription: {
+			type: 'boolean',
+			optional: false, nullable: false,
+		},
+		basicPlanRoleId: {
+			type: 'string',
+			optional: false, nullable: true,
+		},
+		basicPlanPrice: {
+			type: 'number',
+			optional: false, nullable: true,
+			default: 0,
+		},
+		transactionsActNotationUrl: {
+			type: 'string',
+			optional: false, nullable: true,
+		},
 		pointName: {
 			type: 'string',
 			optional: false,

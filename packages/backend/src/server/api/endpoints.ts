@@ -105,6 +105,13 @@ import * as ep___admin_roles_assign from './endpoints/admin/roles/assign.js';
 import * as ep___admin_roles_unassign from './endpoints/admin/roles/unassign.js';
 import * as ep___admin_roles_updateDefaultPolicies from './endpoints/admin/roles/update-default-policies.js';
 import * as ep___admin_roles_users from './endpoints/admin/roles/users.js';
+//import * as ep___admin_stripe_checkoutSessionCompleted from './endpoints/admin/stripe/checkout-session-completed.js';
+import * as ep___admin_stripe_customerSubscriptionCreated from './endpoints/admin/stripe/customer-subscription-created.js';
+import * as ep___admin_stripe_customerSubscriptionDeleted from './endpoints/admin/stripe/customer-subscription-deleted.js';
+import * as ep___admin_stripe_customerSubscriptionPaused from './endpoints/admin/stripe/customer-subscription-paused.js';
+import * as ep___admin_stripe_customerSubscriptionResumed from './endpoints/admin/stripe/customer-subscription-resumed.js';
+import * as ep___admin_stripe_invoicePaid from './endpoints/admin/stripe/invoice-paid.js';
+import * as ep___admin_stripe_invoicePaymentFailed from './endpoints/admin/stripe/invoice-payment-failed.js';
 import * as ep___admin_systemWebhook_create from './endpoints/admin/system-webhook/create.js';
 import * as ep___admin_systemWebhook_delete from './endpoints/admin/system-webhook/delete.js';
 import * as ep___admin_systemWebhook_list from './endpoints/admin/system-webhook/list.js';
@@ -410,6 +417,9 @@ import * as ep___reversi_invitations from './endpoints/reversi/invitations.js';
 import * as ep___reversi_showGame from './endpoints/reversi/show-game.js';
 import * as ep___reversi_surrender from './endpoints/reversi/surrender.js';
 import * as ep___reversi_verify from './endpoints/reversi/verify.js';
+import * as ep___subscription_checkout from './endpoints/subscription/checkout.js';
+import * as ep___subscription_portal from './endpoints/subscription/portal.js';
+import * as ep___subscription_webhook from './endpoints/subscription/webhook.js';
 const eps = [
 	['admin/meta', ep___admin_meta],
 	['admin/abuse-user-reports', ep___admin_abuseUserReports],
@@ -503,6 +513,13 @@ const eps = [
 	['admin/roles/unassign', ep___admin_roles_unassign],
 	['admin/roles/update-default-policies', ep___admin_roles_updateDefaultPolicies],
 	['admin/roles/users', ep___admin_roles_users],
+//	['admin/stripe/checkout-session-completed', ep___admin_stripe_checkoutSessionCompleted],
+	['admin/stripe/customer-subscription-created', ep___admin_stripe_customerSubscriptionCreated],
+	['admin/stripe/customer-subscription-deleted', ep___admin_stripe_customerSubscriptionDeleted],
+	['admin/stripe/customer-subscription-paused', ep___admin_stripe_customerSubscriptionPaused],
+	['admin/stripe/customer-subscription-resumed', ep___admin_stripe_customerSubscriptionResumed],
+	['admin/stripe/invoice-paid', ep___admin_stripe_invoicePaid],
+	['admin/stripe/invoice-payment-failed', ep___admin_stripe_invoicePaymentFailed],
 	['admin/system-webhook/create', ep___admin_systemWebhook_create],
 	['admin/system-webhook/delete', ep___admin_systemWebhook_delete],
 	['admin/system-webhook/list', ep___admin_systemWebhook_list],
@@ -808,6 +825,9 @@ const eps = [
 	['reversi/show-game', ep___reversi_showGame],
 	['reversi/surrender', ep___reversi_surrender],
 	['reversi/verify', ep___reversi_verify],
+	['subscription/checkout', ep___subscription_checkout],
+	['subscription/portal', ep___subscription_portal],
+	['subscription/webhook', ep___subscription_webhook],
 ];
 
 interface IEndpointMetaBase {

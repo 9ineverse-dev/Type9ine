@@ -60,6 +60,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<i v-else-if="appearNote.visibility === 'specified'" ref="specified" class="ti ti-mail"></i>
 						</span>
 						<span v-if="appearNote.localOnly" style="margin-left: 0.5em;" :title="i18n.ts._visibility['disableFederation']"><i class="ti ti-rocket-off"></i></span>
+						<span v-if="appearNote.channel && !appearNote.channel.searchable" style="margin-left: 0.5em;" :title="i18n.ts.noteNotSearchable"><i class="ti ti-search-off"></i></span>
 					</div>
 				</div>
 				<div :class="$style.noteHeaderUsername"><MkAcct :user="appearNote.user"/></div>
@@ -125,6 +126,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 			>
 				<i class="ti ti-repeat"></i>
 				<p v-if="appearNote.renoteCount > 0" :class="$style.noteFooterButtonCount">{{ number(appearNote.renoteCount) }}</p>
+			</button>
+			<button v-if="canRenote" ref="ChannelrenoteButton" :class="$style.noteFooterButton" class="_button" @mousedown="chooseRnChannel()">
+				<i class="ti ti-device-tv"></i>
 			</button>
 			<button v-else class="_button" :class="$style.noteFooterButton" disabled>
 				<i class="ti ti-ban"></i>
@@ -454,7 +458,47 @@ function renote() {
 	showMovedDialog();
 
 	const { menu } = getRenoteMenu({ note: note.value, renoteButton });
-	os.popupMenu(menu, renoteButton.value);
+	os.popupMenu(menu, renoteButton.value, {
+		viaKeyboard,
+	});
+}
+
+async function chooseRnChannel(viaKeyboard = false): Promise<void> {
+	const channels = await misskeyApi('channels/my-favorites', {
+		limit: 20,
+	});
+	const Channelitems = channels.map(channel => ({
+		text: channel.name,
+		icon: 'ti ti-repeat',
+		action: () => {
+			os.post({
+				renote: appearNote,
+				channel: channel,
+			});
+		},
+	}));
+	os.popupMenu(Channelitems,renoteButton.value, {
+		viaKeyboard,
+	});
+}
+
+async function chooseRnChannel(viaKeyboard = false): Promise<void> {
+	const channels = await misskeyApi('channels/my-favorites', {
+		limit: 20,
+	});
+	const Channelitems = channels.map(channel => ({
+		text: channel.name,
+		icon: 'ti ti-repeat',
+		action: () => {
+			os.post({
+				renote: appearNote,
+				channel: channel,
+			});
+		},
+	}));
+	os.popupMenu(Channelitems,renoteButton.value, {
+		viaKeyboard,
+	});
 }
 
 function reply(): void {

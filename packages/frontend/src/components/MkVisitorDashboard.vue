@@ -24,7 +24,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<div class="_gaps_s " :class="$style.mainActions">
 				<MkButton :class="$style.mainAction" full rounded gradate data-cy-signup style="margin-right: 12px;" @click="signup()">{{ i18n.ts.joinThisServer }}</MkButton>
 				<MkButton :class="$style.mainAction" full rounded data-cy-signin @click="signin()">{{ i18n.ts.login }}</MkButton>
+				<a :href="instance.transactionsActNotationUrl" class="_link" target="_blank">特別商取引法に基づく表記<i class="ti ti-external-link"></i></a>
 			</div>
+
 		</div>
 	</div>
 
@@ -152,6 +154,7 @@ function showMenu(ev: MouseEvent) {
 
 .mainAbout {
 	padding: 0 32px;
+	text-align: left;
 }
 
 .mainWarn {

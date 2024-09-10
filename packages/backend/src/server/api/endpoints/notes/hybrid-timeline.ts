@@ -197,39 +197,82 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 		withReplies: boolean,
 	}, me: MiLocalUser) {
 		const followees = await this.userFollowingService.getFollowees(me.id);
-		const followingChannels = await this.channelFollowingsRepository.find({
-			where: {
-				followerId: me.id,
-			},
-		});
+		const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
+		let scoreCount = Math.floor(followees.length*0.1 + 20);
+		if(scoreCount > 100){
+			scoreCount = 100;
+		}
 
+		let rnLimit = followees.length * 10;
+		if(rnLimit > 2500){
+			rnLimit = 2500;
+		}
+
+		const rnQuery1 = await this.notesRepository.createQueryBuilder('note')
+			.select('note.id')
+			.select('note.renoteId')
+			.select('renote.score')
+			.leftJoinAndSelect('note.renote', 'renote')
+			.andWhere('(note.userId IN (:...meOrFolloweeIds)) AND (renote.userId IN (:...meOrFolloweeIds))', { meOrFolloweeIds: meOrFolloweeIds })
+			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 4)) })
+			.andWhere('(renote.score > :CountScore)', { CountScore: 10 })
+			.andWhere('note.renoteId IS NOT NULL')
+			.andWhere('note.visibility = \'public\'')
+			.orderBy('renote.score', 'DESC')
+			.limit(rnLimit)
+
+			this.queryService.generateMutedUserQuery(rnQuery1, me);
+			this.queryService.generateBlockedUserQuery(rnQuery1, me);
+			this.queryService.generateMutedUserRenotesQueryForNotes(rnQuery1, me);
+
+		const rnQuery2 = await this.notesRepository.createQueryBuilder('note')
+			.select('note.id')
+			.select('note.renoteId')
+			.leftJoinAndSelect('note.renote', 'renote')
+			.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+			.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 4)) })
+			.andWhere('(renote.score > :CountScore)', { CountScore: scoreCount })
+			.andWhere('note.renoteId IS NOT NULL')
+			.andWhere('note.visibility = \'public\'')
+			.orderBy('renote.score', 'DESC')
+			.limit(rnLimit)
+
+			this.queryService.generateMutedUserQuery(rnQuery2, me);
+			this.queryService.generateBlockedUserQuery(rnQuery2, me);
+			this.queryService.generateMutedUserRenotesQueryForNotes(rnQuery2, me);
+		let rnArray = new Array();
+		if (followees.length > 10) {
+			const rn1 = await rnQuery1.getMany();
+			const duplicationRn1 = [...rn1.map(d => d.renoteId)];
+			const rn2 = await rnQuery2.getMany();
+			const duplicationRn2 = [...rn2.map(d => d.renoteId)];
+			const duplicationRn = duplicationRn1.concat(duplicationRn2);
+			rnArray = [...new Set(duplicationRn)];
+		}
 		const query = this.queryService.makePaginationQuery(this.notesRepository.createQueryBuilder('note'), ps.sinceId, ps.untilId)
-			.andWhere(new Brackets(qb => {
-				if (followees.length > 0) {
-					const meOrFolloweeIds = [me.id, ...followees.map(f => f.followeeId)];
-					qb.where('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds });
-					qb.orWhere('(note.visibility = \'public\') AND (note.userHost IS NULL)');
-				} else {
-					qb.where('note.userId = :meId', { meId: me.id });
-					qb.orWhere('(note.visibility = \'public\') AND (note.userHost IS NULL)');
-				}
-			}))
 			.innerJoinAndSelect('note.user', 'user')
 			.leftJoinAndSelect('note.reply', 'reply')
 			.leftJoinAndSelect('note.renote', 'renote')
 			.leftJoinAndSelect('reply.user', 'replyUser')
 			.leftJoinAndSelect('renote.user', 'renoteUser');
-
-		if (followingChannels.length > 0) {
-			const followingChannelIds = followingChannels.map(x => x.followeeId);
-
-			query.andWhere(new Brackets(qb => {
-				qb.where('note.channelId IN (:...followingChannelIds)', { followingChannelIds });
-				qb.orWhere('note.channelId IS NULL');
-			}));
-		} else {
-			query.andWhere('note.channelId IS NULL');
-		}
+			if ((followees.length > 15) && (rnArray.length > 10)) {
+				query.andWhere('note.id IN (:...rnArray)', { rnArray: rnArray })
+			} else if ((followees.length > 5)){
+				query.andWhere('note.userId IN (:...meOrFolloweeIds)', { meOrFolloweeIds: meOrFolloweeIds })
+				query.andWhere('(note.score > :CountScore)', { CountScore: 20 })
+				query.andWhere('note.userHost IS NULL')
+			} else {
+				const recomend = await this.notesRepository.createQueryBuilder('note')
+				.select('note.id')
+				.andWhere('note.id > :minId', { minId: this.idService.gen(Date.now() - (1000 * 60 * 60 * 24 * 7)) })
+				.andWhere('note.visibility = \'public\'')
+				.orderBy('note.score', 'DESC')
+				.andWhere('note.userHost IS NULL')
+				.limit(50);
+				const rc = await recomend.getMany();
+				const recomendNote = [...rc.map(d => d.id)];
+				query.andWhere('note.id IN (:...rnArray)', { rnArray: recomendNote })
+			}
 
 		if (!ps.withReplies) {
 			query.andWhere(new Brackets(qb => {

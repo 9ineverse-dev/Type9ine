@@ -113,8 +113,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				// 順番は保持されるけど数は減ってる可能性がある
 				const _users: MiUser[] = [];
 				for (const id of ps.userIds) {
-					const user = users.find(x => x.id === id);
-					if (user != null) _users.push(user);
+					const pushuser = users.find(x => x.id === id)!
+					if(pushuser !== undefined){  _users.push(pushuser); }
 				}
 
 				const _userMap = await this.userEntityService.packMany(_users, me, { schema: 'UserDetailed' })

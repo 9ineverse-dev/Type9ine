@@ -283,6 +283,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 							{{ number(appearNote.renoteCount) }}
 						</p>
 					</button>
+				<button v-if="canRenote" ref="ChannelrenoteButton" :class="$style.footerButton" class="_button" @mousedown="chooseRnChannel()">
+					<i class="ti ti-device-tv"></i>
+				</button>
 					<button v-else :class="$style.footerButton" class="_button" disabled>
 						<i class="ti ti-ban"></i>
 					</button>
@@ -712,6 +715,25 @@ function renote(viaKeyboard = false) {
 		viaKeyboard,
 	});
 }
+async function chooseRnChannel(viaKeyboard = false): Promise<void> {
+	const channels = await misskeyApi('channels/my-favorites', {
+		limit: 20,
+	});
+	const Channelitems = channels.map(channel => ({
+		text: channel.name,
+		icon: 'ti ti-repeat',
+		action: () => {
+			os.post({
+				renote: appearNote,
+				channel: channel,
+			});
+		},
+	}));
+	os.popupMenu(Channelitems,renoteButton.value, {
+		viaKeyboard,
+	}
+	);
+}
 
 function reply(): void {
 	pleaseLogin(undefined, pleaseLoginContext.value);
@@ -926,7 +948,6 @@ function emitUpdReaction(emoji: string, delta: number) {
 	}
 }
 </script>
-
 <style lang="scss" module>
 .root {
 	position: relative;

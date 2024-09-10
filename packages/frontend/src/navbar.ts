@@ -5,6 +5,7 @@
 
 import { computed, reactive } from 'vue';
 import { clearCache } from './scripts/clear-cache.js';
+import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
 import { miLocalStorage } from '@/local-storage.js';
 import { openInstanceMenu, openToolsMenu } from '@/ui/_common_/common.js';
@@ -15,6 +16,12 @@ import { ui } from '@/config.js';
 import { unisonReload } from '@/scripts/unison-reload.js';
 
 export const navbarItemDef = reactive({
+	subscription: {
+		title: i18n.ts._subsc.subscription,
+		icon: 'ti ti-coin-yen',
+		to: '/subscription',
+		show: computed(() => $i != null && instance.sellSubscription),
+	},
 	notifications: {
 		title: i18n.ts.notifications,
 		icon: 'ti ti-bell',

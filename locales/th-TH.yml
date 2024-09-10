@@ -2262,10 +2262,10 @@ _instanceCharts:
   files: "การเพิ่มลดของจำนวนไฟล์"
   filesTotal: "จำนวนไฟล์สะสม"
 _timelines:
-  home: "หน้าหลัก"
-  local: "ท้องถิ่น"
-  social: "โซเชียล"
-  global: "ทั่วโลก"
+  home: "หน้าแรก"
+  local: "ในพื้นที่"
+  social: "ชุมชน"
+  global: "สปอร์ตไลท์"
 _play:
   new: "สร้าง Play"
   edit: "แก้ไข Play"

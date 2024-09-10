@@ -20,10 +20,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template #label>{{ i18n.ts.color }}</template>
 			</MkColorInput>
 
-			<MkSwitch v-model="isSensitive">
-				<template #label>{{ i18n.ts.sensitive }}</template>
-			</MkSwitch>
-
 			<MkSwitch v-model="allowRenoteToExternal">
 				<template #label>{{ i18n.ts._channel.allowRenoteToExternal }}</template>
 			</MkSwitch>
@@ -39,6 +35,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<MkButton @click="removeBannerImage()"><i class="ti ti-trash"></i> {{ i18n.ts._channel.removeBanner }}</MkButton>
 				</div>
 			</div>
+
+			<MkSwitch v-model="isSensitive">
+				<template #label>{{ i18n.ts.compartmentalization }}</template>
+			</MkSwitch>
+
+			<MkSwitch v-model="searchable">
+				{{ i18n.ts.channelSearchable }}
+			</MkSwitch>
 
 			<MkFolder :defaultOpen="true">
 				<template #label>{{ i18n.ts.pinnedNotes }}</template>
@@ -57,6 +61,33 @@ SPDX-License-Identifier: AGPL-3.0-only
 								<button class="_button" :class="$style.pinnedNoteHandle"><i class="ti ti-menu"></i></button>
 								{{ element.id }}
 								<button class="_button" :class="$style.pinnedNoteRemove" @click="removePinnedNote(index)"><i class="ti ti-x"></i></button>
+							</div>
+						</template>
+					</Sortable>
+				</div>
+			</MkFolder>
+
+			<MkSwitch v-model="isPrivate" :disabled="!$i.policies.canCreatePrivateChannel">
+				{{ i18n.ts._channel.isPrivate }}
+			</MkSwitch>
+
+			<MkFolder v-if="isPrivate && $i.policies.canCreatePrivateChannel === true" :defaultOpen="true">
+				<template #label>{{ i18n.ts._channel.privateUserIds }}</template>
+
+				<div class="_gaps">
+					<MkButton primary rounded @click="addPrivateUserIds()"><i class="ti ti-plus"></i></MkButton>
+
+					<Sortable
+						v-model="privateUserIds"
+						itemKey="value"
+						:handle="'.' + $style.pinnedNoteHandle"
+						:animation="150"
+					>
+						<template #item="{element,index}">
+							<div :class="$style.pinnedNote">
+								<button class="_button" :class="$style.pinnedNoteHandle"><i class="ti ti-menu"></i></button>
+								{{ element.label }}
+								<button class="_button" :class="$style.pinnedNoteRemove" @click="removePrivateUserIds(index)"><i class="ti ti-x"></i></button>
 							</div>
 						</template>
 					</Sortable>
@@ -95,7 +126,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch, defineAsyncComponent } from 'vue';
+import { computed, ref, watch, defineAsyncComponent, onMounted } from 'vue';
 import * as Misskey from 'misskey-js';
 import MkButton from '@/components/MkButton.vue';
 import MkInput from '@/components/MkInput.vue';
@@ -107,6 +138,7 @@ import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { i18n } from '@/i18n.js';
 import MkFolder from '@/components/MkFolder.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
+import { $i } from '@/account.js';
 import MkTextarea from '@/components/MkTextarea.vue';
 import { useRouter } from '@/router/supplier.js';
 import { $i } from '@/account.js';
@@ -124,8 +156,11 @@ const name = ref<string | null>(null);
 const description = ref<string | null>(null);
 const bannerUrl = ref<string | null>(null);
 const bannerId = ref<string | null>(null);
-const color = ref('#000');
+const color = ref('#FFFFFF');
 const isSensitive = ref(false);
+const searchable = ref(true);
+const isPrivate = ref(false);
+const privateUserIds = ref<{ value: string, label: string}[]>([]);
 const allowRenoteToExternal = ref(true);
 const isLocalOnly = ref(false);
 const pinnedNotes = ref<{ id: Misskey.entities.Note['id'] }[]>([]);
@@ -137,6 +172,12 @@ watch(() => bannerId.value, async () => {
 		bannerUrl.value = (await misskeyApi('drive/files/show', {
 			fileId: bannerId.value,
 		})).url;
+	}
+});
+
+watch(isPrivate, () => {
+	if (isPrivate.value) {
+		searchable.value = false;
 	}
 });
 const collaboratorUsers = ref<Misskey.entities.User[]>([]);
@@ -152,12 +193,30 @@ async function fetchChannel() {
 	description.value = channel.value.description;
 	bannerId.value = channel.value.bannerId;
 	bannerUrl.value = channel.value.bannerUrl;
+	searchable.value = channel.value.searchable;
 	isSensitive.value = channel.value.isSensitive;
+	isPrivate.value = channel.value.isPrivate;
+	const fetchPrivateUserIds = channel.value.privateUserIds;
+	color.value = channel.value.color;
+	allowRenoteToExternal.value = channel.value.allowRenoteToExternal;
+	const set = new Set(fetchPrivateUserIds);
+	const searchPrivateUserIds = [...set];
+	const pusers = await misskeyApi('users/show', {
+		userIds: searchPrivateUserIds,
+	});
+	if (pusers) {
+		let tmp: any[] = [];
+		for (let puser of pusers) {
+			if (puser) {
+				tmp.push({ value: puser.id, label: puser.username });
+			}
+		}
+		privateUserIds.value = tmp;
+	}
 	pinnedNotes.value = channel.value.pinnedNoteIds.map(id => ({
 		id,
 	}));
-	color.value = channel.value.color;
-	allowRenoteToExternal.value = channel.value.allowRenoteToExternal;
+	
 	isLocalOnly.value = channel.value.isLocalOnly;
 	collaboratorUsers.value = channel.value.collaboratorUsers;
 }
@@ -204,7 +263,51 @@ function addUser() {
 	});
 }
 
-fetchChannel();
+//fetchChannel();
+
+onMounted(() => {
+	fetchChannel();
+});
+
+async function addPrivateUserIds() {
+	const { canceled, result } = await os.inputText({
+		title: i18n.ts.usernameOrUserId,
+	});
+	if (canceled) return;
+
+	const show = (user) => {
+		privateUserIds.value = [{
+			value: user.id,
+			label: user.username,
+		}, ...privateUserIds.value];
+	};
+
+	const usernamePromise = misskeyApi('users/show', Misskey.acct.parse(result) );
+	const idPromise = misskeyApi('users/show', { userId: result });
+	let _notFound = false;
+	const notFound = () => {
+		if (_notFound) {
+			os.alert({
+				type: 'error',
+				text: i18n.ts.noSuchUser,
+			});
+		} else {
+			_notFound = true;
+		}
+	};
+	usernamePromise.then(show).catch(err => {
+		if (err.code === 'NO_SUCH_USER') {
+			notFound();
+		}
+	});
+	idPromise.then(show).catch(err => {
+		notFound();
+	});
+}
+
+function removePrivateUserIds(index: number) {
+	privateUserIds.value.splice(index, 1);
+}
 
 async function addPinnedNote() {
 	const { canceled, result: value } = await os.inputText({
@@ -223,14 +326,21 @@ function removePinnedNote(index: number) {
 	pinnedNotes.value.splice(index, 1);
 }
 
-function save() {
+async function save() {
+
+	const fetchPrivateUserIds = privateUserIds.value.map(v => v.value);
+	const set = new Set(fetchPrivateUserIds);
+	const saverivateUserIds = [...set];
 	const params = {
 		name: name.value,
 		description: description.value,
 		bannerId: bannerId.value,
 		pinnedNoteIds: pinnedNotes.value.map(x => x.id),
 		color: color.value,
+		searchable: searchable.value,
 		isSensitive: isSensitive.value,
+		isPrivate: isPrivate.value,
+		privateUserIds: saverivateUserIds,
 		allowRenoteToExternal: allowRenoteToExternal.value,
 		isLocalOnly: isLocalOnly.value,
 		collaboratorIds: collaboratorUsers.value.map(x => x.id),
@@ -238,12 +348,13 @@ function save() {
 
 	if (props.channelId) {
 		params.channelId = props.channelId;
-		os.apiWithDialog('channels/update', params);
+		await os.apiWithDialog('channels/update', params);
 	} else {
-		os.apiWithDialog('channels/create', params).then(created => {
+		await os.apiWithDialog('channels/create', params).then(created => {
 			router.push(`/channels/${created.id}`);
 		});
 	}
+	fetchChannel();
 }
 
 async function archive() {
@@ -281,6 +392,7 @@ definePageMetadata(() => ({
 	title: props.channelId ? i18n.ts._channel.edit : i18n.ts._channel.create,
 	icon: 'ti ti-device-tv',
 }));
+
 </script>
 
 <style lang="scss" module>

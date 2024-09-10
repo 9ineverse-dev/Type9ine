@@ -167,23 +167,45 @@ SPDX-License-Identifier: AGPL-3.0-only
 								</MkSwitch>
 							</MkFolder>
 
-							<MkFolder v-if="matchQuery([i18n.ts._role._options.canRequestCustomEmojis, 'canRequestCustomEmojis'])" class="_margin">
-								<template #label>{{ i18n.ts._role._options.canRequestCustomEmojis }}</template>
-								<template #suffix>{{ policies.canRequestCustomEmojis ? i18n.ts.yes : i18n.ts.no }}</template>
-								<MkSwitch v-model="policies.canRequestCustomEmojis">
-									<template #label>{{ i18n.ts.enable }}</template>
-								</MkSwitch>
-							</MkFolder>
-						</MkFoldableSection>
-						<MkFoldableSection >
-							<template #header>ドライブ、ファイル系</template>
-							<MkFolder v-if="matchQuery([i18n.ts._role._options.driveCapacity, 'driveCapacityMb'])" class="_margin">
-								<template #label>{{ i18n.ts._role._options.driveCapacity }}</template>
-								<template #suffix>{{ policies.driveCapacityMb }}MB</template>
-								<MkInput v-model="policies.driveCapacityMb" type="number">
-									<template #suffix>MB</template>
-								</MkInput>
-							</MkFolder>
+						<MkFolder v-if="matchQuery([i18n.ts._role._options.canSearchNotes, 'canSearchNotes'])">
+							<template #label>{{ i18n.ts._role._options.canSearchNotes }}</template>
+							<template #suffix>{{ policies.canSearchNotes ? i18n.ts.yes : i18n.ts.no }}</template>
+							<MkSwitch v-model="policies.canSearchNotes">
+								<template #label>{{ i18n.ts.enable }}</template>
+							</MkSwitch>
+						</MkFolder>
+
+						<MkFolder v-if="matchQuery([i18n.ts._role._options.canUseTranslator, 'canSearchNotes'])">
+							<template #label>{{ i18n.ts._role._options.canUseTranslator }}</template>
+							<template #suffix>{{ policies.canUseTranslator ? i18n.ts.yes : i18n.ts.no }}</template>
+							<MkSwitch v-model="policies.canUseTranslator">
+								<template #label>{{ i18n.ts.enable }}</template>
+							</MkSwitch>
+						</MkFolder>
+						
+						<MkFolder v-if="matchQuery([i18n.ts._role._options.canCreatePrivateChannel, 'canCreatePrivateChannel'])">
+							<template #label>{{ i18n.ts._role._options.canCreatePrivateChannel }}</template>
+							<template #suffix>{{ policies.canCreatePrivateChannel ? i18n.ts.yes : i18n.ts.no }}</template>
+							<MkSwitch v-model="policies.canCreatePrivateChannel">
+								<template #label>{{ i18n.ts.enable }}</template>
+							</MkSwitch>
+						</MkFolder>
+
+						<MkFolder v-if="matchQuery([i18n.ts._role._options.canAccountDelete, 'canAccountDelete'])">
+							<template #label>{{ i18n.ts._role._options.canAccountDelete }}</template>
+							<template #suffix>{{ policies.canAccountDelete ? i18n.ts.yes : i18n.ts.no }}</template>
+							<MkSwitch v-model="policies.canAccountDelete">
+								<template #label>{{ i18n.ts.enable }}</template>
+							</MkSwitch>
+						</MkFolder>
+
+						<MkFolder v-if="matchQuery([i18n.ts._role._options.driveCapacity, 'driveCapacityMb'])">
+							<template #label>{{ i18n.ts._role._options.driveCapacity }}</template>
+							<template #suffix>{{ policies.driveCapacityMb }}MB</template>
+							<MkInput v-model="policies.driveCapacityMb" type="number">
+								<template #suffix>MB</template>
+							</MkInput>
+						</MkFolder>
 
 							<MkFolder v-if="matchQuery([i18n.ts._role._options.alwaysMarkNsfw, 'alwaysMarkNsfw'])" class="_margin">
 								<template #label>{{ i18n.ts._role._options.alwaysMarkNsfw }}</template>

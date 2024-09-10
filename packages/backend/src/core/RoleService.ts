@@ -46,6 +46,7 @@ export type RolePolicies = {
 	canRequestCustomEmojis: boolean;
 	canManageAvatarDecorations: boolean;
 	canSearchNotes: boolean;
+	canCreatePrivateChannel: boolean;
 	canUseTranslator: boolean;
 	canHideAds: boolean;
 	driveCapacityMb: number;
@@ -61,6 +62,7 @@ export type RolePolicies = {
 	userEachUserListsLimit: number;
 	rateLimitFactor: number;
 	avatarDecorationLimit: number;
+	canAccountDelete: boolean;
 	emojiPickerProfileLimit: number;
 	listPinnedLimit: number;
 	localTimelineAnyLimit: number;
@@ -81,6 +83,7 @@ export const DEFAULT_POLICIES: RolePolicies = {
 	canRequestCustomEmojis: false,
 	canManageAvatarDecorations: false,
 	canSearchNotes: false,
+	canCreatePrivateChannel: false,
 	canUseTranslator: true,
 	canHideAds: false,
 	driveCapacityMb: 100,
@@ -96,6 +99,7 @@ export const DEFAULT_POLICIES: RolePolicies = {
 	userEachUserListsLimit: 50,
 	rateLimitFactor: 1,
 	avatarDecorationLimit: 1,
+	canAccountDelete: true,
 	emojiPickerProfileLimit: 2,
 	listPinnedLimit: 2,
 	localTimelineAnyLimit: 3,
@@ -387,6 +391,7 @@ export class RoleService implements OnApplicationShutdown, OnModuleInit {
 			canRequestCustomEmojis: calc('canRequestCustomEmojis', vs => vs.some(v => v === true)),
 			canManageAvatarDecorations: calc('canManageAvatarDecorations', vs => vs.some(v => v === true)),
 			canSearchNotes: calc('canSearchNotes', vs => vs.some(v => v === true)),
+			canCreatePrivateChannel: calc('canCreatePrivateChannel', vs => vs.some(v => v === true)),
 			canUseTranslator: calc('canUseTranslator', vs => vs.some(v => v === true)),
 			canHideAds: calc('canHideAds', vs => vs.some(v => v === true)),
 			driveCapacityMb: calc('driveCapacityMb', vs => Math.max(...vs)),
@@ -402,6 +407,7 @@ export class RoleService implements OnApplicationShutdown, OnModuleInit {
 			userEachUserListsLimit: calc('userEachUserListsLimit', vs => Math.max(...vs)),
 			rateLimitFactor: calc('rateLimitFactor', vs => Math.max(...vs)),
 			avatarDecorationLimit: calc('avatarDecorationLimit', vs => Math.max(...vs)),
+			canAccountDelete: calc('canAccountDelete', vs => vs.some(v => v === true)),
 			emojiPickerProfileLimit: calc('emojiPickerProfileLimit', vs => Math.max(...vs)),
 			listPinnedLimit: calc('listPinnedLimit', vs => Math.max(...vs)),
 			localTimelineAnyLimit: calc('localTimelineAnyLimit', vs => Math.max(...vs)),

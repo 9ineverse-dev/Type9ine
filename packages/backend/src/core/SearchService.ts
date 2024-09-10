@@ -4,7 +4,7 @@
  */
 
 import { Inject, Injectable } from '@nestjs/common';
-import { In } from 'typeorm';
+import { In, Brackets } from 'typeorm';
 import { DI } from '@/di-symbols.js';
 import type { Config } from '@/config.js';
 import { bindThis } from '@/decorators.js';
@@ -63,7 +63,7 @@ function compileQuery(q: Q): string {
 
 @Injectable()
 export class SearchService {
-	private readonly meilisearchIndexScope: 'local' | 'global' | string[] = 'local';
+	private readonly meilisearchIndexScope: 'local' | 'global' | string[] = 'global';
 	private meilisearchNoteIndex: Index | null = null;
 
 	constructor(
@@ -161,12 +161,13 @@ export class SearchService {
 		userId?: MiNote['userId'] | null;
 		channelId?: MiNote['channelId'] | null;
 		host?: string | null;
+		checkChannelSearchable?: boolean;
 	}, pagination: {
 		untilId?: MiNote['id'];
 		sinceId?: MiNote['id'];
 		limit?: number;
 	}): Promise<MiNote[]> {
-		if (this.meilisearch) {
+		if ((this.meilisearch && opts.channelId === null) && (this.meilisearch && opts.userId === null)) {
 			const filter: Q = {
 				op: 'and',
 				qs: [],
@@ -212,6 +213,15 @@ export class SearchService {
 				query.andWhere('note.userId = :userId', { userId: opts.userId });
 			} else if (opts.channelId) {
 				query.andWhere('note.channelId = :channelId', { channelId: opts.channelId });
+			}
+
+			if (opts.checkChannelSearchable) {
+				query
+					.leftJoinAndSelect('note.channel', 'channel')
+					.andWhere(new Brackets(qb => {
+						qb.orWhere('channel.searchable IS NULL');
+						qb.orWhere('channel.searchable = true');
+					}));
 			}
 
 			query

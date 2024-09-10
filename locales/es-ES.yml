@@ -2225,8 +2225,8 @@ _instanceCharts:
 _timelines:
   home: "Inicio"
   local: "Local"
-  social: "Social"
-  global: "Global"
+  social: "Comunidad"
+  global: "Destacar"
 _play:
   new: "Crear guión"
   edit: "Editar guión"

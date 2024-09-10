@@ -78,7 +78,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			const usersCount = usersChart.local.total[0] + usersChart.remote.total[0];
 			const originalUsersCount = usersChart.local.total[0];
 
-			const [
+			/*const [
 				reactionsCount,
 				//originalReactionsCount,
 				instances,
@@ -86,16 +86,17 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				this.noteReactionsRepository.count({ cache: 3600000 }), // 1 hour
 				//this.noteReactionsRepository.count({ where: { userHost: IsNull() }, cache: 3600000 }),
 				this.instancesRepository.count({ cache: 3600000 }),
-			]);
+			]);*/
+
 
 			return {
 				notesCount,
 				originalNotesCount,
 				usersCount,
 				originalUsersCount,
-				reactionsCount,
+				reactionsCount: 0,
 				//originalReactionsCount,
-				instances,
+				instances: 0,
 				driveUsageLocal: 0,
 				driveUsageRemote: 0,
 			};

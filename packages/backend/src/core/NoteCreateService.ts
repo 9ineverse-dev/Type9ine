@@ -98,6 +98,10 @@ class NotificationManager {
 		if (this.notifier.id === notifiee) return;
 
 		const exist = this.queue.find(x => x.target === notifiee);
+		if (this.note.visibility === 'specified') {
+			const notificationVisiable = this.note.visibleUserIds.some((id: any) => notifiee === id);
+			if (notificationVisiable === false) return;
+		}
 
 		if (exist) {
 			// 「メンションされているかつ返信されている」場合は、メンションとしての通知ではなく返信としての通知にする
@@ -263,10 +267,14 @@ export class NoteCreateService implements OnApplicationShutdown {
 		if (data.channel != null) {
 			data.visibility = 'public';
 			data.visibleUsers = [];
-			if (data.channel.isLocalOnly) {
-				data.localOnly = true;
+			if (data.channel.isPrivate === true || !data.channel.userId) {
+				data.visibility = 'specified';
+				data.channel.privateUserIds.push( data.channel!.userId );
+				const minChannelvisibleUsers = await this.usersRepository.findBy({	id: In(data.channel.privateUserIds),});
+				data.visibleUsers = minChannelvisibleUsers;
 			}
 		}
+		if (data.channel != null) data.localOnly = true;
 
 		const meta = await this.metaService.fetch();
 
@@ -431,6 +439,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 			if (data.visibleUsers == null) throw new Error('invalid param');
 
 			for (const u of data.visibleUsers) {
+				if ( data.channel?.id ) continue;
 				if (!mentionedUsers.some(x => x.id === u.id)) {
 					mentionedUsers.push(u);
 				}
@@ -438,6 +447,60 @@ export class NoteCreateService implements OnApplicationShutdown {
 
 			if (data.reply && !data.visibleUsers.some(x => x.id === data.reply!.userId)) {
 				data.visibleUsers.push(await this.usersRepository.findOneByOrFail({ id: data.reply!.userId }));
+			}
+
+			const deleteVisibility = data.visibleUsers;
+			if(user.host!==null && meta.defaultWhiteHosts!==null){
+				for (const u of deleteVisibility.filter(u => this.userEntityService.isLocalUser(u))) {
+					const profiles = await this.userProfilesRepository.findOne({
+						where: {
+							userId: u.id,
+						},
+					});
+					let allowInstance = [];
+					if(profiles.userWhiteInstances===null)
+					{allowInstance = meta.defaultWhiteHosts }
+					else { allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances)};
+					if (!(allowInstance.includes(user.host))){
+						data.visibleUsers = data.visibleUsers.filter(function(a) {
+							return a !== u;
+						});
+					}
+				}
+			} else if(user.host===null && meta.defaultWhiteHosts!==null) {
+				const profiles = await this.userProfilesRepository.findOne({
+					where: {
+						userId: user.id,
+					},
+				});
+				let allowInstance = [];
+					if(profiles.userWhiteInstances===null)
+					{allowInstance = meta.defaultWhiteHosts }
+					else { allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances)};
+					for (const v of data.visibleUsers){
+						if (v.host===null)continue;
+						if (!allowInstance.includes(v.host)){
+							throw new Error("Not allowed to send to that instance");
+					};
+				}
+			}
+		}
+
+		const deleteMentions = mentionedUsers;
+		if(user.host!==null && deleteMentions!==null && meta.defaultWhiteHosts!==null){
+			for (const u of deleteMentions.filter(u => this.userEntityService.isLocalUser(u))) {
+				const profiles = await this.userProfilesRepository.findOne({
+					where: {
+						userId: u.id,
+					},
+				});
+				let allowInstance = [];
+				if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances) };
+				if (!(allowInstance.includes(user.host))){
+					mentionedUsers = mentionedUsers.filter(function(a) {
+						return a !== u;
+					});
+				}
 			}
 		}
 
@@ -611,7 +674,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 		}
 
 		if (data.renote && data.renote.userId !== user.id && !user.isBot) {
-			this.incRenoteCount(data.renote);
+			if ( data.visibility !== 'specified') this.incRenoteCount(data.renote);
 		}
 
 		if (data.poll && data.poll.expiresAt) {
@@ -684,7 +747,18 @@ export class NoteCreateService implements OnApplicationShutdown {
 					});
 
 					if (!isThreadMuted) {
-						nm.push(data.reply.userId, 'reply');
+
+						const profiles = await this.userProfilesRepository.findOne({
+							where: {
+								userId: data.reply.userId,
+							},
+						});
+						let allowInstance = [];
+						if(user.host){
+							if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{ allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances) };
+							if (allowInstance.includes(user.host)) nm.push(data.reply.userId, 'reply');
+					}
+
 						this.globalEventService.publishMainStream(data.reply.userId, 'reply', noteObj);
 
 						const webhooks = (await this.webhookService.getActiveWebhooks()).filter(x => x.userId === data.reply!.userId && x.on.includes('reply'));
@@ -703,8 +777,18 @@ export class NoteCreateService implements OnApplicationShutdown {
 
 				// Notify
 				if (data.renote.userHost === null) {
+					const profiles = await this.userProfilesRepository.findOne({
+						where: {
+							userId: data.renote.userId,
+						},
+					});
+					let allowInstance = [];
+					if(user.host){
+						if(profiles.userWhiteInstances===null){allowInstance = meta.defaultWhiteHosts }else{ allowInstance = meta.defaultWhiteHosts.concat(profiles.userWhiteInstances) };
+						if (allowInstance.includes(user.host)) nm.push(data.renote.userId, type);
+				} else {
 					nm.push(data.renote.userId, type);
-				}
+				}}
 
 				// Publish event
 				if ((user.id !== data.renote.userId) && data.renote.userHost === null) {
@@ -873,7 +957,7 @@ export class NoteCreateService implements OnApplicationShutdown {
 
 	@bindThis
 	private index(note: MiNote) {
-		if (note.text == null && note.cw == null) return;
+		if ((note.text == null && note.cw == null) || (note.channelId !== null)) return;
 
 		this.searchService.indexNote(note);
 	}

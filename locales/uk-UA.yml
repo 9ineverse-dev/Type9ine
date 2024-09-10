@@ -1507,8 +1507,8 @@ _instanceCharts:
 _timelines:
   home: "Домівка"
   local: "Локальна"
-  social: "Соціальна"
-  global: "Глобальна"
+  social: "Спільнота"
+  global: "Прожектор"
 _play:
   viewSource: "Переглянути вихідний код"
   featured: "Популярні"

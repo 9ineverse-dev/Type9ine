@@ -1326,8 +1326,8 @@ _instanceCharts:
 _timelines:
   home: "Domov"
   local: "Lokálne"
-  social: "Sociálne"
-  global: "Globálne"
+  social: "Spoločenstva"
+  global: "Reflektor"
 _play:
   viewSource: "Ukázať zdroj"
   featured: "Význačné"

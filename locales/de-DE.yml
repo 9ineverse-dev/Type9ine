@@ -2038,8 +2038,8 @@ _instanceCharts:
 _timelines:
   home: "Startseite"
   local: "Lokal"
-  social: "Sozial"
-  global: "Global"
+  social: "Gemeinschaft"
+  global: "der Strahler"
 _play:
   new: "Play erstellen"
   edit: "Play bearbeiten"

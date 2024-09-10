@@ -7,12 +7,14 @@
 
 import { Component, markRaw, Ref, ref, defineAsyncComponent, nextTick } from 'vue';
 import { EventEmitter } from 'eventemitter3';
+import insertTextAtCursor from 'insert-text-at-cursor';
 import * as Misskey from 'misskey-js';
 import type { ComponentProps as CP } from 'vue-component-type-helpers';
 import type { Form, GetFormResultType } from '@/scripts/form.js';
 import { misskeyApi } from '@/scripts/misskey-api.js';
 import { defaultStore } from '@/store.js';
 import { i18n } from '@/i18n.js';
+import { defaultStore } from '@/store.js';
 import MkPostFormDialog from '@/components/MkPostFormDialog.vue';
 import XPostFormDialog from '@/components/XPostFormDialog.vue';
 import MkWaitingDialog from '@/components/MkWaitingDialog.vue';
@@ -21,6 +23,7 @@ import MkToast from '@/components/MkToast.vue';
 import MkDialog from '@/components/MkDialog.vue';
 import MkPasswordDialog from '@/components/MkPasswordDialog.vue';
 import MkEmojiPickerDialog from '@/components/MkEmojiPickerDialog.vue';
+import MkEmojiPickerWindow from '@/components/MkEmojiPickerWindow.vue';
 import MkPopupMenu from '@/components/MkPopupMenu.vue';
 import MkContextMenu from '@/components/MkContextMenu.vue';
 import { MenuItem } from '@/types/menu.js';
@@ -651,6 +654,64 @@ export async function cropImage(image: Misskey.entities.DriveFile, options: {
 			},
 			closed: () => dispose(),
 		});
+	});
+}
+
+type AwaitType<T> =
+	T extends Promise<infer U> ? U :
+	T extends (...args: any[]) => Promise<infer V> ? V :
+	T;
+let openingEmojiPicker: AwaitType<ReturnType<typeof popup>> | null = null;
+let activeTextarea: HTMLTextAreaElement | HTMLInputElement | null = null;
+
+export async function openEmojiPicker(src: HTMLElement, opts: ComponentProps<typeof MkEmojiPickerWindow>, initialTextarea: typeof activeTextarea) {
+	if (openingEmojiPicker) return;
+
+	activeTextarea = initialTextarea;
+
+	for (const textarea of Array.from(
+		document.querySelectorAll('textarea, input'),
+	)) {
+		textarea.addEventListener('focus', () => {
+			activeTextarea = textarea as HTMLTextAreaElement | HTMLInputElement;
+		});
+	}
+
+	const observer = new MutationObserver(records => {
+		for (const record of records) {
+			for (const node of Array.from(record.addedNodes).filter(n => n instanceof HTMLElement) as HTMLElement[]) {
+				for (const textarea of Array.from(
+					node.querySelectorAll('textarea, input'),
+				).filter(el => (el as HTMLTextAreaElement | HTMLInputElement).dataset.preventEmojiInsert == null)) {
+					if (document.activeElement === textarea) activeTextarea = textarea as HTMLTextAreaElement | HTMLInputElement;
+					textarea.addEventListener('focus', () => {
+						activeTextarea = textarea as HTMLTextAreaElement | HTMLInputElement;
+					});
+				}
+			}
+		}
+	});
+
+	observer.observe(document.body, {
+		childList: true,
+		subtree: true,
+		attributes: false,
+		characterData: false,
+	});
+
+	openingEmojiPicker = await popup(MkEmojiPickerWindow, {
+		src,
+		pinnedEmojis: opts.asReactionPicker ? defaultStore.reactiveState.reactions : defaultStore.reactiveState.pinnedEmojis,
+		...opts,
+	}, {
+		chosen: emoji => {
+			insertTextAtCursor(activeTextarea, emoji);
+		},
+		closed: () => {
+			openingEmojiPicker!.dispose();
+			openingEmojiPicker = null;
+			observer.disconnect();
+		},
 	});
 }
 

@@ -2242,8 +2242,8 @@ _instanceCharts:
 _timelines:
   home: "Beranda"
   local: "Lokal"
-  social: "Sosial"
-  global: "Global"
+  social: "Masyarakat"
+  global: "Menyoroti"
 _play:
   new: "Membuat Permainan"
   edit: "Menyunting Permainan"

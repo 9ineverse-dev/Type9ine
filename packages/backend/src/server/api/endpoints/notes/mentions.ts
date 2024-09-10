@@ -63,7 +63,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				.andWhere(new Brackets(qb => {
 					qb // このmeIdAsListパラメータはqueryServiceのgenerateVisibilityQueryでセットされる
 						.where(':meIdAsList <@ note.mentions')
-						.orWhere(':meIdAsList <@ note.visibleUserIds');
+						.orWhere('(:meIdAsList <@ note.visibleUserIds) AND (note.channelId IS NULL) ');
 				}))
 				// Avoid scanning primary key index
 				.orderBy('CONCAT(note.id)', 'DESC')

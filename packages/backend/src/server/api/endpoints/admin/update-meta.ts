@@ -121,6 +121,15 @@ export const paramDef = {
 				type: 'string',
 			},
 		},
+		planAssignControlKey: { type: 'string', nullable: true },
+		basicPlanRoleId: { type: 'string', format: 'misskey:id', nullable: true },
+		failedRoleId: { type: 'string', format: 'misskey:id', nullable: true },
+		basicPlanPriceId: { type: 'string', nullable: true },
+		basicPlanPrice: { type: 'integer', nullable: true },
+		transactionsActNotationUrl: { type: 'string', nullable: true },
+		sellSubscription: { type: 'boolean' },
+		stripeAPIKey: { type: 'string', nullable: true },
+		stripeWebhookKey: { type: 'string', nullable: true },
 		DiscordWebhookUrl: { type: 'string', nullable: true },
 		DiscordWebhookUrlWordBlock: { type: 'string', nullable: true },
 		deeplAuthKey: { type: 'string', nullable: true },
@@ -184,6 +193,11 @@ export const paramDef = {
 				type: 'string',
 			},
 		},
+		defaultWhiteHosts: {
+			type: 'array', nullable: true, items: {
+				type: 'string',
+			},
+	},
 		mediaSilencedHosts: {
 			type: 'array',
 			nullable: true,
@@ -354,6 +368,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 					lastValue = h;
 					return h !== '' && h !== lv && !set.blockedHosts?.includes(h);
 				});
+			}
+			if (Array.isArray(ps.defaultWhiteHosts)) {
+				set.defaultWhiteHosts = ps.defaultWhiteHosts.filter(Boolean).map(x => x.toLowerCase());
 			}
 			if (Array.isArray(ps.mediaSilencedHosts)) {
 				let lastValue = '';
@@ -613,6 +630,70 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 
 			if (ps.inquiryUrl !== undefined) {
 				set.inquiryUrl = ps.inquiryUrl;
+			}
+
+			if (ps.planAssignControlKey !== undefined) {
+				if (ps.planAssignControlKey === '') {
+					set.planAssignControlKey = null;
+				} else {
+					set.planAssignControlKey = ps.planAssignControlKey;
+				}
+			}
+
+			if (ps.basicPlanRoleId !== undefined) {
+				if (ps.basicPlanRoleId === '') {
+					set.basicPlanRoleId = null;
+				} else {
+					set.basicPlanRoleId = ps.basicPlanRoleId;
+				}
+			}
+
+			if (ps.failedRoleId !== undefined) {
+				if (ps.failedRoleId === '') {
+					set.failedRoleId = null;
+				} else {
+					set.failedRoleId = ps.failedRoleId;
+				}
+			}
+
+			if (ps.basicPlanPriceId !== undefined) {
+				if (ps.basicPlanPriceId === '') {
+					set.basicPlanPriceId = null;
+				} else {
+					set.basicPlanPriceId = ps.basicPlanPriceId;
+				}
+			}
+
+			if (ps.basicPlanPrice !== undefined) {
+				set.basicPlanPrice = ps.basicPlanPrice;
+			}
+
+			if (ps.transactionsActNotationUrl !== undefined) {
+				if (ps.transactionsActNotationUrl === '') {
+					set.transactionsActNotationUrl = null;
+				} else {
+					set.transactionsActNotationUrl = ps.transactionsActNotationUrl;
+				}
+			}
+
+			if (ps.stripeAPIKey !== undefined) {
+				if (ps.stripeAPIKey === '') {
+					set.stripeAPIKey = null;
+				} else {
+					set.stripeAPIKey = ps.stripeAPIKey;
+				}
+			}
+
+			if (ps.stripeWebhookKey !== undefined) {
+				if (ps.stripeWebhookKey === '') {
+					set.stripeWebhookKey = null;
+				} else {
+					set.stripeWebhookKey = ps.stripeWebhookKey;
+				}
+			}
+
+			if (ps.sellSubscription !== undefined) {
+				set.sellSubscription = ps.sellSubscription;
 			}
 
 			if (ps.deeplAuthKey !== undefined) {

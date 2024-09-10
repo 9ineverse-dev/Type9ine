@@ -1,4 +1,19 @@
-@charset "utf-8";
+/*
+ * SPDX-FileCopyrightText: syuilo and other misskey contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+ @charset "utf-8";
+
+//追記文
+body:has(.xpACr.xCGq6) .x7c6u.xyfXN._button {
+	display: none;
+}
+
+body:has(.xpACr.xCGq6) ._button.xplJN {
+	display: none;
+}
+
 
 /*
  * SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project

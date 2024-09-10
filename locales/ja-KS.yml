@@ -122,6 +122,7 @@ pinned: "ピン留めしとく"
 you: "あんた"
 clickToShow: "押したら見えるで"
 sensitive: "気いつけて見いや"
+compartmentalization: "棲み分け"
 add: "増やす"
 reaction: "ツッコミ"
 reactions: "ツッコミ"
@@ -2264,8 +2265,8 @@ _instanceCharts:
 _timelines:
   home: "ホーム"
   local: "ローカル"
-  social: "ソーシャル"
-  global: "グローバル"
+  social: "界隈"
+  global: "スポットライト"
 _play:
   new: "Playの作成"
   edit: "Playの編集"

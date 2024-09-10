@@ -42,8 +42,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<div class="_gaps_m">
 					<FormInfo warn>{{ i18n.ts._accountDelete.mayTakeTime }}</FormInfo>
 					<FormInfo>{{ i18n.ts._accountDelete.sendEmail }}</FormInfo>
-					<MkButton v-if="!$i.isDeleted" danger @click="deleteAccount">{{ i18n.ts._accountDelete.requestAccountDelete }}</MkButton>
-					<MkButton v-else disabled>{{ i18n.ts._accountDelete.inProgress }}</MkButton>
+					<template v-if="$i.policies.canAccountDelete === true">
+						<MkButton v-if="!$i.isDeleted" danger @click="deleteAccount">{{ i18n.ts._accountDelete.requestAccountDelete }}</MkButton>
+						<MkButton v-else disabled>{{ i18n.ts._accountDelete.inProgress }}</MkButton>
+					</template>
+					<template v-else>
+						<FormInfo warn>{{ i18n.ts._accountDelete.cannotDelete }}</FormInfo>
+					</template>
 				</div>
 			</MkFolder>
 
@@ -107,6 +112,7 @@ const $i = signinRequired();
 const reportError = computed(defaultStore.makeGetterSetter('reportError'));
 const enableCondensedLineForAcct = computed(defaultStore.makeGetterSetter('enableCondensedLineForAcct'));
 const devMode = computed(defaultStore.makeGetterSetter('devMode'));
+const AccountDeletable = (($i != null && $i.policies.canAccountDelete));
 const defaultWithReplies = computed(defaultStore.makeGetterSetter('defaultWithReplies'));
 
 async function deleteAccount() {

@@ -230,6 +230,7 @@ export class ReactionService {
 			.update()
 			.set({
 				reactions: () => sql,
+				...(!user.isBot ? { score: () => '"score" + 1' } : {}),
 				...(note.reactionAndUserPairCache.length <
 				PER_NOTE_REACTION_USER_PAIR_CACHE_MAX
 					? {
@@ -404,6 +405,7 @@ export class ReactionService {
 			.update()
 			.set({
 				reactions: () => sql,
+				...(!user.isBot ? { score: () => '"score" - 1' } : {}),
 				reactionAndUserPairCache: () =>
 					`array_remove("reactionAndUserPairCache", '${user.id}/${exist.reaction}')`,
 			})

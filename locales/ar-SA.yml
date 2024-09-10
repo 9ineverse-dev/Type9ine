@@ -1454,8 +1454,8 @@ _instanceCharts:
 _timelines:
   home: "الرئيسي"
   local: "المحلي"
-  social: "الاجتماعي"
-  global: "الشامل"
+  social: "مجتمع"
+  global: "بقعة ضوء"
 _play:
   viewSource: "اظهر المصدر"
   featured: "الأكثر شعبية"

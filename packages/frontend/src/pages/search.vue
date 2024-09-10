@@ -54,7 +54,9 @@ const props = withDefaults(defineProps<{
 const XNote = defineAsyncComponent(() => import('./search.note.vue'));
 const XUser = defineAsyncComponent(() => import('./search.user.vue'));
 
-const tab = ref(toRef(props, 'type').value);
+const tab = ref('user');
+
+const notesSearchAvailable = (($i == null && instance.policies.canSearchNotes) || ($i != null && $i.policies.canSearchNotes));
 
 const headerActions = computed(() => []);
 
