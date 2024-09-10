@@ -56,8 +56,6 @@ const XUser = defineAsyncComponent(() => import('./search.user.vue'));
 
 const tab = ref('user');
 
-const notesSearchAvailable = (($i == null && instance.policies.canSearchNotes) || ($i != null && $i.policies.canSearchNotes));
-
 const headerActions = computed(() => []);
 
 const headerTabs = computed(() => [{
