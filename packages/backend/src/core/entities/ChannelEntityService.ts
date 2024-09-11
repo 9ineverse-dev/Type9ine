@@ -95,7 +95,7 @@ export class ChannelEntityService {
 			notesCount: channel.notesCount,
 			isSensitive: channel.isSensitive,
 			allowRenoteToExternal: channel.allowRenoteToExternal,
-			isLocalOnly: channel.isLocalOnly,
+
 			collaboratorUsers: channel.collaboratorIds.length > 0 ? await this.userEntityService.packMany(channel.collaboratorIds) : [],
 			...(me ? {
 				isFollowing,
@@ -109,3 +109,4 @@ export class ChannelEntityService {
 		};
 	}
 }
+

@@ -63,7 +63,6 @@ export const paramDef = {
 		color: { type: 'string', minLength: 1, maxLength: 16 },
 		isSensitive: { type: 'boolean', nullable: true },
 		allowRenoteToExternal: { type: 'boolean', nullable: true },
-		isLocalOnly: { type: 'boolean', nullable: true },
 		collaboratorIds: {
 			type: 'array',
 			items: {
@@ -141,7 +140,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				...(banner ? { bannerId: banner.id } : {}),
 				...(typeof ps.isSensitive === 'boolean' ? { isSensitive: ps.isSensitive } : {}),
 				...(typeof ps.allowRenoteToExternal === 'boolean' ? { allowRenoteToExternal: ps.allowRenoteToExternal } : {}),
-				...(typeof ps.isLocalOnly === 'boolean' ? { isLocalOnly: ps.isLocalOnly } : {}),
 				...(collaboratorIds.length > 0 ? { collaboratorIds: collaboratorIds } : {}),
 			};
 

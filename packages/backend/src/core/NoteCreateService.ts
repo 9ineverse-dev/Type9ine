@@ -260,13 +260,9 @@ export class NoteCreateService implements OnApplicationShutdown {
 		if (data.createdAt == null) data.createdAt = new Date();
 		if (data.visibility == null) data.visibility = 'public';
 		if (data.localOnly == null) data.localOnly = false;
-		if (data.channel != null) {
-			data.visibility = 'public';
-			data.visibleUsers = [];
-			if (data.channel.isLocalOnly) {
-				data.localOnly = true;
-			}
-		}
+		if (data.channel != null) data.visibility = 'public';
+		if (data.channel != null) data.visibleUsers = [];
+		if (data.channel != null) data.localOnly = true;
 
 		const meta = await this.metaService.fetch();
 
@@ -724,7 +720,6 @@ export class NoteCreateService implements OnApplicationShutdown {
 			//#region AP deliver
 			if (this.userEntityService.isLocalUser(user)) {
 				(async () => {
-
 					const noteActivity = await this.renderNoteOrRenoteActivity(data, note);
 					const dm = this.apDeliverManagerService.createDeliverManager(user, noteActivity);
 

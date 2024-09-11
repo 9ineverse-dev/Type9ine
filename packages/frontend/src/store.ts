@@ -103,6 +103,10 @@ export const defaultStore = markRaw(
 			where: 'account',
 			default: 'public' as (typeof Misskey.noteVisibilities)[number],
 		},
+		defaultNoteLocalOnly: {
+			where: 'account',
+			default: false,
+		},
 		draftSavingBehavior: {
 			where: 'account',
 			default: 'auto' as 'auto' | 'manual',
@@ -259,6 +263,10 @@ export const defaultStore = markRaw(
 		visibility: {
 			where: 'deviceAccount',
 			default: 'public' as (typeof Misskey.noteVisibilities)[number],
+		},
+		localOnly: {
+			where: 'deviceAccount',
+			default: false,
 		},
 		showPreview: {
 			where: 'device',
