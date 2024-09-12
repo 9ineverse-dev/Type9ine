@@ -24,10 +24,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template #label>{{ i18n.ts._channel.allowRenoteToExternal }}</template>
 			</MkSwitch>
 
-			<MkSwitch v-model="isLocalOnly">
-				<template #label>{{ i18n.ts._channel.isLocalOnly }}</template>
-			</MkSwitch>
-
 			<div>
 				<MkButton v-if="bannerId == null" @click="setBannerImage"><i class="ti ti-plus"></i> {{ i18n.ts._channel.setBanner }}</MkButton>
 				<div v-else-if="bannerUrl">
@@ -161,7 +157,6 @@ const searchable = ref(true);
 const isPrivate = ref(false);
 const privateUserIds = ref<{ value: string, label: string}[]>([]);
 const allowRenoteToExternal = ref(true);
-const isLocalOnly = ref(false);
 const pinnedNotes = ref<{ id: Misskey.entities.Note['id'] }[]>([]);
 
 watch(() => bannerId.value, async () => {
@@ -215,8 +210,7 @@ async function fetchChannel() {
 	pinnedNotes.value = channel.value.pinnedNoteIds.map(id => ({
 		id,
 	}));
-
-	isLocalOnly.value = channel.value.isLocalOnly;
+	color.value = channel.value.color;
 	collaboratorUsers.value = channel.value.collaboratorUsers;
 }
 
@@ -341,7 +335,6 @@ async function save() {
 		isPrivate: isPrivate.value,
 		privateUserIds: saverivateUserIds,
 		allowRenoteToExternal: allowRenoteToExternal.value,
-		isLocalOnly: isLocalOnly.value,
 		collaboratorIds: collaboratorUsers.value.map(x => x.id),
 	};
 

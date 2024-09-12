@@ -59,7 +59,6 @@ export const paramDef = {
 			},
 		},
 		allowRenoteToExternal: { type: 'boolean', nullable: true },
-		isLocalOnly: { type: 'boolean', nullable: true },
 		collaboratorIds: {
 			type: 'array',
 			items: {
@@ -107,7 +106,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				isSensitive: ps.isSensitive ?? false,
 				...(ps.color !== undefined ? { color: ps.color } : {}),
 				allowRenoteToExternal: ps.allowRenoteToExternal ?? true,
-				isLocalOnly: ps.isLocalOnly ?? false,
 				collaboratorIds: ps.collaboratorIds ?? [],
 			} as MiChannel);
 
