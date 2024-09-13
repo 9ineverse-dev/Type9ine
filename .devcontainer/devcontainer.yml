@@ -6,7 +6,7 @@
 #───┘ URL └─────────────────────────────────────────────────────
 
 # Final accessible URL seen by a user.
-url: http://127.0.0.1:3000/
+url: http://127.0.0.1:9000/
 
 # ONCE YOU HAVE STARTED THE INSTANCE, DO NOT CHANGE THE
 # URL SETTINGS AFTER THAT!
@@ -28,7 +28,7 @@ url: http://127.0.0.1:3000/
 #   because tokens may be transferred in GET requests.
 
 # The port that your Type4ny server should listen on.
-port: 3000
+port: 9000
 
 #   ┌──────────────────────────┐
 #───┘ PostgreSQL configuration └────────────────────────────────

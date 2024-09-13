@@ -9,7 +9,7 @@
 		},
 		"ghcr.io/devcontainers-contrib/features/corepack:1": {}
 	},
-	"forwardPorts": [3000],
+	"forwardPorts": [9000],
 	"postCreateCommand": "/bin/bash .devcontainer/init.sh",
 	"customizations": {
 		"vscode": {
