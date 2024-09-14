@@ -301,6 +301,10 @@ export interface Locale extends ILocale {
      */
     "addToAntenna": string;
     /**
+     * プライベートチャンネルに招待
+     */
+    "assignToPrivateChannel": string;
+    /**
      * メッセージを送信
      */
     "sendMessage": string;

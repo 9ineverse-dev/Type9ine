@@ -283,6 +283,38 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter
 	}] : [])] as any;
 
 	if ($i && meId !== user.id) {
+		if ($i.policies.canCreatePrivateChannel) {
+			menu = menu.concat([{
+				type: 'parent',
+				icon: 'ti ti-device-tv',
+				text: i18n.ts.assignToPrivateChannel,
+				children: async () => {
+					const channels = await misskeyApi('channels/owned', { limit:20 });
+
+					return channels.filter(c => !(c.privateUserIds.includes(user.id))).map(c => ({
+						text: c.name,
+						action: async () => {
+							const puserids = c.privateUserIds.concat(user.id);
+							await os.apiWithDialog('channels/update', {
+								channelId: c.id,
+								name: c.name,
+								description: c.description,
+								bannerId: c.bannerId,
+								pinnedNoteIds: c.pinnedNoteIds,
+								color: c.color,
+								searchable: c.searchable,
+								isSensitive: c.isSensitive,
+								isPrivate: c.isPrivate,
+								privateUserIds: puserids,
+								allowRenoteToExternal: c.allowRenoteToExternal,
+								collaboratorIds: c.collaboratorIds,
+							});
+						},
+					}));
+				},
+			}]);
+		}
+
 		if (iAmModerator) {
 			menu = menu.concat([{
 				type: 'parent',
