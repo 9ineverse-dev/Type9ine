@@ -109,11 +109,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			const iAmModerator = await this.roleService.isModerator(me);
 
-			if (ps.collaboratorIds && channel.userId !== me.id && !iAmModerator) {
-				throw new ApiError(meta.errors.accessDenied);
-			}
-
-			if (!channel.collaboratorIds.includes(me.id) && !iAmModerator) {
+			if (!( iAmModerator || channel.userId === me.id || channel.collaboratorIds.includes(me.id) )) {
 				throw new ApiError(meta.errors.accessDenied);
 			}
 
@@ -138,6 +134,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 					id: In(ps.collaboratorIds),
 				})).map(u => u.id);
 			}
+
+			if ( !( channel.userId === me.id || iAmModerator ) ) {
+				collaboratorIds = channel.collaboratorIds;
+			};
 
 			const updateValues = {
 				...(ps.name !== undefined ? { name: ps.name } : {}),
