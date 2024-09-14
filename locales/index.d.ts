@@ -305,6 +305,10 @@ export interface Locale extends ILocale {
      */
     "assignToPrivateChannel": string;
     /**
+     * ユーザーを招待する
+     */
+    "assignUserToPrivateChannel": string;
+    /**
      * メッセージを送信
      */
     "sendMessage": string;

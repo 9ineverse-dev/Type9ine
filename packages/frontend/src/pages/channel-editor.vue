@@ -71,7 +71,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template #label>{{ i18n.ts._channel.privateUserIds }}</template>
 
 				<div class="_gaps">
-					<MkButton @click="addPrivateUserIds()">{{ "ユーザーを招待する" }}</MkButton>
+					<MkButton @click="addPrivateUserIds()">{{ i18n.ts.assignUserToPrivateChannel }}</MkButton>
 
 					<div v-for="( user, i ) in privateUsers" :class="$style.userItem">
 						<div :class="$style.userItemMain">
