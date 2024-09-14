@@ -55,8 +55,8 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 			iconOnly: true,
 		},
 		social: {
-			title: i18n.ts._timelines.social,
-			icon: 'ti ti-universe',
+			title: i18n.ts._timelines.recommend,
+			icon: 'ti ti-bolt',
 			iconOnly: true,
 		},
 		media: {
@@ -65,8 +65,8 @@ export const timelineHeaderItemDef = reactive<Partial<Record<TimelineHeaderItem,
 			iconOnly: true,
 		} } : {}),
 	...(isGlobalTimelineAvailable ? { global: {
-		title: i18n.ts._timelines.global,
-		icon: 'ti ti-whirl',
+		title: i18n.ts._timelines.community,
+		icon: 'ti ti-users',
 		iconOnly: true,
 	} } : {}),
 	lists: {

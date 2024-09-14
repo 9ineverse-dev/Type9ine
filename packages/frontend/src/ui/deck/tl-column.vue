@@ -94,7 +94,7 @@ async function setType() {
 		}, {
 			value: 'media' as const, text: i18n.ts._timelines.media,
 		}, {
-			value: 'social' as const, text: i18n.ts._timelines.social,
+			value: 'social' as const, text: i18n.ts._timelines.recommend,
 		}, {
 			value: 'global' as const, text: i18n.ts._timelines.community,
 		}],
