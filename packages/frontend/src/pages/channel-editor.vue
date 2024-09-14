@@ -63,30 +63,24 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</MkFolder>
 
-			<MkSwitch v-model="isPrivate" :disabled="!$i.policies.canCreatePrivateChannel">
+			<MkSwitch v-model="isPrivate" :disabled="!($i.policies.canCreatePrivateChannel && isRoot)">
 				{{ i18n.ts._channel.isPrivate }}
 			</MkSwitch>
 
-			<MkFolder v-if="isPrivate && $i.policies.canCreatePrivateChannel === true" :defaultOpen="true">
+			<MkFolder v-if="isPrivate && $i.policies.canCreatePrivateChannel === true " :defaultOpen="true" :disabled="!isRoot">
 				<template #label>{{ i18n.ts._channel.privateUserIds }}</template>
 
 				<div class="_gaps">
-					<MkButton primary rounded @click="addPrivateUserIds()"><i class="ti ti-plus"></i></MkButton>
+					<MkButton @click="addPrivateUserIds()">{{ "ユーザーを招待する" }}</MkButton>
 
-					<Sortable
-						v-model="privateUserIds"
-						itemKey="value"
-						:handle="'.' + $style.pinnedNoteHandle"
-						:animation="150"
-					>
-						<template #item="{element,index}">
-							<div :class="$style.pinnedNote">
-								<button class="_button" :class="$style.pinnedNoteHandle"><i class="ti ti-menu"></i></button>
-								{{ element.label }}
-								<button class="_button" :class="$style.pinnedNoteRemove" @click="removePrivateUserIds(index)"><i class="ti ti-x"></i></button>
-							</div>
-						</template>
-					</Sortable>
+					<div v-for="( user, i ) in privateUsers" :class="$style.userItem">
+						<div :class="$style.userItemMain">
+							<MkA :class="$style.userItemMainBody" :to="`${userPage(user)}`">
+								<MkUserCardMini :user="user"/>
+							</MkA>
+							<button class="_button" :class="$style.unassign" @click="removePrivateUserIds(i)"><i class="ti ti-x"></i></button>
+						</div>
+					</div>
 				</div>
 			</MkFolder>
 			<MkFolder v-if="isRoot" :defaultOpen="true">
@@ -162,6 +156,7 @@ const isSensitive = ref(false);
 const searchable = ref(true);
 const isPrivate = ref(false);
 const privateUserIds = ref<{ value: string, label: string}[]>([]);
+const privateUsers = ref<Misskey.entities.User[] | null>(null);
 const allowRenoteToExternal = ref(true);
 const pinnedNotes = ref<{ id: Misskey.entities.Note['id'] }[]>([]);
 const isRoot = ref(false);
@@ -205,6 +200,7 @@ async function fetchChannel() {
 	const pusers = await misskeyApi('users/show', {
 		userIds: searchPrivateUserIds,
 	});
+	privateUsers.value = pusers;
 	if (pusers) {
 		let tmp: any[] = [];
 		for (let puser of pusers) {
@@ -275,43 +271,34 @@ onMounted(() => {
 });
 
 async function addPrivateUserIds() {
-	const { canceled, result } = await os.inputText({
-		title: i18n.ts.usernameOrUserId,
-	});
-	if (canceled) return;
-
-	const show = (user) => {
-		privateUserIds.value = [{
-			value: user.id,
-			label: user.username,
-		}, ...privateUserIds.value];
-	};
-
-	const usernamePromise = misskeyApi('users/show', Misskey.acct.parse(result) );
-	const idPromise = misskeyApi('users/show', { userId: result });
-	let _notFound = false;
-	const notFound = () => {
-		if (_notFound) {
-			os.alert({
-				type: 'error',
-				text: i18n.ts.noSuchUser,
-			});
+	os.selectUser({ includeSelf: true, multiple: true, localOnly: true }).then( user => {
+		if (Array.isArray(user)) {
+			privateUsers.value = [
+				...privateUsers.value, ...user,
+			];
+			for (const i of user) {
+				privateUserIds.value = [
+				...privateUserIds.value, {
+					value: i.id,
+					label: i.username,
+				}];
+			}
 		} else {
-			_notFound = true;
+			privateUsers.value = [
+				...privateUsers.value, user,
+			];
+			privateUserIds.value = [
+				...privateUserIds.value, {
+					value: user.id,
+					label: user.username,
+				}];
 		}
-	};
-	usernamePromise.then(show).catch(err => {
-		if (err.code === 'NO_SUCH_USER') {
-			notFound();
-		}
-	});
-	idPromise.then(show).catch(err => {
-		notFound();
 	});
 }
 
 function removePrivateUserIds(index: number) {
 	privateUserIds.value.splice(index, 1);
+	privateUsers.value.splice(index, 1);
 }
 
 async function addPinnedNote() {
