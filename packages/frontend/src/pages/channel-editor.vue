@@ -264,10 +264,6 @@ function collaboratorUserDelete (i:number) {
 	collaboratorUsers.value.splice( i, 1 );
 }
 
-function collaboratorUserDelete (i:number) {
-	collaboratorUsers.value.splice( i, 1 );
-}
-
 //fetchChannel();
 
 onMounted(() => {
