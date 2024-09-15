@@ -503,6 +503,7 @@ unregister: "登録を解除"
 passwordLessLogin: "パスワードレスログイン"
 passwordLessLoginDescription: "パスワードを使用せず、セキュリティキーやパスキーなどのみでログインします"
 resetPassword: "パスワードをリセット"
+grantPoints: "{pointName}を付与する"
 newPasswordIs: "新しいパスワードは「{password}」です"
 reduceUiAnimation: "UIのアニメーションを減らす"
 share: "共有"
@@ -1528,7 +1529,7 @@ _achievements:
   earnedAt: "獲得日時"
   _types:
     _notes1:
-      title: "just setting up my tp4ny"
+      title: "just setting up my Type4ny"
       description: "初めてノートを投稿した"
       flavor: "良い9ineverse.comライフを！"
     _notes10:

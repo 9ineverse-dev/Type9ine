@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -109,11 +110,11 @@ function onClick(ev: MouseEvent) {
 				react(`:${props.name}:`);
 				sound.playMisskeySfx('reaction');
 			},
-		}] : []), ...(!defaultStore.state[`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault-1 : ''}`].includes(`:${props.name}:`) ? [{
+		}] : []), ...(!defaultStore.state[`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault - 1 : ''}`].includes(`:${props.name}:`) ? [{
 			text: i18n.ts.addToDefaultEmojiPicker,
 			icon: 'ti ti-plus',
 			action: () => {
-				defaultStore.set(`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault-1 : ''}`, [...defaultStore.state[`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault-1 : ''}`], `:${props.name}:`]);
+				defaultStore.set(`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault - 1 : ''}`, [...defaultStore.state[`reactions${defaultStore.state.pickerProfileDefault > 1 ? defaultStore.state.pickerProfileDefault - 1 : ''}`], `:${props.name}:`]);
 			},
 		}] : []), {
 			text: i18n.ts.info,

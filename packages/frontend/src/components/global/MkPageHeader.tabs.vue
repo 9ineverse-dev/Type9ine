@@ -1,5 +1,6 @@
 <!--
-SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License-Identifier: AGPL-3.0-only
+SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
@@ -56,7 +57,7 @@ import { onMounted, onUnmounted, watch, nextTick, shallowRef, ref, computed } fr
 import { defaultStore } from '@/store.js';
 import { ui } from '@/config.js';
 
-const gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const props = withDefaults(defineProps<{
 	tabs?: Tab[];
@@ -177,6 +178,8 @@ onMounted(() => {
 		});
 		ro2.observe(props.rootEl);
 	}
+
+	window.addEventListener('resize', renderTab);
 });
 
 onUnmounted(() => {

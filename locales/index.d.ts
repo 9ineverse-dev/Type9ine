@@ -2025,6 +2025,10 @@ export interface Locale extends ILocale {
      */
     "resetPassword": string;
     /**
+     * {pointName}を付与する
+     */
+    "grantPoints": ParameterizedString<"pointName">;
+    /**
      * 新しいパスワードは「{password}」です
      */
     "newPasswordIs": ParameterizedString<"password">;
@@ -6040,7 +6044,7 @@ export interface Locale extends ILocale {
         "_types": {
             "_notes1": {
                 /**
-                 * just setting up my tp4ny
+                 * just setting up my Type4ny
                  */
                 "title": string;
                 /**

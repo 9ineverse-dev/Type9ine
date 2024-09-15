@@ -125,7 +125,7 @@ export const navbarItemDef = reactive({
 		to: '/my/achievements',
 	},
 	games: {
-		title: 'Misskey Games',
+		title: 'Games',
 		icon: 'ti ti-device-gamepad',
 		to: '/games',
 	},
@@ -191,10 +191,16 @@ export const navbarItemDef = reactive({
 		show: computed(() => $i != null),
 		to: `/@${$i?.username}`,
 	},
+	calendar: {
+		title: i18n.ts.calendar,
+		icon: 'ti ti-calendar-event',
+		show: computed(() => $i != null),
+		to: '/calendar',
+	},
 	scheduledNotes: {
 		title: i18n.ts._schedulePost.list,
 		icon: 'ti ti-calendar-event',
-		show: computed(() => $i && $i.policies?.canScheduleNote),
+		show: computed(() => $i && $i.policies.canScheduleNote),
 		action: (ev) => {
 			os.listSchedulePost();
 		},

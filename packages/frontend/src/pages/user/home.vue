@@ -36,7 +36,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<span v-if="$i && $i.id != user.id && user.isFollowed" class="followed">{{ i18n.ts.followsYou }}</span>
 						<div class="actions">
 							<button class="menu _button" @click="menu"><i class="ti ti-dots"></i></button>
-							<MkNotifyButton v-if="$i?.id != user.id " :user="user"></MkNotifyButton>
+							<MkNotifyButton :user="user" @update:notify="user.notify = $event"/>
 							<MkFollowButton
 								v-if="$i?.id != user.id" v-model:user="user" :inline="true" :transparent="false" :full="true"
 								class="koudoku"
@@ -207,7 +207,7 @@ import MkRemoteInfoUpdate from '@/components/MkRemoteInfoUpdate.vue';
 import MkNotes from '@/components/MkNotes.vue';
 import MkLazy from '@/components/global/MkLazy.vue';
 import { getStaticImageUrl } from '@/scripts/media-proxy.js';
-import { instance } from "@/instance.js";
+import { instance } from '@/instance.js';
 
 function calcAge(birthdate: string): number {
 	const date = new Date(birthdate);
@@ -226,7 +226,6 @@ function calcAge(birthdate: string): number {
 
 const XFiles = defineAsyncComponent(() => import('./index.files.vue'));
 const XActivity = defineAsyncComponent(() => import('./index.activity.vue'));
-const XTimeline = defineAsyncComponent(() => import('./index.timeline.vue'));
 
 const props = withDefaults(defineProps<{
   user: Misskey.entities.UserDetailed;

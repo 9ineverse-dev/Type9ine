@@ -1,3 +1,7 @@
+<!--
+SPDX-FileCopyrightText: Type4ny-project
+SPDX-License-Identifier: AGPL-3.0-only
+-->
 <template>
 <MkPagination ref="emojisRequestPaginationComponent" :pagination="paginationRequest">
 	<template #empty><span>{{ i18n.ts.noCustomEmojis }}</span></template>
@@ -37,7 +41,7 @@ import MkPagination from '@/components/MkPagination.vue';
 import * as os from '@/os';
 import { i18n } from '@/i18n';
 import MkButton from '@/components/MkButton.vue';
-import {misskeyApi} from "@/scripts/misskey-api.js";
+import { misskeyApi } from '@/scripts/misskey-api.js';
 
 const emojisRequestPaginationComponent = shallowRef<InstanceType<typeof MkPagination>>();
 
@@ -101,7 +105,7 @@ async function deleteRequest(emoji) {
 	});
 	if (canceled) return;
 
-    misskeyApi('admin/emoji/delete', {
+	misskeyApi('admin/emoji/delete', {
 		id: emoji.id,
 	}).then(() => {
 		emojisRequestPaginationComponent.value.removeItem((item) => item.id === emoji.id);

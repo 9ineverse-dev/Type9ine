@@ -59,7 +59,7 @@ import { checkReactionPermissions } from '@/scripts/check-reaction-permissions.j
 import { customEmojisMap } from '@/custom-emojis.js';
 import { getUnicodeEmoji } from '@/scripts/emojilist.js';
 
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const props = defineProps<{
 	reaction: string;
@@ -114,8 +114,7 @@ function getReactionName(reaction: string, formated = false) {
 async function toggleReaction() {
 	if (!canToggle.value) return;
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	const oldReaction = props.note.myReactions?.includes(props.reaction)
+	const oldReaction = props.note.myReactions.includes(props.reaction)
 		? props.reaction
 		: null;
 	if (oldReaction) {
@@ -127,6 +126,8 @@ async function toggleReaction() {
 					: i18n.ts.cancelReactionConfirm,
 		});
 		if (confirm.canceled) return;
+
+		// eslint-disable-next-line vue/no-mutating-props
 		props.note.myReactions.splice(
 			props.note.myReactions.indexOf(oldReaction),
 			1,

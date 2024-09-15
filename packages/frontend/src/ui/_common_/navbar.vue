@@ -93,7 +93,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				@click="os.post"
 			>
 				<i class="ti ti-pencil ti-fw" :class="$style.postIcon"></i><span
-					:class="$style.postText,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}"
+					:class="[$style.postText,{[$style.gamingDark]: gamingType === 'dark',[$style.gamingLight]: gamingType === 'light',}]"
 				>{{
 					i18n.ts.note
 				}}</span>
@@ -147,14 +147,13 @@ const enablehanntenn = computed(defaultStore.makeGetterSetter('enablehanntenn'))
 
 if (darkMode.value) {
 	bannerUrl.value = enablehanntenn.value ? bannerLight : bannerDark;
-	iconUrl.value = (enablehanntenn.value ? iconLight : iconDark) ;
-
+	iconUrl.value = (enablehanntenn.value ? iconLight : iconDark);
 } else {
 	bannerUrl.value = enablehanntenn.value ? bannerDark : bannerLight;
 	iconUrl.value = (enablehanntenn.value ? iconDark : iconLight);
 }
 
-if (!iconUrl.value){
+if (!iconUrl.value) {
 	iconUrl.value = instance.iconUrl || instance.faviconUrl || '/favicon.ico';
 }
 
@@ -485,7 +484,6 @@ function more(ev: MouseEvent) {
     box-sizing: border-box;
     color: var(--navFg);
 		transition: all 0.2s ease;
-
 
     &.gamingDark {
       color: var(--navFg);

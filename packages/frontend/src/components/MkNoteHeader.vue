@@ -13,18 +13,18 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 		<img v-for="(role, i) in note.user.badgeRoles" :key="i" v-tooltip="role.name" :class="$style.badgeRole" :src="role.iconUrl!"/>
 	</div>
 	<div :class="$style.info">
-        <span v-if="note.updatedAt" style="margin-right: 0.5em;" :title="i18n.ts.edited"><i class="ti ti-pencil"></i></span>
-        <div v-if="mock">
-            <MkTime :time="note.createdAt" colored/>
-        </div>
-        <MkTime v-else-if="note.isSchedule" mode="absolute" :time="note.createdAt" colored/>
+		<span v-if="note.updatedAt" style="margin-right: 0.5em;" :title="i18n.ts.edited"><i class="ti ti-pencil"></i></span>
+		<div v-if="mock">
+			<MkTime :time="note.createdAt" colored/>
+		</div>
+		<MkTime v-else-if="note.isSchedule" mode="absolute" :time="note.createdAt" colored/>
 		<MkA v-else :to="notePage(note)">
-            <MkTime :time="note.createdAt" colored/>
-        </MkA>
+			<MkTime :time="note.createdAt" colored/>
+		</MkA>
 		<span v-if="note.visibility !== 'public'" style="margin-left: 0.5em;" :title="i18n.ts._visibility[note.visibility]">
-			<i v-if="note.visibility === 'home'" class="ti ti-home"></i>
-			<i v-else-if="note.visibility === 'followers'" class="ti ti-lock"></i>
-			<i v-else-if="note.visibility === 'specified'" ref="specified" class="ti ti-mail"></i>
+			<i v-if="note.visibility === 'home'" class="ti ti-home" data-cy-note-visibility-home></i>
+			<i v-else-if="note.visibility === 'followers'" class="ti ti-lock" data-cy-note-visibility-followers></i>
+			<i v-else-if="note.visibility === 'specified'" ref="specified" class="ti ti-mail" data-cy-note-visibility-specified></i>
 		</span>
 		<span v-if="note.localOnly" style="margin-left: 0.5em;" :title="i18n.ts._visibility['disableFederation']"><i class="ti ti-rocket-off"></i></span>
 		<span v-if="note.channel" style="margin-left: 0.5em;" :title="note.channel.name"><i class="ti ti-device-tv"></i></span>
@@ -34,7 +34,7 @@ SPDX-FileCopyrightText: syuilo and misskey-project , Type4ny-projectSPDX-License
 </template>
 
 <script lang="ts" setup>
-import {inject} from 'vue';
+import { inject } from 'vue';
 import * as Misskey from 'misskey-js';
 import { i18n } from '@/i18n.js';
 import { notePage } from '@/filters/note.js';
