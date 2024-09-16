@@ -20,7 +20,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 		<div :class="$style.headerRight">
 			<template v-if="!(channel != null && fixed)">
-				<button v-if="channel == null" ref="visibilityButton" v-click-anime v-tooltip="i18n.ts.visibility" :class="['_button', $style.headerRightItem, $style.visibility]" @click="setVisibility">
+				<button v-if="channel == null" ref="visibilityButton" v-click-anime v-tooltip="i18n.ts.visibility" data-cy-open-post-form-visibility :class="['_button', $style.headerRightItem, $style.visibility]" @click="setVisibility">
 					<span v-if="visibility === 'public'"><i class="ti ti-world"></i></span>
 					<span v-if="visibility === 'home'"><i class="ti ti-home"></i></span>
 					<span v-if="visibility === 'followers'"><i class="ti ti-lock"></i></span>
@@ -147,7 +147,7 @@ import { listSchedulePost } from '@/os.js';
 const $i = signinRequired();
 
 const modal = inject('modal');
-let gamingType = computed(defaultStore.makeGetterSetter('gamingType'));
+const gamingType = defaultStore.state.gamingType;
 
 const props = withDefaults(defineProps<{
 	reply?: Misskey.entities.Note;
@@ -513,7 +513,7 @@ function addMissingMention() {
 }
 
 function insertRuby() {
-	insertTextAtCursor(textareaEl.value, '$[ruby 本文 上につくやつ]');
+	insertTextAtCursor(textareaEl.value, '$[ruby 本文 ルビ]');
 }
 
 function togglePoll() {
@@ -821,6 +821,11 @@ async function saveDraft(auto = true) {
 		await noteDrafts.remove(draftType.value, $i.id, 'default', draftAuxId.value as string);
 	}
 
+	if (text.value === '' && files.value.length === 0) {
+		deleteDraft();
+		return;
+	}
+
 	await noteDrafts.set(draftType.value, $i.id, auto ? 'default' : Date.now().toString(), {
 		text: text.value,
 		useCw: useCw.value,
@@ -830,8 +835,8 @@ async function saveDraft(auto = true) {
 		files: files.value,
 		poll: poll.value,
 		visibleUserIds: visibility.value === 'specified' ? visibleUsers.value.map(x => x.id) : undefined,
-	quoteId: quoteId.value,
-			reactionAcceptance: reactionAcceptance.value,}, draftAuxId.value as string);
+		quoteId: quoteId.value,
+		reactionAcceptance: reactionAcceptance.value }, draftAuxId.value as string);
 
 	if (!auto) {
 		clear();
@@ -1027,7 +1032,7 @@ async function post(ev?: MouseEvent) {
 			const text = postData.text ?? '';
 			const lowerCase = text.toLowerCase();
 			if ((lowerCase.includes('love') || lowerCase.includes('❤')) && lowerCase.includes('misskey')) {
-				claimAchievement('iLoveMisskey');
+				claimAchievement('iLoveType4ny');
 			}
 			if ([
 				'https://youtu.be/Efrlqw8ytg4',

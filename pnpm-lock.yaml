@@ -23493,7 +23493,7 @@ snapshots:
 
   qs@6.11.0:
     dependencies:
-      side-channel: 1.0.6
+      side-channel: 1.0.4
 
   qs@6.13.0:
     dependencies:
