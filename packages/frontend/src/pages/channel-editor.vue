@@ -103,7 +103,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<MkFolder v-if="isRoot">
 				<template #label>{{ i18n.ts._channel.dangerSettings }}</template>
 
-				<MkButton danger @click="transferAdmin()">
+				<MkButton v-if="!isPrivate" danger @click="transferAdmin()">
 					{{ i18n.ts._channel.transferAdminConfirmTitle }}
 				</MkButton>
 			</MkFolder>
