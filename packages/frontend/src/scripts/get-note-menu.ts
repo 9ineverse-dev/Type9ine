@@ -421,7 +421,7 @@ export function getNoteMenu(props: {
 			),
 			...(appearNote.userId === $i.id || $i.isModerator || $i.isAdmin ? [
 				{ type: 'divider' },
-				appearNote.userId === $i.id && $i.policies.canEditNote ? {
+				appearNote.userId === $i.id && appearNote.localOnly && $i.policies.canEditNote ? {
 					icon: 'ti ti-edit',
 					text: i18n.ts.edit,
 					action: edit,
