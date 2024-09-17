@@ -32,7 +32,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<MkNote v-for="note in channel.pinnedNotes" :key="note.id" class="_panel" :note="note"/>
 					</div>
 				</MkFoldableSection>
-				
+
 				<MkFolder v-if="channel.isPrivate" defaultOpen><template #label>{{ i18n.ts.members }}</template>
 					<template #caption>{{ i18n.t('nUsers', { n: `${channel.privateUserIds.length}` }) }}</template>
 					<MkPagination :pagination="usersPagination">
@@ -160,7 +160,9 @@ watch(() => props.channelId, async () => {
 		tab.value = 'timeline';
 	}
 	queueUserIds = channel.value.privateUserIds;
-	queueUserIds.unshift(channel.value.userId);
+	queueUserIds.value.unshift(channel.value.userId);
+	const set = [...new Set(queueUserIds.value)];
+	queueUserIds.value = set;
 	await misskeyApi('users/show', {
 		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
 	}).then(_users => {
@@ -176,26 +178,6 @@ watch(() => props.channelId, async () => {
 		}
 	}
 }, { immediate: true });
-
-function fetchMoreUsers() {
-	fetching = true;
-	//if ( !channel ) return;
-	//if (fetching && pusers.length !== 0) return; // fetchingがtrueならやめるが、usersが空なら続行
-	misskeyApi('users/show', {
-		userIds: queueUserIds.slice(0, FETCH_USERS_LIMIT),
-	}).then(_users => {
-		for (let i = 0; i < _users.length; i++) {
-			const element = _users[i];
-			pusers = pusers.push(element);
-		}
-		//pusers = pusers.concat(_users);
-		queueUserIds = queueUserIds.slice(FETCH_USERS_LIMIT);
-	}).finally(() => {
-		fetching = false;
-		const instance = getCurrentInstance();
-		instance.proxy.forceUpdate();
-	});
-}
 
 function edit() {
 	router.push(`/channels/${channel.value?.id}/edit`);
