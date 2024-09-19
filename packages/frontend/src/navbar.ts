@@ -191,12 +191,12 @@ export const navbarItemDef = reactive({
 		show: computed(() => $i != null),
 		to: `/@${$i?.username}`,
 	},
-	calendar: {
+	/*calendar: {
 		title: i18n.ts.calendar,
 		icon: 'ti ti-calendar-event',
 		show: computed(() => $i != null),
 		to: '/calendar',
-	},
+	},*/
 	scheduledNotes: {
 		title: i18n.ts._schedulePost.list,
 		icon: 'ti ti-calendar-event',

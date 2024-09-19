@@ -66,6 +66,7 @@ export type RolePolicies = {
 	emojiPickerProfileLimit: number;
 	listPinnedLimit: number;
 	localTimelineAnyLimit: number;
+	loginBonusGrantEnabled: boolean;
 };
 
 export const DEFAULT_POLICIES: RolePolicies = {
@@ -103,6 +104,7 @@ export const DEFAULT_POLICIES: RolePolicies = {
 	emojiPickerProfileLimit: 2,
 	listPinnedLimit: 2,
 	localTimelineAnyLimit: 3,
+	loginBonusGrantEnabled: true,
 };
 
 @Injectable()
@@ -411,6 +413,7 @@ export class RoleService implements OnApplicationShutdown, OnModuleInit {
 			emojiPickerProfileLimit: calc('emojiPickerProfileLimit', vs => Math.max(...vs)),
 			listPinnedLimit: calc('listPinnedLimit', vs => Math.max(...vs)),
 			localTimelineAnyLimit: calc('localTimelineAnyLimit', vs => Math.max(...vs)),
+			loginBonusGrantEnabled: calc('loginBonusGrantEnabled', vs => vs.some(v => v === true)),
 		};
 	}
 

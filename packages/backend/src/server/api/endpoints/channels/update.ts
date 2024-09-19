@@ -135,10 +135,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				})).map(u => u.id);
 			}
 
-			if ( !( channel.userId === me.id || iAmModerator ) ) {
-				collaboratorIds = channel.collaboratorIds;
-			};
-
 			const updateValues = {
 				...(ps.name !== undefined ? { name: ps.name } : {}),
 				...(ps.description !== undefined ? { description: ps.description } : {}),
@@ -151,7 +147,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				...(typeof ps.allowRenoteToExternal === 'boolean' ? { allowRenoteToExternal: ps.allowRenoteToExternal } : {}),
 				...(typeof ps.isPrivate === 'boolean' ? { isPrivate: ps.isPrivate } : {}),
 				...(ps.privateUserIds !== undefined ? { privateUserIds: ps.privateUserIds } : {}),
-				...(collaboratorIds.length > 0 ? { collaboratorIds: collaboratorIds } : {}),
+				...((ps.collaboratorIds !== undefined && ( channel.userId === me.id || iAmModerator )) ? { collaboratorIds: collaboratorIds } : {}),
 			};
 
 			if (Object.keys(updateValues).length > 0) {

@@ -241,16 +241,15 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 		super(meta, paramDef, async (ps, me) => {
 			const set = {} as Partial<MiMeta>;
 			if (!envOption.managed || this.config.rootUserName === me.username) {
+				// マネージドサービスだったら
+				// rootUserName が me.username と一致する場合にしか設定を変えられないように
+
 				if (typeof ps.disableRegistration === 'boolean') {
 					set.disableRegistration = ps.disableRegistration;
 				}
 
 				if (ps.useObjectStorage !== undefined) {
 					set.useObjectStorage = ps.useObjectStorage;
-				}
-
-				if (ps.pointName !== undefined) {
-					set.pointName = ps.pointName;
 				}
 
 				if (ps.objectStorageBaseUrl !== undefined) {
@@ -322,6 +321,38 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 						ps.enableFanoutTimelineDbFallback;
 				}
 
+				if (typeof ps.urlPreviewEnabled === 'boolean') {
+					set.urlPreviewEnabled = ps.urlPreviewEnabled;
+				}
+
+				if (typeof ps.urlPreviewTimeout === 'number') {
+					set.urlPreviewTimeout = ps.urlPreviewTimeout;
+				}
+
+				if (typeof ps.urlPreviewMaximumContentLength === 'number') {
+					set.urlPreviewMaximumContentLength = ps.urlPreviewMaximumContentLength;
+				}
+
+				if (ps.urlPreviewRequireContentLength !== undefined) {
+					set.urlPreviewRequireContentLength = ps.urlPreviewRequireContentLength ?? undefined;
+				}
+
+				if (ps.urlPreviewUserAgent !== undefined) {
+					const value = (ps.urlPreviewUserAgent ?? '').trim();
+					set.urlPreviewUserAgent = value === '' ? null : ps.urlPreviewUserAgent;
+				}
+				if (
+					ps.summalyProxy !== undefined ||
+					ps.urlPreviewSummaryProxyUrl !== undefined
+				) {
+					const value = (
+						ps.urlPreviewSummaryProxyUrl ??
+						ps.summalyProxy ??
+						''
+					).trim();
+					set.urlPreviewSummaryProxyUrl = value === '' ? null : value;
+				}
+
 				if (ps.perLocalUserUserTimelineCacheMax !== undefined) {
 					set.perLocalUserUserTimelineCacheMax =
 						ps.perLocalUserUserTimelineCacheMax;
@@ -349,6 +380,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				set.hiddenTags = ps.hiddenTags.filter(Boolean);
 			}
 
+			if (ps.pointName !== undefined) {
+				set.pointName = ps.pointName;
+			}
+
 			if (Array.isArray(ps.blockedHosts)) {
 				set.blockedHosts = ps.blockedHosts
 					.filter(Boolean)
@@ -372,6 +407,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (Array.isArray(ps.defaultWhiteHosts)) {
 				set.defaultWhiteHosts = ps.defaultWhiteHosts.filter(Boolean).map(x => x.toLowerCase());
 			}
+
 			if (Array.isArray(ps.mediaSilencedHosts)) {
 				let lastValue = '';
 				set.mediaSilencedHosts = ps.mediaSilencedHosts.sort().filter((h) => {
@@ -383,18 +419,23 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 			if (ps.themeColor !== undefined) {
 				set.themeColor = ps.themeColor;
 			}
+
 			if (ps.DiscordWebhookUrl !== undefined) {
 				set.DiscordWebhookUrl = ps.DiscordWebhookUrl;
 			}
+
 			if (ps.DiscordWebhookUrlWordBlock !== undefined) {
 				set.DiscordWebhookUrlWordBlock = ps.DiscordWebhookUrlWordBlock;
 			}
+
 			if (ps.EmojiBotToken !== undefined) {
 				set.EmojiBotToken = ps.EmojiBotToken;
 			}
+
 			if (ps.ApiBase !== undefined) {
 				set.ApiBase = ps.ApiBase;
 			}
+
 			if (ps.mascotImageUrl !== undefined) {
 				set.mascotImageUrl = ps.mascotImageUrl;
 			}
@@ -781,38 +822,6 @@ export default class extends Endpoint<typeof meta, typeof paramDef> {
 				set.bannedEmailDomains = ps.bannedEmailDomains;
 			}
 
-			if (typeof ps.urlPreviewEnabled === 'boolean') {
-				set.urlPreviewEnabled = ps.urlPreviewEnabled;
-			}
-
-			if (typeof ps.urlPreviewTimeout === 'number') {
-				set.urlPreviewTimeout = ps.urlPreviewTimeout;
-			}
-
-			if (typeof ps.urlPreviewMaximumContentLength === 'number') {
-				set.urlPreviewMaximumContentLength = ps.urlPreviewMaximumContentLength;
-			}
-
-			if (ps.urlPreviewRequireContentLength !== undefined) {
-				set.urlPreviewRequireContentLength = ps.urlPreviewRequireContentLength ?? undefined;
-			}
-
-			if (ps.urlPreviewUserAgent !== undefined) {
-				const value = (ps.urlPreviewUserAgent ?? '').trim();
-				set.urlPreviewUserAgent = value === '' ? null : ps.urlPreviewUserAgent;
-			}
-
-			if (
-				ps.summalyProxy !== undefined ||
-				ps.urlPreviewSummaryProxyUrl !== undefined
-			) {
-				const value = (
-					ps.urlPreviewSummaryProxyUrl ??
-					ps.summalyProxy ??
-					''
-				).trim();
-				set.urlPreviewSummaryProxyUrl = value === '' ? null : value;
-			}
 			if (ps.bannerDark !== undefined) {
 				set.bannerDark = ps.bannerDark;
 			}
