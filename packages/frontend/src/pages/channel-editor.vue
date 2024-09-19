@@ -256,7 +256,11 @@ function addUser() {
 				...collaboratorUsers.value,
 				user,
 			];
-		}
+		};
+		if ( isPrivate.value === true ) {
+			collaboratorUsers.value = collaboratorUsers.value.filter((u) => (privateUserIds.value.map(v => v.value).includes(u.id)));
+		};
+		collaboratorUsers.value = [...new Set(collaboratorUsers.value)];
 	});
 }
 
@@ -299,6 +303,9 @@ async function addPrivateUserIds() {
 function removePrivateUserIds(index: number) {
 	privateUserIds.value.splice(index, 1);
 	privateUsers.value.splice(index, 1);
+	if ( isPrivate.value === true ) {
+		collaboratorUsers.value = collaboratorUsers.value.filter((u) => (privateUserIds.value.map(v => v.value).includes(u.id)));
+	};
 }
 
 async function addPinnedNote() {
@@ -319,10 +326,9 @@ function removePinnedNote(index: number) {
 }
 
 async function save() {
-
 	const fetchPrivateUserIds = privateUserIds.value.map(v => v.value);
 	const set = new Set(fetchPrivateUserIds);
-	const saverivateUserIds = [...set];
+	const saveprivateUserIds = [...set];
 	const params = {
 		name: name.value,
 		description: description.value,
@@ -332,9 +338,9 @@ async function save() {
 		searchable: searchable.value,
 		isSensitive: isSensitive.value,
 		isPrivate: isPrivate.value,
-		privateUserIds: saverivateUserIds,
+		privateUserIds: saveprivateUserIds,
 		allowRenoteToExternal: allowRenoteToExternal.value,
-		collaboratorIds: collaboratorUsers.value.map(x => x.id),
+		collaboratorIds: collaboratorUsers.value.filter((u) => (saveprivateUserIds.includes(u.id) || isPrivate.value === false )).map(x => x.id),
 	};
 
 	if (props.channelId) {
