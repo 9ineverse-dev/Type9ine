@@ -54,12 +54,13 @@ import MkFoldableSection from '@/components/MkFoldableSection.vue';
 import { customEmojis, customEmojiCategories } from '@/custom-emojis.js';
 import { i18n } from '@/i18n.js';
 import { $i } from '@/account.js';
+import { useRouter } from '@/router/supplier.js';
 import { definePageMetadata } from '@/scripts/page-metadata';
 import { misskeyApiGet } from '@/scripts/misskey-api.js';
 import * as os from '@/os.js';
 let tab = ref('emojis');
 const headerActions = computed(() => []);
-
+const router = useRouter();
 const headerTabs = computed(() => [{
 	key: 'emojis',
 	title: i18n.ts.list,
@@ -95,13 +96,7 @@ function search() {
 }
 
 const edit = () => {
-	os.popup(defineAsyncComponent(() => import('@/components/MkEmojiEditDialog.vue')), {
-		isRequest: true,
-	}, {
-		done: result => {
-			window.location.reload();
-		},
-	}, 'closed');
+	router.push('/emoji-request');
 };
 
 watch((q), () => {
