@@ -136,7 +136,7 @@ function updatehasExclutiveLicense(v: boolean) {
 
 function generateLicense() {
 	if (ex_license.value !== '') {
-		license.value = license.value + ' and ' + ex_license.value;
+		license.value = license.value + ' and ©' + ex_license.value;
 		generatedLicense.value = true;
 	}
 }
