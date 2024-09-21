@@ -155,7 +155,7 @@ export const navbarItemDef = reactive({
 					unisonReload();
 				},
 			}, {
-				text: 'twilike',
+				text: 'twilike Preview',
 				active: ui === 'twilike',
 				action: () => {
 					miLocalStorage.setItem('ui', 'twilike');
