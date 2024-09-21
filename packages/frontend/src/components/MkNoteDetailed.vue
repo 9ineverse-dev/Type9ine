@@ -423,11 +423,15 @@ if (appearNote.value.reactionAcceptance === 'likeOnly') {
 	});
 }
 
-function renote() {
+function renote(viaKeyboard = false) {
 	pleaseLogin(undefined, pleaseLoginContext.value);
 	showMovedDialog();
 
-	const { menu } = getRenoteMenu({ note: note.value, renoteButton });
+	const { menu } = getRenoteMenu({
+		note: note.value,
+		renoteButton,
+		mock: props.mock,
+	});
 	os.popupMenu(menu, renoteButton.value, {
 		viaKeyboard,
 	});
