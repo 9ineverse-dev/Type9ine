@@ -291,7 +291,7 @@ export function getUserMenu(user: Misskey.entities.UserDetailed, router: IRouter
 				children: async () => {
 					const channels = await misskeyApi('channels/owned', { limit:20 });
 
-					return channels.filter(c => !(c.privateUserIds.includes(user.id))).map(c => ({
+					return channels.filter(c => !(c.privateUserIds.includes(user.id)) && c.isPrivate).map(c => ({
 						text: c.name,
 						action: async () => {
 							const puserids = c.privateUserIds.concat(user.id);
