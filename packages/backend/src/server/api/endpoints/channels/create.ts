@@ -12,6 +12,7 @@ import { IdService } from '@/core/IdService.js';
 import { ChannelEntityService } from '@/core/entities/ChannelEntityService.js';
 import { DI } from '@/di-symbols.js';
 import { ApiError } from '../../error.js';
+import { RoleService } from '@/core/RoleService.js';
 
 export const meta = {
 	tags: ['channels'],
@@ -80,6 +81,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 		private idService: IdService,
 		private channelEntityService: ChannelEntityService,
+		private roleService: RoleService,
 	) {
 		super(meta, paramDef, async (ps, me) => {
 			let banner = null;
@@ -92,6 +94,16 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				if (banner == null) {
 					throw new ApiError(meta.errors.noSuchFile);
 				}
+			}
+
+			const policies = await this.roleService.getUserPolicies(me.id);
+			if (!policies.canCreatePrivateChannel && ps.isPrivate) {
+				throw new ApiError({
+					message: 'You are not assigned to a required role.',
+					code: 'ROLE_PERMISSION_DENIED',
+					kind: 'permission',
+					id: '7f86f06f-7e15-4057-8561-f4b6d4ac755a',
+				});
 			}
 
 			const channel = await this.channelsRepository.insertOne({

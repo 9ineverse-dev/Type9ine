@@ -63,7 +63,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</MkFolder>
 
-			<MkSwitch v-model="isPrivate" :disabled="!($i.policies.canCreatePrivateChannel && isRoot)">
+			<MkSwitch v-model="isPrivate" :disabled="!($i.policies.canCreatePrivateChannel && (isRoot || !channelId))">
 				{{ i18n.ts._channel.isPrivate }}
 			</MkSwitch>
 
@@ -100,7 +100,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</MkFolder>
 
-			<MkFolder v-if="isRoot">
+			<MkFolder v-if="isRoot && !isPrivate">
 				<template #label>{{ i18n.ts._channel.dangerSettings }}</template>
 
 				<MkButton v-if="!isPrivate" danger @click="transferAdmin()">

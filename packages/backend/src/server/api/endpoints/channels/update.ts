@@ -108,6 +108,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			}
 
 			const iAmModerator = await this.roleService.isModerator(me);
+			const policies = await this.roleService.getUserPolicies(me.id);
 
 			if (!( iAmModerator || channel.userId === me.id || channel.collaboratorIds.includes(me.id) )) {
 				throw new ApiError(meta.errors.accessDenied);
@@ -145,8 +146,8 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				...(banner ? { bannerId: banner.id } : {}),
 				...(typeof ps.isSensitive === 'boolean' ? { isSensitive: ps.isSensitive } : {}),
 				...(typeof ps.allowRenoteToExternal === 'boolean' ? { allowRenoteToExternal: ps.allowRenoteToExternal } : {}),
-				...(typeof ps.isPrivate === 'boolean' ? { isPrivate: ps.isPrivate } : {}),
-				...(ps.privateUserIds !== undefined ? { privateUserIds: ps.privateUserIds } : {}),
+				...(typeof ps.isPrivate === 'boolean' && ( policies.canCreatePrivateChannel ) ? { isPrivate: ps.isPrivate } : {}),
+				...(ps.privateUserIds !== undefined && ( policies.canCreatePrivateChannel ) ? { privateUserIds: ps.privateUserIds } : {}),
 				...((ps.collaboratorIds !== undefined && ( channel.userId === me.id || iAmModerator )) ? { collaboratorIds: collaboratorIds } : {}),
 			};
 
