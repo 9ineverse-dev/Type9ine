@@ -5470,6 +5470,10 @@ export interface Locale extends ILocale {
      * ポイントは正の値である必要があります。
      */
     "pointsMustBePositive": string;
+    /**
+     * 背景画像URL
+     */
+    "backgroundImageUrls": string;
     "_delivery": {
         /**
          * 配信状態
