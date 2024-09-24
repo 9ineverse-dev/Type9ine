@@ -5656,9 +5656,9 @@ export interface Locale extends ILocale {
          */
         "haveFun": ParameterizedString<"name">;
         /**
-         * このまま9ineverse.comの使い方についてのチュートリアルに進むこともできますが、ここで中断してすぐに使い始めることもできます。
+         * このまま{name}の使い方についてのチュートリアルに進むこともできますが、ここで中断してすぐに使い始めることもできます。
          */
-        "youCanContinueTutorial": string;
+        "youCanContinueTutorial": ParameterizedString<"name">;
         /**
          * チュートリアルを開始
          */

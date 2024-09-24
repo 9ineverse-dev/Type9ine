@@ -113,7 +113,7 @@ export const defaultStore = markRaw(
 		},
 		rememberNoteVisibility: {
 			where: 'account',
-			default: false,
+			default: true,
 		},
 		localOnly: {
 			where: 'deviceAccount',
