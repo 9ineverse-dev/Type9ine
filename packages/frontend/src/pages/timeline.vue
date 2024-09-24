@@ -10,7 +10,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 		<MkHorizontalSwipe v-model:tab="src" :tabs="$i ? headerTabs : headerTabsWhenNotLogin">
 			<div :key="src" ref="rootEl">
 				<MkInfo v-if="isBasicTimeline(src) && !defaultStore.reactiveState.timelineTutorials.value[src]" style="margin-bottom: var(--margin);" closable @close="closeTutorial()">
-					{{ i18n.ts._timelineDescription[src] }}
+					<div v-if="['social'].includes(src)">
+						{{ i18n.ts._initialTutorial._timeline.recommend }}
+					</div>
+					<div v-else-if="['global'].includes(src)">
+						{{ i18n.ts._initialTutorial._timeline.community }}
+					</div>
+					<div v-else>
+						{{ i18n.ts._timelineDescription[src] }}
+					</div>
 				</MkInfo>
 				<MkPostForm v-if="$i && defaultStore.reactiveState.showFixedPostForm.value && ui !== 'twilike' && !(src === 'social' || src == 'global')" :channel="channelInfo" :autofocus="deviceKind === 'desktop'" :class="$style.postForm" class="post-form _panel" fixed style="margin-bottom: var(--margin);"/>
 				<XPostForm v-if="$i && ui === 'twilike' " :channel="channelInfo" :autofocus="deviceKind === 'desktop'" :class="$style.postForm" class="post-form _panel" fixed style="margin-bottom: var(--margin);"/>
