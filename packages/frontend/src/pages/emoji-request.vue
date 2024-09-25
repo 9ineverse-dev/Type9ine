@@ -51,14 +51,25 @@
 					<MkButton rounded @click="updatehasExclutiveLicense(false)">{{ i18n.ts.no }}</MkButton>
 				</div>
 				<div v-if="!hasExclutiveLicense">
-					<MkInput v-model="ex_license" style="margin: 16px" :mfmAutocomplete="true">
-						<template #label>{{ '絵文字を作成する上以外のライセンス情報を記入してください' }}</template>
+					<MkInput v-model="ex_licensor" style="margin: 16px" :mfmAutocomplete="true">
+						<template #label>{{ '他の著作者の活動名・ペンネーム、もしくは法人名を記入してください' }}</template>
 						<template #caption>
-							{{ '例：以下のように、ライセンス所有者の名前と、そのライセンスが分かるリンクもしくはライセンス自体を記入してください。' }}<br/>
-							{{ '「©ExampleLicensor https://example.com/ and ©ExampleLicensor2 CC 4.0 by-sa 」' }}
+							{{ '以下のように、ライセンス所有者の名前を記入してください。' }}<br/>
+							{{ '例：個人の場合「AXNGURA」 法人の場合「9ineverse Inc.」' }}<br/>
+							{{ '尚、ライセンス情報のURL等で著作者情報を表示・確認できる場合に限り、著作者名は省略することができます。' }}
+						</template>
+					</MkInput>
+					<MkInput v-model="ex_license" style="margin: 16px" :mfmAutocomplete="true">
+						<template #label>{{ '使用した著作物のライセンス情報を確認できるURL,もしくはライセンスそのものを記載してください。' }}</template>
+						<template #caption>
+							{{ '以下のように、そのライセンスが分かるリンクもしくはライセンス自体を記入してください。' }}<br/>
+							{{ '例：ライセンスがURLの場合「 https://example.com/ 」ライセンスがCCの場合「 CC 4.0 by-sa 」「CC0」' }}
 						</template>
 					</MkInput>
 					<MkButton rounded @click="generateLicense">{{ i18n.ts.add }}</MkButton>
+					<div v-if="generatedLicense">
+						<div :class="$style.q_text">更に複数の著作物を利用している場合は、</br>再度記入欄を埋めて追加ボタンを押すことで、ライセンスを追記できます。</div>
+					</div>
 				</div>
 				<div v-if="generatedLicense">
 					<MkInput v-model="license" style="margin: 16px" :mfmAutocomplete="true">
@@ -102,6 +113,7 @@ const name = ref<string>('');
 const category = ref<string>('');
 const aliases = ref<string>('');
 const license = ref<string>('');
+const ex_licensor = ref<string>('');
 const ex_license = ref<string>('');
 const isSensitive = ref(false);
 const localOnly = ref(false);
@@ -135,10 +147,18 @@ function updatehasExclutiveLicense(v: boolean) {
 }
 
 function generateLicense() {
-	if (ex_license.value !== '') {
-		license.value = license.value + ' and ©' + ex_license.value;
+	if (ex_licensor.value !== '' ) {
+		license.value = license.value + ' , ©' + ex_licensor.value;
+		generatedLicense.value = true;
+		if (ex_license.value !== '') {
+			license.value = license.value + ' ' + ex_license.value;
+		}
+	} else if (ex_license.value !== '' ) {
+		license.value = license.value + ' , ' + ex_license.value;
 		generatedLicense.value = true;
 	}
+	ex_licensor.value = '';
+	ex_license.value = '';
 }
 
 async function changeImage(ev) {
