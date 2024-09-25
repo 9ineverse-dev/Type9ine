@@ -1210,7 +1210,7 @@ onMounted(() => {
 		await noteDrafts.migrate($i.id);
 
 		// 書きかけの投稿を復元
-		if (!props.instant && !props.mention && !props.specified && !props.mock && !defaultStore.state.disableNoteDrafting) {
+		if (!props.instant && !props.mention && !props.specified && !props.mock && !props.reply && !defaultStore.state.disableNoteDrafting) {
 			const draft = await noteDrafts.get(draftType.value, $i.id, 'default', draftAuxId.value as string);
 			if (draft) applyDraft(draft, true);
 		}
