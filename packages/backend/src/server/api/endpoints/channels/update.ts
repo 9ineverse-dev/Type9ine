@@ -136,6 +136,11 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				})).map(u => u.id);
 			}
 
+			if (!( channel.userId === me.id || iAmModerator )) {
+				collaboratorIds = channel.collaboratorIds;
+			}
+			collaboratorIds = collaboratorIds.filter((u) => ((ps.privateUserIds !== undefined ? ps.privateUserIds : channel.privateUserIds).includes(u) || channel.isPrivate.value === false ))
+
 			const updateValues = {
 				...(ps.name !== undefined ? { name: ps.name } : {}),
 				...(ps.description !== undefined ? { description: ps.description } : {}),
@@ -148,7 +153,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				...(typeof ps.allowRenoteToExternal === 'boolean' ? { allowRenoteToExternal: ps.allowRenoteToExternal } : {}),
 				...(typeof ps.isPrivate === 'boolean' && ( policies.canCreatePrivateChannel ) ? { isPrivate: ps.isPrivate } : {}),
 				...(ps.privateUserIds !== undefined && ( policies.canCreatePrivateChannel ) ? { privateUserIds: ps.privateUserIds } : {}),
-				...((ps.collaboratorIds !== undefined && ( channel.userId === me.id || iAmModerator )) ? { collaboratorIds: collaboratorIds } : {}),
+				...(ps.collaboratorIds !== undefined  ? { collaboratorIds: collaboratorIds } : {}),
 			};
 
 			if (Object.keys(updateValues).length > 0) {
