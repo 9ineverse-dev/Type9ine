@@ -100,18 +100,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</div>
 			</MkFolder>
 
-			<MkFolder v-if="isRoot && !isPrivate">
+			<MkFolder v-if="isRoot">
 				<template #label>{{ i18n.ts._channel.dangerSettings }}</template>
 
-				<MkButton v-if="!isPrivate" danger @click="transferAdmin()">
+				<MkButton v-if="isRoot && !isPrivate" style="margin: 16px" danger @click="transferAdmin()">
 					{{ i18n.ts._channel.transferAdminConfirmTitle }}
 				</MkButton>
+				<MkButton v-if="channelId" style="margin: 16px" danger @click="archive()"><i class="ti ti-trash"></i> {{ i18n.ts.archive }}</MkButton>
 			</MkFolder>
 
 			<div>
 				<div class="_buttons">
 					<MkButton primary @click="save()"><i class="ti ti-device-floppy"></i> {{ channelId ? i18n.ts.save : i18n.ts.create }}</MkButton>
-					<MkButton v-if="channelId" danger @click="archive()"><i class="ti ti-trash"></i> {{ i18n.ts.archive }}</MkButton>
 				</div>
 			</div>
 		</div>
@@ -261,11 +261,13 @@ function addUser() {
 			collaboratorUsers.value = collaboratorUsers.value.filter((u) => (privateUserIds.value.map(v => v.value).includes(u.id)));
 		};
 		collaboratorUsers.value = [...new Set(collaboratorUsers.value)];
+		save();
 	});
 }
 
 function collaboratorUserDelete (i:number) {
 	collaboratorUsers.value.splice( i, 1 );
+	save();
 }
 
 //fetchChannel();
