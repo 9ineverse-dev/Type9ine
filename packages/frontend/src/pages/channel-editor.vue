@@ -67,7 +67,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				{{ i18n.ts._channel.isPrivate }}
 			</MkSwitch>
 
-			<MkFolder v-if="isPrivate && $i.policies.canCreatePrivateChannel === true " :defaultOpen="true" :disabled="!isRoot">
+			<MkFolder v-if="isPrivate && channelId" :defaultOpen="true" >
 				<template #label>{{ i18n.ts._channel.privateUserIds }}</template>
 
 				<div class="_gaps">
@@ -299,6 +299,7 @@ async function addPrivateUserIds() {
 					label: user.username,
 				}];
 		}
+		save();
 	});
 }
 
@@ -308,6 +309,7 @@ function removePrivateUserIds(index: number) {
 	if ( isPrivate.value === true ) {
 		collaboratorUsers.value = collaboratorUsers.value.filter((u) => (privateUserIds.value.map(v => v.value).includes(u.id)));
 	};
+	save();
 }
 
 async function addPinnedNote() {
