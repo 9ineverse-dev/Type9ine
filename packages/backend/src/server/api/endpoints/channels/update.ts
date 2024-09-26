@@ -139,7 +139,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 			if (!( channel.userId === me.id || iAmModerator )) {
 				collaboratorIds = channel.collaboratorIds;
 			}
-			collaboratorIds = collaboratorIds.filter((u) => ((ps.privateUserIds !== undefined ? ps.privateUserIds : channel.privateUserIds).includes(u) || channel.isPrivate.value === false ))
+
+			if (channel.isPrivate.value || ps.isPrivate) {
+				collaboratorIds = collaboratorIds.filter((u) => (ps.privateUserIds !== undefined ? ps.privateUserIds : channel.privateUserIds).includes(u))
+			}
 
 			const updateValues = {
 				...(ps.name !== undefined ? { name: ps.name } : {}),

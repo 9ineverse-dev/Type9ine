@@ -266,12 +266,15 @@ export class NoteCreateService implements OnApplicationShutdown {
 		if (data.channel != null) {
 			data.visibility = 'public';
 			data.visibleUsers = [];
-			if (data.channel.isPrivate === true || !data.channel.userId) {
+			if (data.channel.isPrivate === true) {
 				data.visibility = 'specified';
 				data.channel.privateUserIds.push( data.channel!.userId );
 				data.channel.privateUserIds = Array.from(new Set(data.channel.privateUserIds));
 				const minChannelvisibleUsers = await this.usersRepository.findBy({	id: In(data.channel.privateUserIds),});
 				data.visibleUsers = minChannelvisibleUsers;
+				if (!minChannelvisibleUsers.map(u => u.id).includes(user.id)) {
+					throw new Error('can not access private channel');
+				};
 			}
 		}
 		if (data.channel != null) data.localOnly = true;

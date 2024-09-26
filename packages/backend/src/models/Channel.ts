@@ -89,7 +89,7 @@ export class MiChannel {
 	@Column('varchar', {
 		array: true, length: 128, default: '{}',
 	})
-	public privateUserIds: User['id'][];
+	public privateUserIds: MiUser['id'][];
 
 	@Index()
 	@Column('integer', {
